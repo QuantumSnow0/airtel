@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Airtel SmartConnect Lead Capture Form
+
+A modern, customer-friendly lead capture form for Airtel Kenya's SmartConnect 5G/FTTx services. Built with Next.js, TypeScript, and Tailwind CSS.
+
+## Features
+
+- 🎨 Beautiful, minimal, mobile-first design
+- 📱 Fully responsive form with smart input handling
+- ✅ Real-time validation with helpful error messages
+- 🔄 Dual submission: Saves to Supabase and Microsoft Forms
+- ⚡ Fast and optimized with Next.js App Router
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: Supabase (PostgreSQL)
+- **Integration**: Microsoft Forms API
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ 
+- npm, yarn, pnpm, or bun
+- Supabase account and project
+- Microsoft Forms form ID
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Set up environment variables (create `.env.local`):
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+MS_FORMS_FORM_ID=your_form_id
+MS_FORMS_RESPONSE_PAGE_URL=your_response_page_url
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Set up Supabase database (see `SUPABASE_SETUP.md`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. Run the development server:
+```bash
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) to see the form.
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+lead-capture/
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── submit/        # Form submission API route
+│   │   ├── page.tsx           # Main form page
+│   │   └── layout.tsx        # Root layout
+│   └── lib/
+│       ├── supabase.ts        # Supabase client
+│       └── types.ts           # TypeScript types
+├── SUPABASE_SETUP.md         # Supabase setup guide
+└── VERCEL_DEPLOYMENT.md      # Vercel deployment guide
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for detailed deployment instructions.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Quick deploy to Vercel:
+1. Push to GitHub/GitLab/Bitbucket
+2. Import project in Vercel
+3. Add environment variables
+4. Deploy!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Documentation
+
+- [Supabase Setup Guide](./SUPABASE_SETUP.md)
+- [Vercel Deployment Guide](./VERCEL_DEPLOYMENT.md)
+- [Form Details](./../form_details.md)
+- [Integration Notes](./../integration_notes.md)
+
+## License
+
+Private - Airtel Kenya Internal Use

@@ -27,6 +27,6 @@ body {
 
 @layer components {
   .input {
-    @apply w-full rounded-2xl border border-slate-200 bg-white/70 px-4 py-3 text-base text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200;
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 transition-colors focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20;
   }
 }
