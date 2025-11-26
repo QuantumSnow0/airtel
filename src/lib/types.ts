@@ -28,3 +28,4 @@ export type LeadSubmission = {
   submission_status?: "pending" | "submitted" | "failed";
 };
 
+

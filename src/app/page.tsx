@@ -681,20 +681,24 @@ export default function Home() {
                     const speed = parts[1];
                     const duration = parts[2];
 
+                    // Extract numeric price and calculate package price
+                    const totalPrice = parseInt(price.replace(/[^\d]/g, ""));
+                    const packagePrice = totalPrice - 1000;
+
                     return (
                       <button
                         key={option}
                         type="button"
                         onClick={() => handleChange("preferredPackage")(option)}
-                        className={`w-full flex items-center justify-between rounded-lg border-2 px-3 py-2.5 transition-all ${
+                        className={`w-full rounded-lg border-2 px-3 py-3 transition-all ${
                           isSelected
                             ? "border-rose-500 bg-rose-50"
                             : "border-slate-200 bg-white hover:border-rose-300 hover:bg-rose-50/30"
                         }`}
                       >
-                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <div className="flex items-start gap-3">
                           <div
-                            className={`flex-shrink-0 h-5 w-5 rounded-full border-2 flex items-center justify-center ${
+                            className={`flex-shrink-0 h-5 w-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
                               isSelected
                                 ? "border-rose-500 bg-rose-500"
                                 : "border-slate-300"
@@ -717,23 +721,30 @@ export default function Home() {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs font-medium text-slate-500 uppercase">
-                                {type}
-                              </span>
-                              <span className="text-sm font-bold text-slate-900">
-                                {speed}
-                              </span>
-                              <span className="text-xs text-slate-400">
-                                • {duration.replace("days", " days")}
-                              </span>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-xs font-medium text-slate-500 uppercase">
+                                  {type}
+                                </span>
+                                <span className="text-sm font-bold text-slate-900">
+                                  {speed}
+                                </span>
+                                <span className="text-xs text-slate-400">
+                                  • {duration.replace("days", " days")}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                              <div className="text-xs text-slate-600">
+                                <span>Package: Ksh.{packagePrice.toLocaleString()}</span>
+                                <span className="mx-1">+</span>
+                                <span>Installation: Ksh.1,000</span>
+                              </div>
+                              <div className="text-base sm:text-sm font-bold text-rose-600">
+                                Total: {price}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="ml-3 flex-shrink-0">
-                          <span className="text-sm font-semibold text-rose-600">
-                            {price}
-                          </span>
                         </div>
                       </button>
                     );
