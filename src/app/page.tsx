@@ -736,7 +736,9 @@ export default function Home() {
                             </div>
                             <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                               <div className="text-xs text-slate-600">
-                                <span>Package: Ksh.{packagePrice.toLocaleString()}</span>
+                                <span>
+                                  Package: Ksh.{packagePrice.toLocaleString()}
+                                </span>
                                 <span className="mx-1">+</span>
                                 <span>Installation: Ksh.1,000</span>
                               </div>
@@ -953,6 +955,115 @@ export default function Home() {
             </button>
           </div>
         </form>
+
+        {/* Product Information Section */}
+        <div className="mt-12 sm:mt-16 px-4 sm:px-0">
+          <div className="sm:rounded-2xl sm:border sm:border-slate-200 sm:bg-white sm:p-8 sm:shadow-sm">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
+              {/* Image */}
+              <div className="flex-shrink-0">
+                <img
+                  src="/airtel.png"
+                  alt="5G Smart Connect Outdoor Unit"
+                  className="w-full max-w-[280px] sm:max-w-[320px] h-auto object-contain"
+                />
+              </div>
+
+              {/* Product Details */}
+              <div className="flex-1 text-center sm:text-left">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4">
+                  5G Smart Connect - Outdoor Unit
+                </h2>
+                <ul className="space-y-3 sm:space-y-4">
+                  <li className="flex items-start gap-3">
+                    <svg
+                      className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-sm sm:text-base text-slate-700">
+                      <span className="font-semibold">
+                        Weather-Resistant Design
+                      </span>{" "}
+                      - Built to perform reliably in all conditions.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <svg
+                      className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-sm sm:text-base text-slate-700">
+                      <span className="font-semibold">High-Gain Antenna</span> -
+                      Offers strong and consistent indoor coverage
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <svg
+                      className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-sm sm:text-base text-slate-700">
+                      <span className="font-semibold">
+                        Signal Amplification
+                      </span>{" "}
+                      - Enhances signal strength to ensure stable and
+                      uninterrupted connectivity.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <svg
+                      className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-sm sm:text-base text-slate-700">
+                      <span className="font-semibold">
+                        Flexible Mounting Options
+                      </span>{" "}
+                      - Easily install on walls, poles, or rooftops to suit your
+                      setup and location.
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
 
       {/* Time Picker Modal */}
