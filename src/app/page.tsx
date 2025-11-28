@@ -81,12 +81,21 @@ export default function Home() {
               {/* Mobile: Content on blurred card */}
               <div className="md:hidden space-y-6 pt-0 -mt-5">
                 <motion.h1
-                  className="text-3xl sm:text-5xl font-extrabold leading-tight whitespace-nowrap text-slate-900 text-center drop-shadow-lg"
+                  className="
+                  text-3xl sm:text-5xl
+                  font-extrabold
+                  leading-tight
+                  whitespace-nowrap
+                  text-neutral-50
+                  text-center
+                  tracking-tight
+                  drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]
+                "
                   variants={titleVariants}
                   initial="hidden"
                   animate="visible"
                 >
-                  5G Smart Connect
+                  Smart Connect 5G
                 </motion.h1>
 
                 <div className="backdrop-blur-md bg-white/85 rounded-2xl p-6 sm:p-8 border border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
@@ -97,11 +106,11 @@ export default function Home() {
                     animate="visible"
                   >
                     <motion.div
-                      className="space-y-4 text-base sm:text-lg leading-relaxed"
+                      className="space-y-0 text-base sm:text-lg leading-relaxed"
                       variants={containerVariants}
                     >
                       <motion.div
-                        className="flex items-start gap-3"
+                        className="flex items-start gap-3 pb-4"
                         variants={featureVariants}
                       >
                         <svg
@@ -127,8 +136,10 @@ export default function Home() {
                         </div>
                       </motion.div>
 
+                      <div className="border-t border-slate-200 my-4" />
+
                       <motion.div
-                        className="flex items-start gap-3"
+                        className="flex items-start gap-3 pb-4"
                         variants={featureVariants}
                       >
                         <svg
@@ -154,8 +165,10 @@ export default function Home() {
                         </div>
                       </motion.div>
 
+                      <div className="border-t border-slate-200 my-4" />
+
                       <motion.div
-                        className="flex items-start gap-3"
+                        className="flex items-start gap-3 pb-4"
                         variants={featureVariants}
                       >
                         <svg
@@ -181,6 +194,8 @@ export default function Home() {
                           </p>
                         </div>
                       </motion.div>
+
+                      <div className="border-t border-slate-200 my-4" />
 
                       <motion.div
                         className="flex items-start gap-3"
