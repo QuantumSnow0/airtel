@@ -484,27 +484,6 @@ export default function RequestInstallation() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-sm border-b border-slate-200 py-4 px-4">
-        <div className="mx-auto max-w-2xl flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
-          >
-            ← Back to Home
-          </Link>
-          <div className="text-center flex-1">
-            <p className="text-xs font-semibold uppercase tracking-wide text-rose-600 mb-1">
-              Airtel Kenya
-            </p>
-            <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
-              SmartConnect Installation Request
-            </h1>
-          </div>
-          <div className="w-24"></div>
-        </div>
-      </header>
-
       {/* Toast Notifications */}
       <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4 space-y-2">
         {toasts.map((toast) => (
@@ -590,9 +569,10 @@ export default function RequestInstallation() {
         ))}
       </div>
 
-      {/* Main Content with padding for fixed header */}
-      <main className="mx-auto max-w-2xl pt-24 pb-24 sm:pb-8 px-3 sm:px-4">
+      {/* Main Content */}
+      <main className="mx-auto max-w-2xl pt-8 pb-32 md:pb-24 px-3 sm:px-4">
         <form
+          id="installation-form"
           className="px-4 sm:rounded-2xl sm:border sm:border-slate-200 sm:bg-white sm:p-8 sm:shadow-sm"
           onSubmit={handleSubmit}
         >
@@ -905,167 +885,121 @@ export default function RequestInstallation() {
             </div>
           </div>
 
-          {/* Sticky Submit Button Area - Mobile only */}
-          <div className="sticky bottom-0 bg-white sm:static sm:bg-transparent pt-4 pb-2 sm:pt-6 -mx-4 px-4 sm:mx-0 sm:px-0 border-t border-slate-200 sm:border-0 mt-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] sm:shadow-none">
-            {status.state === "error" && (
-              <div className="mb-4 rounded-lg bg-rose-50 border border-rose-200 p-3">
-                <p className="text-sm font-medium text-rose-700">
-                  {status.message}
-                </p>
-              </div>
-            )}
-            {status.state === "success" && (
-              <div className="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3">
-                <p className="text-sm font-medium text-emerald-700">
-                  ✓ {status.message}
-                </p>
-              </div>
-            )}
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-rose-600 px-6 py-3.5 font-semibold text-white shadow-md transition hover:bg-rose-500 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
-              disabled={status.state === "submitting"}
-            >
-              {status.state === "submitting" ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Submitting...
-                </span>
-              ) : (
-                "Submit Request"
-              )}
-            </button>
-          </div>
-        </form>
-
-        {/* Product Information Section */}
-        <div className="mt-12 sm:mt-16 px-4 sm:px-0">
-          <div className="sm:rounded-2xl sm:border sm:border-slate-200 sm:bg-white sm:p-8 sm:shadow-sm">
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
-              {/* Image */}
-              <div className="flex-shrink-0">
-                <img
-                  src="/airtel.png"
-                  alt="5G Smart Connect Outdoor Unit"
-                  className="w-full max-w-[280px] sm:max-w-[320px] h-auto object-contain"
-                />
-              </div>
-
-              {/* Product Details */}
-              <div className="flex-1 text-center sm:text-left">
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4">
-                  5G Smart Connect - Outdoor Unit
-                </h2>
-                <ul className="space-y-3 sm:space-y-4">
-                  <li className="flex items-start gap-3">
-                    <svg
-                      className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span className="text-sm sm:text-base text-slate-700">
-                      <span className="font-semibold">
-                        Weather-Resistant Design
-                      </span>{" "}
-                      - Built to perform reliably in all conditions.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <svg
-                      className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span className="text-sm sm:text-base text-slate-700">
-                      <span className="font-semibold">High-Gain Antenna</span> -
-                      Offers strong and consistent indoor coverage
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <svg
-                      className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span className="text-sm sm:text-base text-slate-700">
-                      <span className="font-semibold">
-                        Signal Amplification
-                      </span>{" "}
-                      - Enhances signal strength to ensure stable and
-                      uninterrupted connectivity.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <svg
-                      className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span className="text-sm sm:text-base text-slate-700">
-                      <span className="font-semibold">
-                        Flexible Mounting Options
-                      </span>{" "}
-                      - Easily install on walls, poles, or rooftops to suit your
-                      setup and location.
-                    </span>
-                  </li>
-                </ul>
-              </div>
+          {/* Status Messages */}
+          {status.state === "error" && (
+            <div className="mb-4 rounded-lg bg-rose-50 border border-rose-200 p-3">
+              <p className="text-sm font-medium text-rose-700">
+                {status.message}
+              </p>
             </div>
-          </div>
-        </div>
+          )}
+          {status.state === "success" && (
+            <div className="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3">
+              <p className="text-sm font-medium text-emerald-700">
+                ✓ {status.message}
+              </p>
+            </div>
+          )}
+        </form>
       </main>
+
+      {/* Fixed Submit Button for Mobile */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 p-4 shadow-lg">
+        <button
+          type="submit"
+          form="installation-form"
+          className="w-full rounded-xl px-8 py-4 text-lg font-semibold text-white shadow-lg transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+          style={{
+            background: "linear-gradient(135deg, #ff0033, #b80000)",
+          }}
+          disabled={status.state === "submitting"}
+        >
+          {status.state === "submitting" ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg
+                className="animate-spin h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Submitting...
+            </span>
+          ) : (
+            "Submit Request"
+          )}
+        </button>
+      </div>
+
+      {/* Desktop Submit Button */}
+      <div className="hidden md:block fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 p-4 shadow-lg">
+        <div className="max-w-2xl mx-auto">
+          {status.state === "error" && (
+            <div className="mb-4 rounded-lg bg-rose-50 border border-rose-200 p-3">
+              <p className="text-sm font-medium text-rose-700">
+                {status.message}
+              </p>
+            </div>
+          )}
+          {status.state === "success" && (
+            <div className="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3">
+              <p className="text-sm font-medium text-emerald-700">
+                ✓ {status.message}
+              </p>
+            </div>
+          )}
+          <button
+            type="submit"
+            form="installation-form"
+            className="w-full rounded-xl px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+            style={{
+              background: "linear-gradient(135deg, #ff0033, #b80000)",
+            }}
+            disabled={status.state === "submitting"}
+          >
+            {status.state === "submitting" ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg
+                  className="animate-spin h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Submitting...
+              </span>
+            ) : (
+              "Submit Request"
+            )}
+          </button>
+        </div>
+      </div>
 
       {/* Time Picker Modal */}
       {showTimeModal && (

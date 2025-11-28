@@ -62,10 +62,16 @@ export default function Home() {
             <div className="md:hidden space-y-6">
               {/* Title */}
               <motion.h1
-                className="text-2xl sm:text-5xl font-extrabold leading-tight text-slate-900 text-center"
+                className="text-2xl sm:text-5xl font-extrabold leading-tight text-center mb-3"
                 variants={titleVariants}
                 initial="hidden"
                 animate="visible"
+                style={{
+                  background: "linear-gradient(135deg, #dc2626, #991b1b)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
               >
                 Airtel Smart Connect 5G
               </motion.h1>
@@ -224,10 +230,18 @@ export default function Home() {
                 initial="hidden"
                 animate="visible"
               >
-                <h1 className="text-5xl lg:text-6xl font-extrabold text-slate-900 mb-4">
+                <h1
+                  className="text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight"
+                  style={{
+                    background: "linear-gradient(135deg, #dc2626, #991b1b)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
                   5G Smart Connect
                 </h1>
-                <p className="text-xl lg:text-2xl text-slate-600">
+                <p className="text-xl lg:text-2xl text-slate-600 font-medium">
                   Outdoor Unit - High-Speed Internet for Kenya
                 </p>
               </motion.div>
