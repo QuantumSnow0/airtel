@@ -570,12 +570,117 @@ export default function RequestInstallation() {
       </div>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-2xl pt-8 pb-32 md:pb-24 px-3 sm:px-4">
-        <form
-          id="installation-form"
-          className="px-4 sm:rounded-2xl sm:border sm:border-slate-200 sm:bg-white sm:p-8 sm:shadow-sm"
-          onSubmit={handleSubmit}
-        >
+      <main className="mx-auto max-w-7xl pt-8 pb-32 md:pb-24 px-3 sm:px-4 md:px-8">
+        {/* Desktop: Title Section */}
+        <div className="hidden md:block text-center mb-12">
+          <h1
+            className="text-4xl lg:text-5xl font-extrabold mb-3"
+            style={{
+              background: "linear-gradient(135deg, #dc2626, #991b1b)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            Installation Request
+          </h1>
+          <p className="text-lg text-slate-600">
+            Fill in your details to request your 5G Smart Connect installation
+          </p>
+        </div>
+
+        <div className="md:grid md:grid-cols-3 md:gap-8 lg:gap-12">
+          {/* Desktop: Sidebar with Product Info */}
+          <div className="hidden md:block md:col-span-1">
+            <div className="sticky top-8 space-y-6">
+              <div className="rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200 p-6 shadow-sm">
+                <h2 className="text-xl font-bold text-slate-900 mb-4">
+                  5G Smart Connect
+                </h2>
+                <div className="space-y-3 text-sm text-slate-700">
+                  <div className="flex items-start gap-2">
+                    <svg
+                      className="h-4 w-4 text-rose-600 shrink-0 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span>Weather-Resistant Design</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <svg
+                      className="h-4 w-4 text-rose-600 shrink-0 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span>High-Gain Antenna</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <svg
+                      className="h-4 w-4 text-rose-600 shrink-0 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span>Signal Amplification</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <svg
+                      className="h-4 w-4 text-rose-600 shrink-0 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span>Flexible Mounting Options</span>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-2xl overflow-hidden shadow-lg">
+                <img
+                  src="/airtel.png"
+                  alt="5G Smart Connect Router"
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Form Section */}
+          <div className="md:col-span-2">
+            <form
+              id="installation-form"
+              className="px-4 sm:rounded-2xl sm:border sm:border-slate-200 sm:bg-white sm:p-8 sm:shadow-sm md:shadow-md"
+              onSubmit={handleSubmit}
+            >
           <div className="space-y-0">
             <div className="pb-5 border-b border-slate-300 sm:border-0 sm:pb-0">
               <FormGroup label="1. Full Name" required>
@@ -900,7 +1005,9 @@ export default function RequestInstallation() {
               </p>
             </div>
           )}
-        </form>
+            </form>
+          </div>
+        </div>
       </main>
 
       {/* Fixed Submit Button for Mobile */}
@@ -945,59 +1052,64 @@ export default function RequestInstallation() {
       </div>
 
       {/* Desktop Submit Button */}
-      <div className="hidden md:block fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 p-4 shadow-lg">
-        <div className="max-w-2xl mx-auto">
-          {status.state === "error" && (
-            <div className="mb-4 rounded-lg bg-rose-50 border border-rose-200 p-3">
-              <p className="text-sm font-medium text-rose-700">
-                {status.message}
-              </p>
+      <div className="hidden md:block fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 p-6 shadow-lg">
+        <div className="max-w-7xl mx-auto px-8">
+          <div className="md:grid md:grid-cols-3 md:gap-8 lg:gap-12">
+            <div className="md:col-span-1"></div>
+            <div className="md:col-span-2">
+              {status.state === "error" && (
+                <div className="mb-4 rounded-lg bg-rose-50 border border-rose-200 p-3">
+                  <p className="text-sm font-medium text-rose-700">
+                    {status.message}
+                  </p>
+                </div>
+              )}
+              {status.state === "success" && (
+                <div className="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3">
+                  <p className="text-sm font-medium text-emerald-700">
+                    ✓ {status.message}
+                  </p>
+                </div>
+              )}
+              <button
+                type="submit"
+                form="installation-form"
+                className="w-full rounded-xl px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-rose-500/50 transition hover:shadow-xl hover:shadow-rose-500/60 disabled:cursor-not-allowed disabled:opacity-50"
+                style={{
+                  background: "linear-gradient(135deg, #ff0033, #b80000)",
+                }}
+                disabled={status.state === "submitting"}
+              >
+                {status.state === "submitting" ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg
+                      className="animate-spin h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Submitting...
+                  </span>
+                ) : (
+                  "Submit Request"
+                )}
+              </button>
             </div>
-          )}
-          {status.state === "success" && (
-            <div className="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3">
-              <p className="text-sm font-medium text-emerald-700">
-                ✓ {status.message}
-              </p>
-            </div>
-          )}
-          <button
-            type="submit"
-            form="installation-form"
-            className="w-full rounded-xl px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
-            style={{
-              background: "linear-gradient(135deg, #ff0033, #b80000)",
-            }}
-            disabled={status.state === "submitting"}
-          >
-            {status.state === "submitting" ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg
-                  className="animate-spin h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Submitting...
-              </span>
-            ) : (
-              "Submit Request"
-            )}
-          </button>
+          </div>
         </div>
       </div>
 
