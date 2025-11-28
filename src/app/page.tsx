@@ -58,6 +58,7 @@ export default function Home() {
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: "url('/airtel.png')" }}
           />
+          <div className="absolute inset-0 bg-black/30" />
         </div>
 
         {/* Desktop: Split Layout */}
@@ -79,20 +80,22 @@ export default function Home() {
             <div className="md:grid md:grid-cols-2 md:gap-12 lg:gap-16 items-center">
               {/* Mobile: Content on blurred card */}
               <div className="md:hidden space-y-6 pt-0 -mt-5">
-                <div className="backdrop-blur-md bg-white/85 rounded-2xl p-6 sm:p-8 border border-white/30 shadow-2xl">
+                <motion.h1
+                  className="text-3xl sm:text-5xl font-extrabold leading-tight whitespace-nowrap text-slate-900 text-center drop-shadow-lg"
+                  variants={titleVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  5G Smart Connect
+                </motion.h1>
+
+                <div className="backdrop-blur-md bg-white/85 rounded-2xl p-6 sm:p-8 border border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
                   <motion.div
                     className="text-slate-900 space-y-6"
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
                   >
-                    <motion.h1
-                      className="text-3xl sm:text-5xl font-bold leading-tight whitespace-nowrap"
-                      variants={titleVariants}
-                    >
-                      5G Smart Connect
-                    </motion.h1>
-
                     <motion.div
                       className="space-y-4 text-base sm:text-lg leading-relaxed"
                       variants={containerVariants}
@@ -102,7 +105,7 @@ export default function Home() {
                         variants={featureVariants}
                       >
                         <svg
-                          className="h-6 w-6 text-rose-600 flex-shrink-0 mt-0.5"
+                          className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -115,7 +118,7 @@ export default function Home() {
                           />
                         </svg>
                         <div>
-                          <p className="font-semibold text-rose-600 mb-1">
+                          <p className="font-semibold text-rose-600 mb-1 leading-tight">
                             Weather-Resistant Design
                           </p>
                           <p className="text-slate-700">
@@ -129,7 +132,7 @@ export default function Home() {
                         variants={featureVariants}
                       >
                         <svg
-                          className="h-6 w-6 text-rose-600 flex-shrink-0 mt-0.5"
+                          className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -142,7 +145,7 @@ export default function Home() {
                           />
                         </svg>
                         <div>
-                          <p className="font-semibold text-rose-600 mb-1">
+                          <p className="font-semibold text-rose-600 mb-1 leading-tight">
                             High-Gain Antenna
                           </p>
                           <p className="text-slate-700">
@@ -156,7 +159,7 @@ export default function Home() {
                         variants={featureVariants}
                       >
                         <svg
-                          className="h-6 w-6 text-rose-600 flex-shrink-0 mt-0.5"
+                          className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -169,7 +172,7 @@ export default function Home() {
                           />
                         </svg>
                         <div>
-                          <p className="font-semibold text-rose-600 mb-1">
+                          <p className="font-semibold text-rose-600 mb-1 leading-tight">
                             Signal Amplification
                           </p>
                           <p className="text-slate-700">
@@ -184,7 +187,7 @@ export default function Home() {
                         variants={featureVariants}
                       >
                         <svg
-                          className="h-6 w-6 text-rose-600 flex-shrink-0 mt-0.5"
+                          className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -197,7 +200,7 @@ export default function Home() {
                           />
                         </svg>
                         <div>
-                          <p className="font-semibold text-rose-600 mb-1">
+                          <p className="font-semibold text-rose-600 mb-1 leading-tight">
                             Flexible Mounting Options
                           </p>
                           <p className="text-slate-700">
@@ -210,7 +213,11 @@ export default function Home() {
                     <motion.div className="pt-4" variants={buttonVariants}>
                       <Link
                         href="/request-installation"
-                        className="block w-full text-center rounded-xl bg-rose-600 px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:bg-rose-500 active:scale-95"
+                        className="block w-full text-center rounded-xl px-8 py-5 text-lg font-semibold text-white shadow-lg shadow-rose-500/50 transition hover:shadow-xl hover:shadow-rose-500/60 active:scale-95"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #ff0033, #b80000)",
+                        }}
                       >
                         Get Connected
                       </Link>
