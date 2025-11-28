@@ -5,13 +5,12 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center">
-        {/* Mobile: Background Image with Overlay */}
+        {/* Mobile: Background Image */}
         <div className="md:hidden absolute inset-0 z-0">
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: "url('/airtel.png')" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/80 to-black/85" />
         </div>
 
         {/* Desktop: Split Layout */}
@@ -31,119 +30,123 @@ export default function Home() {
         <div className="relative z-10 w-full px-6 sm:px-8 lg:px-8 py-8 md:py-0">
           <div className="max-w-7xl mx-auto">
             <div className="md:grid md:grid-cols-2 md:gap-12 lg:gap-16 items-center">
-              {/* Mobile: Content on top of overlay */}
-              <div className="md:hidden text-white space-y-6 pt-4">
-                <h1 className="text-4xl sm:text-5xl font-bold leading-tight">
-                  5G Smart Connect
-                </h1>
-                
-                <div className="space-y-4 text-base sm:text-lg leading-relaxed">
-                  <div className="flex items-start gap-3">
-                    <svg
-                      className="h-6 w-6 text-rose-400 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
-                      />
-                    </svg>
-                    <div>
-                      <p className="font-semibold text-rose-500 mb-1">
-                        Weather-Resistant Design
-                      </p>
-                      <p className="text-slate-200">
-                        Built to perform reliably in all conditions.
-                      </p>
+              {/* Mobile: Content on blurred card */}
+              <div className="md:hidden space-y-6 pt-4">
+                <div className="backdrop-blur-xl bg-white/90 rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-2xl">
+                  <div className="text-slate-900 space-y-6">
+                    <h1 className="text-3xl sm:text-5xl font-bold leading-tight whitespace-nowrap">
+                      5G Smart Connect
+                    </h1>
+                    
+                    <div className="space-y-4 text-base sm:text-lg leading-relaxed">
+                      <div className="flex items-start gap-3">
+                        <svg
+                          className="h-6 w-6 text-rose-600 flex-shrink-0 mt-0.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                          />
+                        </svg>
+                        <div>
+                          <p className="font-semibold text-rose-600 mb-1">
+                            Weather-Resistant Design
+                          </p>
+                          <p className="text-slate-700">
+                            Built to perform reliably in all conditions.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-3">
+                        <svg
+                          className="h-6 w-6 text-rose-600 flex-shrink-0 mt-0.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                          />
+                        </svg>
+                        <div>
+                          <p className="font-semibold text-rose-600 mb-1">
+                            High-Gain Antenna
+                          </p>
+                          <p className="text-slate-700">
+                            Offers strong and consistent indoor coverage.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-3">
+                        <svg
+                          className="h-6 w-6 text-rose-600 flex-shrink-0 mt-0.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                          />
+                        </svg>
+                        <div>
+                          <p className="font-semibold text-rose-600 mb-1">
+                            Signal Amplification
+                          </p>
+                          <p className="text-slate-700">
+                            Enhances signal strength for stable, uninterrupted connectivity.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-3">
+                        <svg
+                          className="h-6 w-6 text-rose-600 flex-shrink-0 mt-0.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                          />
+                        </svg>
+                        <div>
+                          <p className="font-semibold text-rose-600 mb-1">
+                            Flexible Mounting Options
+                          </p>
+                          <p className="text-slate-700">
+                            Easily install on walls, poles, or rooftops.
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <svg
-                      className="h-6 w-6 text-rose-400 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
-                      />
-                    </svg>
-                    <div>
-                      <p className="font-semibold text-rose-500 mb-1">
-                        High-Gain Antenna
-                      </p>
-                      <p className="text-slate-200">
-                        Offers strong and consistent indoor coverage.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <svg
-                      className="h-6 w-6 text-rose-400 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
-                      />
-                    </svg>
-                    <div>
-                      <p className="font-semibold text-rose-500 mb-1">
-                        Signal Amplification
-                      </p>
-                      <p className="text-slate-200">
-                        Enhances signal strength for stable, uninterrupted connectivity.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <svg
-                      className="h-6 w-6 text-rose-400 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
-                      />
-                    </svg>
-                    <div>
-                      <p className="font-semibold text-rose-500 mb-1">
-                        Flexible Mounting Options
-                      </p>
-                      <p className="text-slate-200">
-                        Easily install on walls, poles, or rooftops.
-                      </p>
+                    
+                    <div className="pt-4">
+                      <Link
+                        href="/request-installation"
+                        className="block w-full text-center rounded-xl bg-rose-600 px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:bg-rose-500 active:scale-95"
+                      >
+                        Get Connected
+                      </Link>
                     </div>
                   </div>
                 </div>
-                
-                <div className="pt-4">
-                  <Link
-                    href="/request-installation"
-                    className="block w-full text-center rounded-xl bg-rose-600 px-8 py-4 text-lg font-semibold text-white shadow-xl transition hover:bg-rose-500 active:scale-95"
-                  >
-                    Get Connected
-                  </Link>
-                          </div>
-                        </div>
+              </div>
 
               {/* Desktop: Content on right side */}
               <div className="hidden md:block text-slate-900 space-y-6">
