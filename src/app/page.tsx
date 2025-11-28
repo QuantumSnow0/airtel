@@ -51,240 +51,377 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center">
-        {/* Mobile: Background Image */}
-        <div className="md:hidden absolute inset-0 z-0">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: "url('/airtel.png')" }}
-          />
-          <div className="absolute inset-0 bg-black/30" />
-        </div>
-
-        {/* Desktop: Split Layout */}
-        <div className="hidden md:grid md:grid-cols-2 absolute inset-0">
-          {/* Left Side - Image */}
-          <div className="relative">
-            <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: "url('/airtel.png')" }}
-            />
-          </div>
-          {/* Right Side - Content Background */}
-          <div className="bg-gradient-to-b from-slate-50 to-white" />
-        </div>
+      <section className="relative min-h-screen bg-white">
+        {/* Desktop: Background */}
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-b from-slate-50 to-white" />
 
         {/* Content */}
-        <div className="relative z-10 w-full px-6 sm:px-8 lg:px-8 pt-0 pb-4 md:py-0">
+        <div className="relative z-10 w-full px-6 sm:px-8 lg:px-8 pt-8 pb-32 md:py-16">
           <div className="max-w-7xl mx-auto">
-            <div className="md:grid md:grid-cols-2 md:gap-12 lg:gap-16 items-center">
-              {/* Mobile: Content on blurred card */}
-              <div className="md:hidden space-y-6 pt-0 -mt-5">
-                <motion.h1
-                  className="
-                  text-3xl sm:text-5xl
-                  font-extrabold
-                  leading-tight
-                  whitespace-nowrap
-                  text-neutral-50
-                  text-center
-                  tracking-tight
-                  drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]
-                "
-                  variants={titleVariants}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  Smart Connect 5G
-                </motion.h1>
+            {/* Mobile: Zigzag Layout */}
+            <div className="md:hidden space-y-6">
+              {/* Title */}
+              <motion.h1
+                className="text-2xl sm:text-5xl font-extrabold leading-tight text-slate-900 text-center"
+                variants={titleVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                Airtel Smart Connect 5G
+              </motion.h1>
 
-                <div className="backdrop-blur-md bg-white/85 rounded-2xl p-6 sm:p-8 border border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-                  <motion.div
-                    className="text-slate-900 space-y-6"
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
+              {/* Section 1: Feature on top, Image below */}
+              <motion.div
+                className="space-y-2"
+                variants={featureVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <div className="flex items-start gap-3">
+                  <svg
+                    className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
-                    <motion.div
-                      className="space-y-0 text-base sm:text-lg leading-relaxed"
-                      variants={containerVariants}
-                    >
-                      <motion.div
-                        className="flex items-start gap-3 pb-4"
-                        variants={featureVariants}
-                      >
-                        <svg
-                          className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
-                          />
-                        </svg>
-                        <div>
-                          <p className="font-semibold text-rose-600 mb-1 leading-tight">
-                            Weather-Resistant Design
-                          </p>
-                          <p className="text-slate-700">
-                            Built to perform reliably in all conditions.
-                          </p>
-                        </div>
-                      </motion.div>
-
-                      <div className="border-t border-slate-200 my-4" />
-
-                      <motion.div
-                        className="flex items-start gap-3 pb-4"
-                        variants={featureVariants}
-                      >
-                        <svg
-                          className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
-                          />
-                        </svg>
-                        <div>
-                          <p className="font-semibold text-rose-600 mb-1 leading-tight">
-                            High-Gain Antenna
-                          </p>
-                          <p className="text-slate-700">
-                            Offers strong and consistent indoor coverage.
-                          </p>
-                        </div>
-                      </motion.div>
-
-                      <div className="border-t border-slate-200 my-4" />
-
-                      <motion.div
-                        className="flex items-start gap-3 pb-4"
-                        variants={featureVariants}
-                      >
-                        <svg
-                          className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
-                          />
-                        </svg>
-                        <div>
-                          <p className="font-semibold text-rose-600 mb-1 leading-tight">
-                            Signal Amplification
-                          </p>
-                          <p className="text-slate-700">
-                            Enhances signal strength for stable, uninterrupted
-                            connectivity.
-                          </p>
-                        </div>
-                      </motion.div>
-
-                      <div className="border-t border-slate-200 my-4" />
-
-                      <motion.div
-                        className="flex items-start gap-3"
-                        variants={featureVariants}
-                      >
-                        <svg
-                          className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
-                          />
-                        </svg>
-                        <div>
-                          <p className="font-semibold text-rose-600 mb-1 leading-tight">
-                            Flexible Mounting Options
-                          </p>
-                          <p className="text-slate-700">
-                            Easily install on walls, poles, or rooftops.
-                          </p>
-                        </div>
-                      </motion.div>
-                    </motion.div>
-
-                    <motion.div className="pt-4" variants={buttonVariants}>
-                      <Link
-                        href="/request-installation"
-                        className="block w-full text-center rounded-xl px-8 py-5 text-lg font-semibold text-white shadow-lg shadow-rose-500/50 transition hover:shadow-xl hover:shadow-rose-500/60 active:scale-95"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, #ff0033, #b80000)",
-                        }}
-                      >
-                        Get Connected
-                      </Link>
-                    </motion.div>
-                  </motion.div>
-                </div>
-              </div>
-
-              {/* Desktop: Content on right side */}
-              <div className="hidden md:block text-slate-900 space-y-6">
-                <h1 className="text-4xl lg:text-5xl font-bold">
-                  5G Smart Connect - Outdoor Unit
-                </h1>
-                <div className="space-y-4 text-base lg:text-lg text-slate-700">
-                  <p>
-                    <span className="font-semibold text-slate-900">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                    />
+                  </svg>
+                  <div>
+                    <p className="font-semibold text-rose-600 mb-1 leading-tight">
                       Weather-Resistant Design
-                    </span>{" "}
-                    - Built to perform reliably in all conditions.
-                  </p>
-                  <p>
-                    <span className="font-semibold text-slate-900">
-                      High-Gain Antenna
-                    </span>{" "}
-                    - Offers strong and consistent indoor coverage
-                  </p>
-                  <p>
-                    <span className="font-semibold text-slate-900">
-                      Signal Amplification
-                    </span>{" "}
-                    - Enhances signal strength to ensure stable and
-                    uninterrupted connectivity.
-                  </p>
-                  <p>
-                    <span className="font-semibold text-slate-900">
-                      Flexible Mounting Options
-                    </span>{" "}
-                    - Easily install on walls, poles, or rooftops to suit your
-                    setup and location.
-                  </p>
+                    </p>
+                    <p className="text-slate-700">
+                      Built to perform reliably in all conditions.
+                    </p>
+                  </div>
                 </div>
+                <img
+                  src="/airtel.png"
+                  alt="5G Smart Connect Router"
+                  className="w-full rounded-lg shadow-md"
+                />
+              </motion.div>
+
+              {/* Section 2: Feature on top, Image below */}
+              <motion.div
+                className="space-y-4"
+                variants={featureVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <div className="flex items-start gap-3">
+                  <svg
+                    className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                    />
+                  </svg>
+                  <div>
+                    <p className="font-semibold text-rose-600 mb-1 leading-tight">
+                      High-Gain Antenna
+                    </p>
+                    <p className="text-slate-700">
+                      Offers strong and consistent indoor coverage.
+                    </p>
+                  </div>
+                </div>
+                <img
+                  src="/airtel1.jpeg"
+                  alt="5G Smart Connect Router"
+                  className="w-full rounded-lg shadow-md"
+                />
+              </motion.div>
+
+              {/* Section 3: Feature on top, Image below */}
+              <motion.div
+                className="space-y-4"
+                variants={featureVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <div className="flex items-start gap-3">
+                  <svg
+                    className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                    />
+                  </svg>
+                  <div>
+                    <p className="font-semibold text-rose-600 mb-1 leading-tight">
+                      Signal Amplification
+                    </p>
+                    <p className="text-slate-700">
+                      Enhances signal strength for stable, uninterrupted
+                      connectivity.
+                    </p>
+                  </div>
+                </div>
+                <img
+                  src="/airtel2.jpeg"
+                  alt="5G Smart Connect Router Installation"
+                  className="w-full rounded-lg shadow-md"
+                />
+              </motion.div>
+
+              {/* Section 4: Feature only (no image) */}
+              <motion.div
+                className="space-y-4"
+                variants={featureVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <div className="flex items-start gap-3">
+                  <svg
+                    className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                    />
+                  </svg>
+                  <div>
+                    <p className="font-semibold text-rose-600 mb-1 leading-tight">
+                      Flexible Mounting Options
+                    </p>
+                    <p className="text-slate-700">
+                      Easily install on walls, poles, or rooftops.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Desktop: Full Layout */}
+            <div className="hidden md:block">
+              {/* Hero Section */}
+              <motion.div
+                className="text-center mb-16"
+                variants={titleVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h1 className="text-5xl lg:text-6xl font-extrabold text-slate-900 mb-4">
+                  5G Smart Connect
+                </h1>
+                <p className="text-xl lg:text-2xl text-slate-600">
+                  Outdoor Unit - High-Speed Internet for Kenya
+                </p>
+              </motion.div>
+
+              {/* Product Images Grid */}
+              <motion.div
+                className="grid grid-cols-3 gap-6 mb-16"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <motion.div
+                  className="overflow-hidden rounded-xl shadow-lg"
+                  variants={featureVariants}
+                >
+                  <img
+                    src="/airtel.png"
+                    alt="5G Smart Connect Router"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </motion.div>
+                <motion.div
+                  className="overflow-hidden rounded-xl shadow-lg"
+                  variants={featureVariants}
+                >
+                  <img
+                    src="/airtel1.jpeg"
+                    alt="5G Smart Connect Router"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </motion.div>
+                <motion.div
+                  className="overflow-hidden rounded-xl shadow-lg"
+                  variants={featureVariants}
+                >
+                  <img
+                    src="/airtel2.jpeg"
+                    alt="5G Smart Connect Router Installation"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </motion.div>
+              </motion.div>
+
+              {/* Features Grid */}
+              <motion.div
+                className="grid grid-cols-2 gap-8 mb-12"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <motion.div
+                  className="flex items-start gap-4 p-6 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+                  variants={featureVariants}
+                >
+                  <svg
+                    className="h-6 w-6 text-rose-600 shrink-0 mt-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                    />
+                  </svg>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                      Weather-Resistant Design
+                    </h3>
+                    <p className="text-slate-700 leading-relaxed">
+                      Built to perform reliably in all conditions.
+                    </p>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-start gap-4 p-6 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+                  variants={featureVariants}
+                >
+                  <svg
+                    className="h-6 w-6 text-rose-600 shrink-0 mt-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                    />
+                  </svg>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                      High-Gain Antenna
+                    </h3>
+                    <p className="text-slate-700 leading-relaxed">
+                      Offers strong and consistent indoor coverage.
+                    </p>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-start gap-4 p-6 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+                  variants={featureVariants}
+                >
+                  <svg
+                    className="h-6 w-6 text-rose-600 shrink-0 mt-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                    />
+                  </svg>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                      Signal Amplification
+                    </h3>
+                    <p className="text-slate-700 leading-relaxed">
+                      Enhances signal strength for stable, uninterrupted
+                      connectivity.
+                    </p>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-start gap-4 p-6 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+                  variants={featureVariants}
+                >
+                  <svg
+                    className="h-6 w-6 text-rose-600 shrink-0 mt-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+                    />
+                  </svg>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                      Flexible Mounting Options
+                    </h3>
+                    <p className="text-slate-700 leading-relaxed">
+                      Easily install on walls, poles, or rooftops.
+                    </p>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+              {/* CTA Button */}
+              <motion.div
+                className="text-center"
+                variants={buttonVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 <Link
                   href="/request-installation"
-                  className="inline-block mt-6 rounded-xl bg-rose-600 px-8 py-4 font-semibold text-white shadow-lg transition hover:bg-rose-500"
+                  className="inline-block rounded-xl px-10 py-5 text-lg font-semibold text-white shadow-lg shadow-rose-500/50 transition hover:shadow-xl hover:shadow-rose-500/60"
+                  style={{
+                    background: "linear-gradient(135deg, #ff0033, #b80000)",
+                  }}
                 >
                   Get Connected
                 </Link>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Fixed Button for Mobile */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 p-4 shadow-lg">
+        <Link
+          href="/request-installation"
+          className="block w-full text-center rounded-xl px-8 py-4 text-lg font-semibold text-white shadow-lg transition active:scale-95"
+          style={{
+            background: "linear-gradient(135deg, #ff0033, #b80000)",
+          }}
+        >
+          Get Connected
+        </Link>
+      </div>
     </div>
   );
 }
