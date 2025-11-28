@@ -36,6 +36,7 @@ export const metadata: Metadata = {
     "5G router installation",
     "Smart Connect ODU",
     "Airtel 5G plans",
+    "Cheap internet",
     "fast internet Kenya",
   ],
   authors: [{ name: "Airtel Kenya" }],
