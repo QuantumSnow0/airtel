@@ -17,11 +17,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.airtel5grouter.co.ke"),
   title: {
     default:
-      "Airtel 5G Smart Connect Router | Fast 5G Internet Installation Request | Kenya",
+      "Airtel 5G Smart Connect | High-Speed 5G Internet Installation | Kenya",
     template: "%s | Airtel Kenya",
   },
   description:
-    "Request your Airtel 5G Smart Connect Outdoor Unit installation in Kenya. Get high-speed 5G internet with weather-resistant design, high-gain antenna, and flexible mounting options. Fast setup, reliable performance. Available in all 47 counties.",
+    "Get Airtel 5G Smart Connect - High-speed 5G internet for your home in Kenya. Weather-resistant outdoor unit with high-gain antenna. Request installation today. Available in all 47 counties.",
   keywords: [
     "Airtel 5G router",
     "5G Smart Connect",
@@ -59,9 +59,9 @@ export const metadata: Metadata = {
     url: "https://www.airtel5grouter.co.ke",
     siteName: "Airtel 5G Smart Connect",
     title:
-      "Airtel 5G Smart Connect Router | Fast 5G Internet Installation | Kenya",
+      "Airtel 5G Smart Connect | High-Speed 5G Internet Installation | Kenya",
     description:
-      "Request your Airtel 5G Smart Connect Outdoor Unit installation. Get high-speed 5G internet with weather-resistant design and reliable performance. Available across all 47 counties in Kenya.",
+      "Get Airtel 5G Smart Connect - High-speed 5G internet for your home in Kenya. Weather-resistant outdoor unit with high-gain antenna. Request installation today. Available in all 47 counties.",
     images: [
       {
         url: "https://www.airtel5grouter.co.ke/airtel.png",
@@ -73,9 +73,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Airtel 5G Smart Connect Router | Fast 5G Internet Installation",
+    title: "Airtel 5G Smart Connect | High-Speed 5G Internet Installation",
     description:
-      "Request your Airtel 5G Smart Connect installation. High-speed 5G internet with weather-resistant design. Available across Kenya.",
+      "Get Airtel 5G Smart Connect - High-speed 5G internet for your home in Kenya. Weather-resistant outdoor unit with high-gain antenna. Available in all 47 counties.",
     images: ["https://www.airtel5grouter.co.ke/airtel.png"],
   },
   alternates: {

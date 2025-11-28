@@ -1,51 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0,
-    },
-  },
-};
-
-const titleVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-    },
-  },
-};
-
-const featureVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.3,
-    },
-  },
-};
-
-const buttonVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.3,
-    },
-  },
-};
 
 export default function Home() {
   return (
@@ -61,11 +14,8 @@ export default function Home() {
             {/* Mobile: Zigzag Layout */}
             <div className="md:hidden space-y-6">
               {/* Title */}
-              <motion.h1
+              <h1
                 className="text-2xl sm:text-5xl font-extrabold leading-tight text-center mb-3"
-                variants={titleVariants}
-                initial="hidden"
-                animate="visible"
                 style={{
                   background: "linear-gradient(135deg, #dc2626, #991b1b)",
                   WebkitBackgroundClip: "text",
@@ -74,15 +24,10 @@ export default function Home() {
                 }}
               >
                 Airtel Smart Connect 5G
-              </motion.h1>
+              </h1>
 
               {/* Section 1: Feature on top, Image below */}
-              <motion.div
-                className="space-y-2"
-                variants={featureVariants}
-                initial="hidden"
-                animate="visible"
-              >
+              <div className="space-y-2">
                 <div className="flex items-start gap-3">
                   <svg
                     className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
@@ -111,15 +56,10 @@ export default function Home() {
                   alt="5G Smart Connect Router"
                   className="w-full rounded-lg shadow-md"
                 />
-              </motion.div>
+              </div>
 
               {/* Section 2: Feature on top, Image below */}
-              <motion.div
-                className="space-y-4"
-                variants={featureVariants}
-                initial="hidden"
-                animate="visible"
-              >
+              <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <svg
                     className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
@@ -148,15 +88,10 @@ export default function Home() {
                   alt="5G Smart Connect Router"
                   className="w-full rounded-lg shadow-md"
                 />
-              </motion.div>
+              </div>
 
               {/* Section 3: Feature on top, Image below */}
-              <motion.div
-                className="space-y-4"
-                variants={featureVariants}
-                initial="hidden"
-                animate="visible"
-              >
+              <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <svg
                     className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
@@ -186,15 +121,10 @@ export default function Home() {
                   alt="5G Smart Connect Router Installation"
                   className="w-full rounded-lg shadow-md"
                 />
-              </motion.div>
+              </div>
 
               {/* Section 4: Feature only (no image) */}
-              <motion.div
-                className="space-y-4"
-                variants={featureVariants}
-                initial="hidden"
-                animate="visible"
-              >
+              <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <svg
                     className="h-5 w-5 text-rose-600 shrink-0 mt-0.5"
@@ -218,23 +148,15 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
 
             {/* Desktop: Full Layout */}
             <div className="hidden md:block">
               {/* Hero Section - Split Layout */}
-              <motion.div
-                className="grid grid-cols-2 gap-8 lg:gap-12 items-start"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-              >
+              <div className="grid grid-cols-2 gap-8 lg:gap-12 items-start">
                 {/* Left: Images Grid Carousel */}
-                <motion.div
-                  className="grid grid-cols-2 gap-3"
-                  variants={featureVariants}
-                >
+                <div className="grid grid-cols-2 gap-3">
                   <div className="rounded-lg overflow-hidden shadow-md aspect-square">
                     <img
                       src="/airtel.png"
@@ -256,13 +178,10 @@ export default function Home() {
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                </motion.div>
+                </div>
 
                 {/* Right: Content */}
-                <motion.div
-                  className="space-y-4 mt-6"
-                  variants={featureVariants}
-                >
+                <div className="space-y-4 mt-6">
                   <div>
                     <h1
                       className="text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight"
@@ -381,7 +300,7 @@ export default function Home() {
                   </div>
 
                   {/* CTA Button */}
-                  <motion.div variants={buttonVariants}>
+                  <div>
                     <Link
                       href="/request-installation"
                       className="inline-block rounded-xl px-10 py-5 text-lg font-semibold text-white shadow-lg shadow-rose-500/50 transition hover:shadow-xl hover:shadow-rose-500/60"
@@ -391,9 +310,9 @@ export default function Home() {
                     >
                       Get Connected
                     </Link>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

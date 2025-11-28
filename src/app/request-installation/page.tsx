@@ -681,330 +681,342 @@ export default function RequestInstallation() {
               className="px-4 sm:rounded-2xl sm:border sm:border-slate-200 sm:bg-white sm:p-8 sm:shadow-sm md:shadow-md"
               onSubmit={handleSubmit}
             >
-          <div className="space-y-0">
-            <div className="pb-5 border-b border-slate-300 sm:border-0 sm:pb-0">
-              <FormGroup label="1. Full Name" required>
-                <input
-                  type="text"
-                  className="input"
-                  value={formState.customerName}
-                  onChange={(event) =>
-                    handleChange("customerName")(event.target.value)
-                  }
-                  placeholder="Enter your full name"
-                />
-              </FormGroup>
-            </div>
-
-            <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <FormGroup label="2. Airtel Number" required>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-600 pointer-events-none">
-                      +254
-                    </div>
+              <div className="space-y-0">
+                <div className="pb-5 border-b border-slate-300 sm:border-0 sm:pb-0">
+                  <FormGroup label="1. Full Name" required>
                     <input
-                      type="tel"
-                      className="input pl-14"
-                      inputMode="numeric"
-                      value={formState.airtelNumber}
-                      onChange={(event) => {
-                        const normalized = normalizePhoneInput(
-                          event.target.value
-                        );
-                        handleChange("airtelNumber")(normalized);
-                      }}
-                      placeholder="712345678"
+                      type="text"
+                      className="input"
+                      value={formState.customerName}
+                      onChange={(event) =>
+                        handleChange("customerName")(event.target.value)
+                      }
+                      placeholder="Enter your full name"
                     />
-                  </div>
-                </FormGroup>
+                  </FormGroup>
+                </div>
 
-                <FormGroup label="3. Alternative Number" required>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-600 pointer-events-none">
-                      +254
-                    </div>
+                <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <FormGroup label="2. Airtel Number" required>
+                      <div className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-600 pointer-events-none">
+                          +254
+                        </div>
+                        <input
+                          type="tel"
+                          className="input pl-14"
+                          inputMode="numeric"
+                          value={formState.airtelNumber}
+                          onChange={(event) => {
+                            const normalized = normalizePhoneInput(
+                              event.target.value
+                            );
+                            handleChange("airtelNumber")(normalized);
+                          }}
+                          placeholder="712345678"
+                        />
+                      </div>
+                    </FormGroup>
+
+                    <FormGroup label="3. Alternative Number" required>
+                      <div className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-600 pointer-events-none">
+                          +254
+                        </div>
+                        <input
+                          type="tel"
+                          className="input pl-14"
+                          inputMode="numeric"
+                          value={formState.alternateNumber}
+                          onChange={(event) => {
+                            const normalized = normalizePhoneInput(
+                              event.target.value
+                            );
+                            handleChange("alternateNumber")(normalized);
+                          }}
+                          placeholder="712345678"
+                        />
+                      </div>
+                    </FormGroup>
+                  </div>
+                </div>
+
+                <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
+                  <FormGroup label="4. Email Address" required>
                     <input
-                      type="tel"
-                      className="input pl-14"
-                      inputMode="numeric"
-                      value={formState.alternateNumber}
-                      onChange={(event) => {
-                        const normalized = normalizePhoneInput(
-                          event.target.value
-                        );
-                        handleChange("alternateNumber")(normalized);
-                      }}
-                      placeholder="712345678"
+                      type="email"
+                      className="input"
+                      value={formState.email}
+                      onChange={(event) =>
+                        handleChange("email")(event.target.value)
+                      }
+                      placeholder="your.email@example.com"
                     />
-                  </div>
-                </FormGroup>
-              </div>
-            </div>
+                  </FormGroup>
+                </div>
 
-            <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
-              <FormGroup label="4. Email Address" required>
-                <input
-                  type="email"
-                  className="input"
-                  value={formState.email}
-                  onChange={(event) =>
-                    handleChange("email")(event.target.value)
-                  }
-                  placeholder="your.email@example.com"
-                />
-              </FormGroup>
-            </div>
+                <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
+                  <FormGroup label="5. Select Package" required>
+                    <div className="space-y-2">
+                      {packageOptions.map((option) => {
+                        const isSelected =
+                          formState.preferredPackage === option;
+                        const [speedPart, price] = option.split(" at ");
+                        const parts = speedPart.split("_");
+                        const type = parts[0];
+                        const speed = parts[1];
+                        const duration = parts[2];
 
-            <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
-              <FormGroup label="5. Select Package" required>
-                <div className="space-y-2">
-                  {packageOptions.map((option) => {
-                    const isSelected = formState.preferredPackage === option;
-                    const [speedPart, price] = option.split(" at ");
-                    const parts = speedPart.split("_");
-                    const type = parts[0];
-                    const speed = parts[1];
-                    const duration = parts[2];
+                        // Extract numeric price and calculate package price
+                        const totalPrice = parseInt(
+                          price.replace(/[^\d]/g, "")
+                        );
+                        const packagePrice = totalPrice - 1000;
 
-                    // Extract numeric price and calculate package price
-                    const totalPrice = parseInt(price.replace(/[^\d]/g, ""));
-                    const packagePrice = totalPrice - 1000;
-
-                    return (
-                      <button
-                        key={option}
-                        type="button"
-                        onClick={() => handleChange("preferredPackage")(option)}
-                        className={`w-full rounded-lg border-2 px-3 py-3 transition-all ${
-                          isSelected
-                            ? "border-rose-500 bg-rose-50"
-                            : "border-slate-200 bg-white hover:border-rose-300 hover:bg-rose-50/30"
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div
-                            className={`flex-shrink-0 h-5 w-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
+                        return (
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() =>
+                              handleChange("preferredPackage")(option)
+                            }
+                            className={`w-full rounded-lg border-2 px-3 py-3 transition-all ${
                               isSelected
-                                ? "border-rose-500 bg-rose-500"
-                                : "border-slate-300"
+                                ? "border-rose-500 bg-rose-50"
+                                : "border-slate-200 bg-white hover:border-rose-300 hover:bg-rose-50/30"
                             }`}
                           >
-                            {isSelected && (
-                              <svg
-                                className="h-3 w-3 text-white"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
+                            <div className="flex items-start gap-3">
+                              <div
+                                className={`flex-shrink-0 h-5 w-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
+                                  isSelected
+                                    ? "border-rose-500 bg-rose-500"
+                                    : "border-slate-300"
+                                }`}
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={3}
-                                  d="M5 13l4 4L19 7"
-                                />
-                              </svg>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-xs font-medium text-slate-500 uppercase">
-                                  {type}
-                                </span>
-                                <span className="text-sm font-bold text-slate-900">
-                                  {speed}
-                                </span>
-                                <span className="text-xs text-slate-400">
-                                  • {duration.replace("days", " days")}
-                                </span>
+                                {isSelected && (
+                                  <svg
+                                    className="h-3 w-3 text-white"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={3}
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="text-xs font-medium text-slate-500 uppercase">
+                                      {type}
+                                    </span>
+                                    <span className="text-sm font-bold text-slate-900">
+                                      {speed}
+                                    </span>
+                                    <span className="text-xs text-slate-400">
+                                      • {duration.replace("days", " days")}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                  <div className="text-xs text-slate-600">
+                                    <span>
+                                      Package: Ksh.
+                                      {packagePrice.toLocaleString()}
+                                    </span>
+                                    <span className="mx-1">+</span>
+                                    <span>Installation: Ksh.1,000</span>
+                                  </div>
+                                  <div className="text-base sm:text-sm font-bold text-rose-600">
+                                    Total: {price}
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                            <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                              <div className="text-xs text-slate-600">
-                                <span>
-                                  Package: Ksh.{packagePrice.toLocaleString()}
-                                </span>
-                                <span className="mx-1">+</span>
-                                <span>Installation: Ksh.1,000</span>
-                              </div>
-                              <div className="text-base sm:text-sm font-bold text-rose-600">
-                                Total: {price}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </FormGroup>
-            </div>
-
-            <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
-              <FormGroup label="6. Installation Town" required>
-                <div className="relative">
-                  <input
-                    ref={townInputRef}
-                    type="text"
-                    className="input"
-                    value={townSearch || formState.installationTown}
-                    onChange={(event) => {
-                      const value = event.target.value;
-                      setTownSearch(value);
-                      setShowTownDropdown(true);
-
-                      // Normalize the input: trim whitespace and remove trailing dots/commas
-                      const normalized = value.trim().replace(/[.,;]+$/, "");
-
-                      // Check if normalized value matches any town (case-insensitive)
-                      const matchedTown = townOptions.find(
-                        (town) =>
-                          town.toLowerCase() === normalized.toLowerCase()
-                      );
-
-                      if (matchedTown) {
-                        // Use the exact town name from the array (not the autofilled one)
-                        handleChange("installationTown")(matchedTown);
-                        setTownSearch("");
-                        setShowTownDropdown(false);
-                        townInputRef.current?.blur();
-                      } else {
-                        handleChange("installationTown")("");
-                      }
-                    }}
-                    onFocus={() => {
-                      if (formState.installationTown) {
-                        handleChange("installationTown")("");
-                        setTownSearch("");
-                      }
-                      setShowTownDropdown(true);
-                    }}
-                    onBlur={() => {
-                      // Normalize on blur in case autofill or paste added extra characters
-                      const currentValue =
-                        townSearch || formState.installationTown;
-                      if (currentValue) {
-                        const normalized = currentValue
-                          .trim()
-                          .replace(/[.,;]+$/, "");
-                        const matchedTown = townOptions.find(
-                          (town) =>
-                            town.toLowerCase() === normalized.toLowerCase()
-                        );
-                        if (
-                          matchedTown &&
-                          matchedTown !== formState.installationTown
-                        ) {
-                          handleChange("installationTown")(matchedTown);
-                          setTownSearch("");
-                        }
-                      }
-                    }}
-                    placeholder="Search or select a county..."
-                  />
-                  {showTownDropdown &&
-                    !formState.installationTown &&
-                    filteredTowns.length > 0 && (
-                      <div
-                        ref={townDropdownRef}
-                        className="absolute z-50 mt-2 max-h-64 w-full overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-xl"
-                      >
-                        {filteredTowns.map((town) => (
-                          <button
-                            key={town}
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleChange("installationTown")(town);
-                              setTownSearch("");
-                              setShowTownDropdown(false);
-                              setTimeout(() => {
-                                townInputRef.current?.blur();
-                              }, 0);
-                            }}
-                            className="w-full px-4 py-3 text-left text-sm text-slate-700 transition-colors hover:bg-rose-50 hover:text-rose-900"
-                          >
-                            {town}
                           </button>
-                        ))}
-                      </div>
-                    )}
+                        );
+                      })}
+                    </div>
+                  </FormGroup>
                 </div>
-              </FormGroup>
-            </div>
 
-            <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
-              <FormGroup label="7. Installation Location" required>
-                <textarea
-                  rows={3}
-                  className="input"
-                  value={formState.deliveryLandmark}
-                  onChange={(event) =>
-                    handleChange("deliveryLandmark")(event.target.value)
-                  }
-                  placeholder="Enter your address, estate, or nearest landmark"
-                />
-              </FormGroup>
-            </div>
+                <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
+                  <FormGroup label="6. Installation Town" required>
+                    <div className="relative">
+                      <input
+                        ref={townInputRef}
+                        type="text"
+                        className="input"
+                        value={townSearch || formState.installationTown}
+                        onChange={(event) => {
+                          const value = event.target.value;
+                          setTownSearch(value);
+                          setShowTownDropdown(true);
 
-            <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <FormGroup label="8. Preferred Date" required>
-                  <input
-                    type="date"
-                    className="input"
-                    value={formState.visitDate}
-                    onChange={(event) =>
-                      handleChange("visitDate")(event.target.value)
-                    }
-                  />
-                </FormGroup>
+                          // Normalize the input: trim whitespace and remove trailing dots/commas
+                          const normalized = value
+                            .trim()
+                            .replace(/[.,;]+$/, "");
 
-                <FormGroup label="9. Preferred Time" required>
-                  <button
-                    type="button"
-                    onClick={() => setShowTimeModal(true)}
-                    className={`input flex items-center justify-between text-left ${
-                      formState.visitTime ? "text-slate-900" : "text-slate-400"
-                    }`}
-                  >
-                    <span>{formState.visitTime || "Choose a time slot"}</span>
-                    <svg
-                      className="h-5 w-5 text-slate-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          // Check if normalized value matches any town (case-insensitive)
+                          const matchedTown = townOptions.find(
+                            (town) =>
+                              town.toLowerCase() === normalized.toLowerCase()
+                          );
+
+                          if (matchedTown) {
+                            // Use the exact town name from the array (not the autofilled one)
+                            handleChange("installationTown")(matchedTown);
+                            setTownSearch("");
+                            setShowTownDropdown(false);
+                            townInputRef.current?.blur();
+                          } else {
+                            handleChange("installationTown")("");
+                          }
+                        }}
+                        onFocus={() => {
+                          if (formState.installationTown) {
+                            handleChange("installationTown")("");
+                            setTownSearch("");
+                          }
+                          setShowTownDropdown(true);
+                        }}
+                        onBlur={() => {
+                          // Normalize on blur in case autofill or paste added extra characters
+                          const currentValue =
+                            townSearch || formState.installationTown;
+                          if (currentValue) {
+                            const normalized = currentValue
+                              .trim()
+                              .replace(/[.,;]+$/, "");
+                            const matchedTown = townOptions.find(
+                              (town) =>
+                                town.toLowerCase() === normalized.toLowerCase()
+                            );
+                            if (
+                              matchedTown &&
+                              matchedTown !== formState.installationTown
+                            ) {
+                              handleChange("installationTown")(matchedTown);
+                              setTownSearch("");
+                            }
+                          }
+                        }}
+                        placeholder="Search or select a county..."
                       />
-                    </svg>
-                  </button>
-                </FormGroup>
-              </div>
-            </div>
-          </div>
+                      {showTownDropdown &&
+                        !formState.installationTown &&
+                        filteredTowns.length > 0 && (
+                          <div
+                            ref={townDropdownRef}
+                            className="absolute z-50 mt-2 max-h-64 w-full overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-xl"
+                          >
+                            {filteredTowns.map((town) => (
+                              <button
+                                key={town}
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleChange("installationTown")(town);
+                                  setTownSearch("");
+                                  setShowTownDropdown(false);
+                                  setTimeout(() => {
+                                    townInputRef.current?.blur();
+                                  }, 0);
+                                }}
+                                className="w-full px-4 py-3 text-left text-sm text-slate-700 transition-colors hover:bg-rose-50 hover:text-rose-900"
+                              >
+                                {town}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                    </div>
+                  </FormGroup>
+                </div>
 
-          {/* Status Messages */}
-          {status.state === "error" && (
-            <div className="mb-4 rounded-lg bg-rose-50 border border-rose-200 p-3">
-              <p className="text-sm font-medium text-rose-700">
-                {status.message}
-              </p>
-            </div>
-          )}
-          {status.state === "success" && (
-            <div className="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3">
-              <p className="text-sm font-medium text-emerald-700">
-                ✓ {status.message}
-              </p>
-            </div>
-          )}
+                <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
+                  <FormGroup label="7. Installation Location" required>
+                    <textarea
+                      rows={3}
+                      className="input"
+                      value={formState.deliveryLandmark}
+                      onChange={(event) =>
+                        handleChange("deliveryLandmark")(event.target.value)
+                      }
+                      placeholder="Enter your address, estate, or nearest landmark"
+                    />
+                  </FormGroup>
+                </div>
+
+                <div className="py-5 border-b border-slate-300 sm:border-0 sm:py-0">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <FormGroup label="8. Preferred Date" required>
+                      <input
+                        type="date"
+                        className="input"
+                        value={formState.visitDate}
+                        onChange={(event) =>
+                          handleChange("visitDate")(event.target.value)
+                        }
+                      />
+                    </FormGroup>
+
+                    <FormGroup label="9. Preferred Time" required>
+                      <button
+                        type="button"
+                        onClick={() => setShowTimeModal(true)}
+                        className={`input flex items-center justify-between text-left ${
+                          formState.visitTime
+                            ? "text-slate-900"
+                            : "text-slate-400"
+                        }`}
+                      >
+                        <span>
+                          {formState.visitTime || "Choose a time slot"}
+                        </span>
+                        <svg
+                          className="h-5 w-5 text-slate-400"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </button>
+                    </FormGroup>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status Messages */}
+              {status.state === "error" && (
+                <div className="mb-4 rounded-lg bg-rose-50 border border-rose-200 p-3">
+                  <p className="text-sm font-medium text-rose-700">
+                    {status.message}
+                  </p>
+                </div>
+              )}
+              {status.state === "success" && (
+                <div className="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3">
+                  <p className="text-sm font-medium text-emerald-700">
+                    ✓ {status.message}
+                  </p>
+                </div>
+              )}
             </form>
           </div>
         </div>
@@ -1258,4 +1270,3 @@ function FormGroup({ label, helper, required, children }: FormGroupProps) {
     </label>
   );
 }
-
