@@ -9,7 +9,7 @@ export default function Home() {
         <div className="hidden md:block absolute inset-0 bg-gradient-to-b from-slate-50 to-white" />
 
         {/* Content */}
-        <div className="relative z-10 w-full px-6 sm:px-8 lg:px-8 pt-8 pb-32 md:py-8 md:overflow-y-auto md:max-h-screen">
+        <div className="relative z-10 w-full px-6 sm:px-8 lg:px-8 pt-8 pb-8 md:py-8 md:overflow-y-auto md:max-h-screen">
           <div className="max-w-7xl mx-auto">
             {/* Mobile: Zigzag Layout */}
             <div className="md:hidden space-y-6">
@@ -56,6 +56,24 @@ export default function Home() {
                   alt="5G Smart Connect Router"
                   className="w-full rounded-lg shadow-md"
                 />
+                <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 my-3">
+                  <p className="text-slate-800 text-base text-center font-medium">
+                    <span className="font-semibold text-rose-600">
+                      Plan prices
+                    </span>{" "}
+                    – KES <span className="font-bold">1,999</span> for 15Mbps
+                    and KES <span className="font-bold">2,999</span> for 30Mbps
+                  </p>
+                  <div className="mt-2 pt-2 border-t border-slate-200">
+                    <p className="text-slate-700 text-sm text-center">
+                      <span className="font-semibold">Total Amount</span>
+                    </p>
+                    <p className="text-slate-700 text-sm text-center mt-1">
+                      Plan Price + KES <span className="font-bold">1,000</span>{" "}
+                      Connection Fee
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Section 2: Feature on top, Image below */}
@@ -221,6 +239,27 @@ export default function Home() {
                         </h3>
                         <p className="text-slate-700">
                           Built to perform reliably in all conditions.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 mb-6">
+                      <p className="text-slate-800 text-lg font-medium">
+                        <span className="font-semibold text-rose-600">
+                          Plan prices
+                        </span>{" "}
+                        – KES <span className="font-bold">1,999</span> for
+                        15Mbps and KES <span className="font-bold">2,999</span>{" "}
+                        for 30Mbps
+                      </p>
+                      <div className="mt-3 pt-3 border-t border-slate-200">
+                        <p className="text-slate-700 text-base text-center">
+                          <span className="font-semibold">Total Amount</span>
+                        </p>
+                        <p className="text-slate-700 text-base text-center mt-1">
+                          Plan Price + KES{" "}
+                          <span className="font-bold">1,000</span> Connection
+                          Fee
                         </p>
                       </div>
                     </div>
