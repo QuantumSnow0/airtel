@@ -1,4 +1,6 @@
-import Link from "next/link";
+"use client";
+
+import PricingCards from "./components/PricingCards";
 
 export default function Home() {
   return (
@@ -54,26 +56,8 @@ export default function Home() {
                 <img
                   src="/airtel.png"
                   alt="5G Smart Connect Router"
-                  className="w-full rounded-lg shadow-md"
+                  className="w-full max-h-[50vh] object-contain rounded-lg shadow-md mx-auto"
                 />
-                <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 my-3">
-                  <p className="text-slate-800 text-base text-center font-medium">
-                    <span className="font-semibold text-rose-600">
-                      Plan prices
-                    </span>{" "}
-                    – KES <span className="font-bold">1,999</span> for 15Mbps
-                    and KES <span className="font-bold">2,999</span> for 30Mbps
-                  </p>
-                  <div className="mt-2 pt-2 border-t border-slate-200">
-                    <p className="text-slate-700 text-sm text-center">
-                      <span className="font-semibold">Total Amount</span>
-                    </p>
-                    <p className="text-slate-700 text-sm text-center mt-1">
-                      Plan Price + KES <span className="font-bold">1,000</span>{" "}
-                      Connection Fee
-                    </p>
-                  </div>
-                </div>
               </div>
 
               {/* Section 2: Feature on top, Image below */}
@@ -104,7 +88,7 @@ export default function Home() {
                 <img
                   src="/airtel1.jpeg"
                   alt="5G Smart Connect Router"
-                  className="w-full rounded-lg shadow-md"
+                  className="w-full max-h-[50vh] object-contain rounded-lg shadow-md mx-auto"
                 />
               </div>
 
@@ -137,7 +121,7 @@ export default function Home() {
                 <img
                   src="/airtel2.jpeg"
                   alt="5G Smart Connect Router Installation"
-                  className="w-full rounded-lg shadow-md"
+                  className="w-full max-h-[50vh] object-contain rounded-lg shadow-md mx-auto"
                 />
               </div>
 
@@ -167,6 +151,11 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Pricing Section - Mobile - Own Row */}
+            <div className="md:hidden">
+              <PricingCards />
             </div>
 
             {/* Desktop: Full Layout */}
@@ -239,27 +228,6 @@ export default function Home() {
                         </h3>
                         <p className="text-slate-700">
                           Built to perform reliably in all conditions.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 mb-6">
-                      <p className="text-slate-800 text-lg font-medium">
-                        <span className="font-semibold text-rose-600">
-                          Plan prices
-                        </span>{" "}
-                        – KES <span className="font-bold">1,999</span> for
-                        15Mbps and KES <span className="font-bold">2,999</span>{" "}
-                        for 30Mbps
-                      </p>
-                      <div className="mt-3 pt-3 border-t border-slate-200">
-                        <p className="text-slate-700 text-base text-center">
-                          <span className="font-semibold">Total Amount</span>
-                        </p>
-                        <p className="text-slate-700 text-base text-center mt-1">
-                          Plan Price + KES{" "}
-                          <span className="font-bold">1,000</span> Connection
-                          Fee
                         </p>
                       </div>
                     </div>
@@ -338,37 +306,14 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* CTA Button */}
-                  <div>
-                    <Link
-                      href="/request-installation"
-                      className="inline-block rounded-xl px-10 py-5 text-lg font-semibold text-white shadow-lg shadow-rose-500/50 transition hover:shadow-xl hover:shadow-rose-500/60"
-                      style={{
-                        background: "linear-gradient(135deg, #ff0033, #b80000)",
-                      }}
-                    >
-                      Get Connected
-                    </Link>
-                  </div>
+                  {/* Pricing Section */}
+                  <PricingCards />
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Fixed Button for Mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 p-4 shadow-lg">
-        <Link
-          href="/request-installation"
-          className="block w-full text-center rounded-xl px-8 py-4 text-lg font-semibold text-white shadow-lg transition active:scale-95"
-          style={{
-            background: "linear-gradient(135deg, #ff0033, #b80000)",
-          }}
-        >
-          Get Connected
-        </Link>
-      </div>
     </div>
   );
 }

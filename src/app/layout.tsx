@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { PackageProvider } from "./contexts/PackageContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -234,7 +235,7 @@ export default function RootLayout({
             gtag('config', 'G-C897PVBGSR');
           `}
         </Script>
-        {children}
+        <PackageProvider>{children}</PackageProvider>
       </body>
     </html>
   );

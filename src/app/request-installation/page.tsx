@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState, useRef, useEffect } from "react";
+import { useMemo, useState, useRef, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 type CustomerFormState = {
@@ -99,7 +100,8 @@ type Toast = {
   type: "error" | "success" | "info";
 };
 
-export default function RequestInstallation() {
+function RequestInstallationForm() {
+  const searchParams = useSearchParams();
   const [formState, setFormState] =
     useState<CustomerFormState>(initialCustomerState);
   const [status, setStatus] = useState<SubmitStatus>({ state: "idle" });
@@ -109,6 +111,20 @@ export default function RequestInstallation() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const townInputRef = useRef<HTMLInputElement>(null);
   const townDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Prefill package from URL parameter
+  useEffect(() => {
+    const packageParam = searchParams.get("package");
+    if (
+      packageParam &&
+      packageOptions.includes(decodeURIComponent(packageParam))
+    ) {
+      setFormState((prev) => ({
+        ...prev,
+        preferredPackage: decodeURIComponent(packageParam),
+      }));
+    }
+  }, [searchParams]);
 
   const showToast = (
     message: string,
@@ -1276,5 +1292,19 @@ function FormGroup({ label, helper, required, children }: FormGroupProps) {
       )}
       {children}
     </label>
+  );
+}
+
+export default function RequestInstallation() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          Loading...
+        </div>
+      }
+    >
+      <RequestInstallationForm />
+    </Suspense>
   );
 }
