@@ -54,24 +54,35 @@ export default function PricingCards() {
       <div className={`md:hidden ${poppins.variable}`}>
         <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-2">
           {/* Package 1 - Standard */}
-          <label
-            className={`group relative rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 transition-all duration-300 cursor-pointer w-full ${
+          <div
+            className={`group relative rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
               selectedPackage === "standard"
-                ? "border-yellow-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)] scale-105"
-                : selectedPackage === "premium"
-                ? "border-slate-700/50 hover:border-slate-600 scale-95"
+                ? "border-yellow-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)]"
                 : "border-slate-700/50 hover:border-slate-600"
             }`}
-            onClick={() => handleCardClick("standard")}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
           >
+            {/* Clickable Overlay - Covers entire card */}
+            <div
+              className="absolute inset-0 cursor-pointer z-20"
+              onClick={() => handleCardClick("standard")}
+              onTouchStart={() => handleCardClick("standard")}
+            />
+
             {/* Price - Top Left with border cut effect */}
-            <div className="absolute -top-2.5 left-2" style={{ zIndex: 5, pointerEvents: 'none' }}>
-              <div className="px-1.5 py-0.5 rounded" style={{
-                background: 'linear-gradient(to bottom, rgb(15, 23, 42), rgba(30, 41, 59, 0.9))',
-                backdropFilter: 'blur(4px)',
-                WebkitBackdropFilter: 'blur(4px)'
-              }}>
+            <div
+              className="absolute -top-2.5 left-2 pointer-events-none"
+              style={{ zIndex: 30 }}
+            >
+              <div
+                className="px-1.5 py-0.5 rounded"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, rgb(15, 23, 42), rgba(30, 41, 59, 0.9))",
+                  backdropFilter: "blur(4px)",
+                  WebkitBackdropFilter: "blur(4px)",
+                }}
+              >
                 <div
                   className="text-lg font-extrabold leading-tight"
                   style={{
@@ -85,25 +96,24 @@ export default function PricingCards() {
                 </div>
               </div>
             </div>
-            <div className="overflow-hidden rounded-lg relative" style={{ zIndex: 10 }}>
-            <div className="p-2.5 pt-4 relative" style={{ zIndex: 10 }}>
 
-              {/* Radio Button */}
-              <div className="absolute top-2 right-2 z-20">
-                <div
-                  className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center transition-all ${
-                    selectedPackage === "standard"
-                      ? "border-yellow-400 bg-yellow-400/20"
-                      : "border-slate-500"
-                  }`}
-                >
-                  {selectedPackage === "standard" && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
-                  )}
-                </div>
+            {/* Radio Button */}
+            <div className="absolute top-2 right-2 z-30 pointer-events-none">
+              <div
+                className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center transition-all ${
+                  selectedPackage === "standard"
+                    ? "border-yellow-400 bg-yellow-400/20"
+                    : "border-slate-500"
+                }`}
+              >
+                {selectedPackage === "standard" && (
+                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                )}
               </div>
+            </div>
 
-              {/* Content */}
+            {/* Content */}
+            <div className="p-2.5 pt-4 relative z-10 pointer-events-none">
               <div className="flex flex-col gap-2">
                 {/* Top Section - Package Name and Speed */}
                 <div className="flex items-center gap-2">
@@ -128,7 +138,9 @@ export default function PricingCards() {
                         WebkitBackgroundClip:
                           selectedPackage === "standard" ? "text" : "unset",
                         WebkitTextFillColor:
-                          selectedPackage === "standard" ? "transparent" : "#ffffff",
+                          selectedPackage === "standard"
+                            ? "transparent"
+                            : "#ffffff",
                         backgroundClip:
                           selectedPackage === "standard" ? "text" : "unset",
                       }}
@@ -183,28 +195,38 @@ export default function PricingCards() {
                 </div>
               </div>
             </div>
-            </div>
-          </label>
+          </div>
 
           {/* Package 2 - Premium */}
-          <label
-            className={`group relative rounded-lg bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border-2 transition-all duration-300 cursor-pointer w-full ${
+          <div
+            className={`group relative rounded-lg bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
               selectedPackage === "premium"
-                ? "border-yellow-400/80 shadow-[0_0_25px_rgba(251,191,36,0.4)] scale-105"
-                : selectedPackage === "standard"
-                ? "border-slate-700/50 hover:border-slate-600 scale-95"
+                ? "border-yellow-400/80 shadow-[0_0_25px_rgba(251,191,36,0.4)]"
                 : "border-slate-700/50 hover:border-slate-600"
             }`}
-            onClick={() => handleCardClick("premium")}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
           >
+            {/* Clickable Overlay - Covers entire card */}
+            <div
+              className="absolute inset-0 cursor-pointer z-20"
+              onClick={() => handleCardClick("premium")}
+              onTouchStart={() => handleCardClick("premium")}
+            />
+
             {/* Price - Top Left with border cut effect */}
-            <div className="absolute -top-2.5 left-2" style={{ zIndex: 5, pointerEvents: 'none' }}>
-              <div className="px-1.5 py-0.5 rounded" style={{
-                background: 'linear-gradient(to bottom, rgb(15, 23, 42), rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9))',
-                backdropFilter: 'blur(4px)',
-                WebkitBackdropFilter: 'blur(4px)'
-              }}>
+            <div
+              className="absolute -top-2.5 left-2 pointer-events-none"
+              style={{ zIndex: 30 }}
+            >
+              <div
+                className="px-1.5 py-0.5 rounded"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, rgb(15, 23, 42), rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9))",
+                  backdropFilter: "blur(4px)",
+                  WebkitBackdropFilter: "blur(4px)",
+                }}
+              >
                 <div
                   className="text-lg font-extrabold leading-tight"
                   style={{
@@ -218,25 +240,24 @@ export default function PricingCards() {
                 </div>
               </div>
             </div>
-            <div className="overflow-hidden rounded-lg relative" style={{ zIndex: 10 }}>
-            <div className="p-2.5 pt-4 relative" style={{ zIndex: 10 }}>
 
-              {/* Radio Button */}
-              <div className="absolute top-2 right-2 z-20">
-                <div
-                  className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center transition-all ${
-                    selectedPackage === "premium"
-                      ? "border-yellow-400 bg-yellow-400/20"
-                      : "border-slate-500"
-                  }`}
-                >
-                  {selectedPackage === "premium" && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
-                  )}
-                </div>
+            {/* Radio Button */}
+            <div className="absolute top-2 right-2 z-30 pointer-events-none">
+              <div
+                className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center transition-all ${
+                  selectedPackage === "premium"
+                    ? "border-yellow-400 bg-yellow-400/20"
+                    : "border-slate-500"
+                }`}
+              >
+                {selectedPackage === "premium" && (
+                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                )}
               </div>
+            </div>
 
-              {/* Content */}
+            {/* Content */}
+            <div className="p-2.5 pt-4 relative z-10 pointer-events-none">
               <div className="flex flex-col gap-2">
                 {/* Top Section - Package Name and Speed */}
                 <div className="flex items-center gap-2 mt-0.5">
@@ -261,7 +282,9 @@ export default function PricingCards() {
                         WebkitBackgroundClip:
                           selectedPackage === "premium" ? "text" : "unset",
                         WebkitTextFillColor:
-                          selectedPackage === "premium" ? "transparent" : "#ffffff",
+                          selectedPackage === "premium"
+                            ? "transparent"
+                            : "#ffffff",
                         backgroundClip:
                           selectedPackage === "premium" ? "text" : "unset",
                       }}
@@ -316,8 +339,7 @@ export default function PricingCards() {
                 </div>
               </div>
             </div>
-            </div>
-          </label>
+          </div>
         </div>
       </div>
 

@@ -81,7 +81,10 @@ export default function ProductCarousel() {
   }, []);
 
   return (
-    <div className="relative w-full" style={{ height: "70vh" }}>
+    <div
+      className="relative w-full"
+      style={{ height: "35vh", overflow: "hidden" }}
+    >
       {/* Title Section - Overlay on top of carousel */}
       <div
         className="absolute top-0 left-0 right-0 flex items-center justify-center px-4 py-1"
@@ -144,10 +147,7 @@ export default function ProductCarousel() {
       </div>
 
       {/* Swiper Carousel Container */}
-      <div
-        className="relative w-full"
-        style={{ height: "calc(70vh - 60px)", zIndex: 1 }}
-      >
+      <div className="relative w-full h-full" style={{ zIndex: 1 }}>
         {/* Navigation Arrows */}
         {activeIndex > 0 && (
           <button
@@ -210,21 +210,20 @@ export default function ProductCarousel() {
           onSlideChange={handleSlideChange}
           onTouchStart={handleTouchStart}
           className="h-full"
+          style={{ height: "100%" }}
         >
           {carouselSlides.map((slide, index) => (
-            <SwiperSlide key={index}>
-              <div className="min-w-full h-full flex flex-col">
+            <SwiperSlide key={index} style={{ height: "100%" }}>
+              <div className="w-full h-full relative">
                 {/* Image Section */}
-                <div
-                  className="relative overflow-hidden"
-                  style={{ height: "70%" }}
-                >
+                <div className="absolute inset-0 overflow-hidden">
                   <img
                     src={slide.image}
                     alt={slide.title}
-                    className={`w-full h-full object-cover ${
-                      index === 3 ? "object-center" : "object-bottom"
-                    }`}
+                    className="w-full h-full object-cover"
+                    style={{
+                      objectPosition: index === 3 ? "center" : "bottom",
+                    }}
                   />
                   {/* Black Overlay */}
                   <div
@@ -234,37 +233,47 @@ export default function ProductCarousel() {
                       zIndex: 1,
                     }}
                   />
-                  {/* Title and Description - Overlay at Bottom */}
+                  {/* Gradient Fade at Bottom */}
                   <div
                     className="absolute bottom-0 left-0 right-0 pointer-events-none"
-                    style={{ zIndex: 3 }}
-                  >
-                    {/* Content */}
-                    <div className="relative px-3 pb-6 pt-8">
-                      <h3
-                        className={`text-xl text-white mb-2 drop-shadow-[0_2px_8px_rgba(255,0,0,0.8)] leading-snug ${poppins.variable}`}
-                        style={{
-                          fontFamily: "var(--font-poppins), sans-serif",
-                          letterSpacing: "0.01em",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {slide.title}
-                      </h3>
-                      <p
-                        className={`text-sm text-white/95 leading-normal drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] ${poppins.variable}`}
-                        style={{
-                          fontFamily: "var(--font-poppins), sans-serif",
-                          letterSpacing: "0.01em",
-                          fontWeight: 300,
-                          lineHeight: "1.5",
-                          wordWrap: "break-word",
-                          hyphens: "auto",
-                        }}
-                      >
-                        {slide.description}
-                      </p>
-                    </div>
+                    style={{
+                      height: "60px",
+                      background:
+                        "linear-gradient(to bottom, transparent, rgb(15, 23, 42))",
+                      zIndex: 2,
+                    }}
+                  />
+                </div>
+                {/* Title and Description - Overlay at Bottom */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 pointer-events-none"
+                  style={{ zIndex: 3 }}
+                >
+                  {/* Content */}
+                  <div className="relative px-3 pb-6 pt-8">
+                    <h3
+                      className={`text-xl text-white mb-2 drop-shadow-[0_2px_8px_rgba(255,0,0,0.8)] leading-snug ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                        letterSpacing: "0.01em",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {slide.title}
+                    </h3>
+                    <p
+                      className={`text-sm text-white/95 leading-normal drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                        letterSpacing: "0.01em",
+                        fontWeight: 300,
+                        lineHeight: "1.5",
+                        wordWrap: "break-word",
+                        hyphens: "auto",
+                      }}
+                    >
+                      {slide.description}
+                    </p>
                   </div>
                 </div>
               </div>

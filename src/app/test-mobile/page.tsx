@@ -14,11 +14,11 @@ export default function TestMobilePage() {
       <ProductCarousel />
 
       {/* Step 1: Choose Your Package */}
-      <section className="px-4 py-8" style={{ marginTop: "-232px" }}>
-        <div className="max-w-md mx-auto">
+      <section className="px-3 py-2" style={{ marginTop: "0" }}>
+        <div className="w-full">
           <div className="text-center mb-6">
             <h2
-              className={`text-2xl font-bold text-white mb-2 ${poppins.variable}`}
+              className={`text-xl font-bold text-white mb-2 ${poppins.variable}`}
               style={{
                 fontFamily: "var(--font-poppins), sans-serif",
                 background: "linear-gradient(135deg, #ffffff, #fbbf24)",
