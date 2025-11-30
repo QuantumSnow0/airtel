@@ -2,6 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { usePackage } from "../contexts/PackageContext";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
 
 export default function PricingCards() {
   const router = useRouter();
@@ -55,178 +62,264 @@ export default function PricingCards() {
         }}
       />
       {/* Mobile Pricing Cards */}
-      <div className="md:hidden space-y-5 pt-6">
-        <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-slate-900 mb-2">
-            Choose Your Package
-          </h2>
-        </div>
-        <div className="flex flex-col gap-4">
-          {/* Package 1 */}
+      <div className={`md:hidden space-y-3 ${poppins.variable}`}>
+        <div className="flex flex-col gap-3">
+          {/* Package 1 - Standard */}
           <label
-            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 via-red-500 to-rose-600 p-3 shadow-2xl transition-all duration-300 transform hover:scale-[1.02] cursor-pointer w-full"
+            className={`group relative overflow-hidden rounded-xl bg-slate-800/90 backdrop-blur-sm border-2 transition-all duration-300 cursor-pointer w-full ${
+              selectedPackage === "standard"
+                ? "border-yellow-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)]"
+                : "border-slate-700/50 hover:border-slate-600"
+            }`}
             onClick={() => handleCardClick("standard")}
+            style={{ fontFamily: "var(--font-poppins), sans-serif" }}
           >
-            <div className="absolute top-2 left-2 z-20">
-              <input
-                type="radio"
-                name="package"
-                value="standard"
-                checked={selectedPackage === "standard"}
-                onChange={() => setSelectedPackage("standard")}
-                className="w-4 h-4 border-2 border-white/50 rounded-full focus:outline-none focus:ring-0 cursor-pointer shrink-0"
-              />
-            </div>
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-12 -mb-12"></div>
-            <div className="relative flex flex-col h-full justify-between min-h-[140px] pt-5">
-              {/* Top Row - Package Info and Price */}
-              <div className="flex items-start justify-between gap-3">
-                {/* Left: Icon, Name, Speed */}
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="w-10 h-10 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-lg overflow-hidden shrink-0">
-                    <img
-                      src="/icon.png"
-                      alt="5G Icon"
-                      className="w-full h-full object-contain p-1.5 brightness-0 invert"
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="text-sm font-bold text-white leading-tight">
-                      Standard
-                    </div>
-                    <div className="text-xs text-white/90 mt-0.5">15 Mbps</div>
-                  </div>
-                </div>
-
-                {/* Right: Price */}
-                <div className="flex flex-col items-end shrink-0">
-                  <div className="text-2xl font-extrabold text-white leading-tight">
-                    Ksh. 1,999
-                  </div>
-                  <div className="text-xs text-white/80 mt-1">per month</div>
+            <div className="p-3">
+              {/* Radio Button */}
+              <div className="absolute top-2.5 right-2.5 z-20">
+                <div
+                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${
+                    selectedPackage === "standard"
+                      ? "border-yellow-400 bg-yellow-400/20"
+                      : "border-slate-500"
+                  }`}
+                >
+                  {selectedPackage === "standard" && (
+                    <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+                  )}
                 </div>
               </div>
 
-              {/* Bottom Section - Validity and Installation */}
-              <div className="pt-4 mt-auto border-t border-white/20 space-y-2">
-                <div className="flex items-center gap-1.5 text-xs text-white/95">
-                  <svg
-                    className="w-4 h-4 text-white shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
+              {/* Content */}
+              <div className="flex flex-col gap-2.5">
+                {/* Top Section - Package Name and Speed */}
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400/20 to-yellow-500/10 border border-yellow-400/30 flex items-center justify-center overflow-hidden shrink-0">
+                    <img
+                      src="/icon.png"
+                      alt="5G Icon"
+                      className="w-full h-full object-contain p-1.5"
+                      style={{
+                        filter: "drop-shadow(0 0 8px rgba(251, 191, 36, 0.5))",
+                      }}
                     />
-                  </svg>
-                  <span className="font-medium">30 days validity</span>
+                  </div>
+                  <div className="flex flex-col flex-1">
+                    <div
+                      className="text-base font-bold text-white leading-tight"
+                      style={{
+                        background:
+                          selectedPackage === "standard"
+                            ? "linear-gradient(135deg, #ffffff, #fbbf24)"
+                            : "none",
+                        WebkitBackgroundClip:
+                          selectedPackage === "standard" ? "text" : "unset",
+                        WebkitTextFillColor:
+                          selectedPackage === "standard" ? "transparent" : "#ffffff",
+                        backgroundClip:
+                          selectedPackage === "standard" ? "text" : "unset",
+                      }}
+                    >
+                      Standard
+                    </div>
+                    <div className="text-xs text-slate-300 mt-0.5">
+                      15 Mbps
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-white/90">
-                  <svg
-                    className="w-4 h-4 text-white shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                  <span>
-                    Installation:{" "}
-                    <span className="font-semibold">Ksh. 1,000</span>
-                  </span>
+
+                {/* Price Section */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-baseline gap-1.5">
+                    <div
+                      className="text-2xl font-extrabold leading-tight"
+                      style={{
+                        background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      Ksh. 1,999
+                    </div>
+                    <div className="text-xs text-slate-400">/month</div>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                    <svg
+                      className="w-3.5 h-3.5 text-yellow-400 shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
+                    </svg>
+                    <span>
+                      Installation:{" "}
+                      <span className="font-semibold text-yellow-400">
+                        Ksh. 1,000
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Bottom Section - Features */}
+                <div className="pt-2 border-t border-slate-700/50">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                    <svg
+                      className="w-3.5 h-3.5 text-yellow-400 shrink-0"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>30 days validity</span>
+                  </div>
                 </div>
               </div>
             </div>
           </label>
 
-          {/* Package 2 */}
+          {/* Package 2 - Premium */}
           <label
-            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 via-red-500 to-rose-600 p-3 shadow-2xl transition-all duration-300 transform hover:scale-[1.02] shine-effect cursor-pointer w-full"
+            className={`group relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border-2 transition-all duration-300 cursor-pointer w-full ${
+              selectedPackage === "premium"
+                ? "border-yellow-400/80 shadow-[0_0_25px_rgba(251,191,36,0.4)]"
+                : "border-slate-700/50 hover:border-slate-600"
+            }`}
             onClick={() => handleCardClick("premium")}
+            style={{ fontFamily: "var(--font-poppins), sans-serif" }}
           >
-            <div className="absolute top-2 left-2 z-20">
-              <input
-                type="radio"
-                name="package"
-                value="premium"
-                checked={selectedPackage === "premium"}
-                onChange={() => setSelectedPackage("premium")}
-                className="w-4 h-4 border-2 border-white/50 rounded-full focus:outline-none focus:ring-0 cursor-pointer shrink-0"
-              />
+            {/* Premium Badge */}
+            <div className="absolute top-2 left-2 z-10">
+              <div
+                className="px-1.5 py-0.5 rounded text-[10px] font-bold"
+                style={{
+                  background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+                  color: "#000000",
+                }}
+              >
+                POPULAR
+              </div>
             </div>
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-12 -mb-12"></div>
-            <div className="relative z-10 flex flex-col h-full justify-between min-h-[140px] pt-5">
-              {/* Top Row - Package Info and Price */}
-              <div className="flex items-start justify-between gap-3">
-                {/* Left: Icon, Name, Speed */}
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="w-10 h-10 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-lg overflow-hidden shrink-0">
-                    <img
-                      src="/icon.png"
-                      alt="5G Icon"
-                      className="w-full h-full object-contain p-1.5 brightness-0 invert"
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="text-sm font-bold text-white leading-tight">
-                      Premium
-                    </div>
-                    <div className="text-xs text-white/90 mt-0.5">30 Mbps</div>
-                  </div>
-                </div>
 
-                {/* Right: Price */}
-                <div className="flex flex-col items-end shrink-0">
-                  <div className="text-2xl font-extrabold text-white leading-tight">
-                    Ksh. 2,999
-                  </div>
-                  <div className="text-xs text-white/80 mt-1">per month</div>
+            <div className="p-3">
+              {/* Radio Button */}
+              <div className="absolute top-2.5 right-2.5 z-20">
+                <div
+                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${
+                    selectedPackage === "premium"
+                      ? "border-yellow-400 bg-yellow-400/20"
+                      : "border-slate-500"
+                  }`}
+                >
+                  {selectedPackage === "premium" && (
+                    <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+                  )}
                 </div>
               </div>
 
-              {/* Bottom Section - Validity and Installation */}
-              <div className="pt-4 mt-auto border-t border-white/20 space-y-2">
-                <div className="flex items-center gap-1.5 text-xs text-white/95">
-                  <svg
-                    className="w-4 h-4 text-white shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
+              {/* Content */}
+              <div className="flex flex-col gap-2.5">
+                {/* Top Section - Package Name and Speed */}
+                <div className="flex items-center gap-2.5 mt-1">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400/30 to-yellow-500/20 border border-yellow-400/50 flex items-center justify-center overflow-hidden shrink-0 shadow-lg shadow-yellow-400/20">
+                    <img
+                      src="/icon.png"
+                      alt="5G Icon"
+                      className="w-full h-full object-contain p-1.5"
+                      style={{
+                        filter: "drop-shadow(0 0 10px rgba(251, 191, 36, 0.6))",
+                      }}
                     />
-                  </svg>
-                  <span className="font-medium">30 days validity</span>
+                  </div>
+                  <div className="flex flex-col flex-1">
+                    <div
+                      className="text-base font-bold text-white leading-tight"
+                      style={{
+                        background:
+                          selectedPackage === "premium"
+                            ? "linear-gradient(135deg, #ffffff, #fbbf24)"
+                            : "none",
+                        WebkitBackgroundClip:
+                          selectedPackage === "premium" ? "text" : "unset",
+                        WebkitTextFillColor:
+                          selectedPackage === "premium" ? "transparent" : "#ffffff",
+                        backgroundClip:
+                          selectedPackage === "premium" ? "text" : "unset",
+                      }}
+                    >
+                      Premium
+                    </div>
+                    <div className="text-xs text-slate-300 mt-0.5">
+                      30 Mbps
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-white/90">
-                  <svg
-                    className="w-4 h-4 text-white shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                  <span>
-                    Installation:{" "}
-                    <span className="font-semibold">Ksh. 1,000</span>
-                  </span>
+
+                {/* Price Section */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-baseline gap-1.5">
+                    <div
+                      className="text-2xl font-extrabold leading-tight"
+                      style={{
+                        background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      Ksh. 2,999
+                    </div>
+                    <div className="text-xs text-slate-400">/month</div>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                    <svg
+                      className="w-3.5 h-3.5 text-yellow-400 shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
+                    </svg>
+                    <span>
+                      Installation:{" "}
+                      <span className="font-semibold text-yellow-400">
+                        Ksh. 1,000
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Bottom Section - Features */}
+                <div className="pt-2 border-t border-slate-700/50">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                    <svg
+                      className="w-3.5 h-3.5 text-yellow-400 shrink-0"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>30 days validity</span>
+                  </div>
                 </div>
               </div>
             </div>
