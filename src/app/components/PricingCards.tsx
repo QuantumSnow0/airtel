@@ -71,17 +71,25 @@ export default function PricingCards() {
 
             {/* Price - Top Left with border cut effect */}
             <div
-              className="absolute -top-2.5 left-2 pointer-events-none"
-              style={{ zIndex: 30 }}
+              className="absolute left-2 pointer-events-none"
+              style={{ zIndex: 30, top: "-2px" }}
             >
+              {/* Transparent div to cut the border - positioned at the border line */}
               <div
-                className="px-1.5 py-0.5 rounded"
+                className="absolute left-0"
                 style={{
-                  background:
-                    "linear-gradient(to bottom, rgb(15, 23, 42), rgba(30, 41, 59, 0.9))",
-                  backdropFilter: "blur(4px)",
-                  WebkitBackdropFilter: "blur(4px)",
+                  top: "0px",
+                  background: "rgb(30, 41, 59)",
+                  height: "2px",
+                  width: "calc(100% + 8px)",
+                  marginLeft: "-4px",
+                  borderTopLeftRadius: "8px",
                 }}
+              />
+              {/* Price text */}
+              <div
+                className="px-1.5 relative"
+                style={{ top: "-50%", transform: "translateY(-50%)" }}
               >
                 <div
                   className="text-lg font-extrabold leading-tight"
@@ -215,17 +223,25 @@ export default function PricingCards() {
 
             {/* Price - Top Left with border cut effect */}
             <div
-              className="absolute -top-2.5 left-2 pointer-events-none"
-              style={{ zIndex: 30 }}
+              className="absolute left-2 pointer-events-none"
+              style={{ zIndex: 30, top: "-2px" }}
             >
+              {/* Transparent div to cut the border - positioned at the border line */}
               <div
-                className="px-1.5 py-0.5 rounded"
+                className="absolute left-0"
                 style={{
-                  background:
-                    "linear-gradient(to bottom, rgb(15, 23, 42), rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9))",
-                  backdropFilter: "blur(4px)",
-                  WebkitBackdropFilter: "blur(4px)",
+                  top: "0px",
+                  background: "rgb(30, 41, 59)",
+                  height: "2px",
+                  width: "calc(100% + 8px)",
+                  marginLeft: "-4px",
+                  borderTopLeftRadius: "8px",
                 }}
+              />
+              {/* Price text */}
+              <div
+                className="px-1.5 relative"
+                style={{ top: "-50%", transform: "translateY(-50%)" }}
               >
                 <div
                   className="text-lg font-extrabold leading-tight"

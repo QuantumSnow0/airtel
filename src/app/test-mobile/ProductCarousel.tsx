@@ -83,7 +83,10 @@ export default function ProductCarousel() {
   return (
     <div
       className="relative w-full"
-      style={{ height: "35vh", overflow: "hidden" }}
+      style={{
+        height: "clamp(250px, 45vw, 40vh)",
+        overflow: "hidden",
+      }}
     >
       {/* Title Section - Overlay on top of carousel */}
       <div
@@ -222,7 +225,12 @@ export default function ProductCarousel() {
                     alt={slide.title}
                     className="w-full h-full object-cover"
                     style={{
-                      objectPosition: index === 3 ? "center" : "bottom",
+                      objectPosition:
+                        index === 3
+                          ? "center"
+                          : index === 0
+                          ? "center"
+                          : "bottom",
                     }}
                   />
                   {/* Black Overlay */}
