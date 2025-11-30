@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import type { LeadSubmission } from "@/lib/types";
+import { randomUUID } from "crypto";
 
 const MS_FORMS_FORM_ID =
   process.env.MS_FORMS_FORM_ID ||
@@ -15,6 +16,7 @@ const QUESTION_IDS = {
   enterpriseCP: "r52e9f6e788444e2a96d9e30de5d635d8",
   agentName: "rcf88d2d33e8c4ed4b33ccc91fec1d771",
   agentMobile: "r2855e7f8fcfb44c98a2c5797e8e9b087",
+  totalUnitsRequired: "rb1675e7eca79440e9aade6600fa4d22c", // Total Units Required (field 5)
   leadType: "rd897bb0eb8344bafaaf8db07a535a049",
   connectionType: "r4ceb180775c04d5a92a39fd687573090",
   customerName: "r3af4eebb47ff46b78eb4118311884f53",
@@ -116,17 +118,23 @@ export async function POST(request: NextRequest) {
     // Step 2: Fetch Microsoft Forms tokens
     let formsSessionId = "";
     let requestVerificationToken = "";
+    let muid = "";
+    let msalCacheEncryption = "";
+    let userSessionId = "";
     let userId = "";
     let tenantId = "";
+    let cookieString = "";
 
     try {
       const tokenResponse = await fetch(MS_FORMS_RESPONSE_PAGE_URL, {
         method: "GET",
         headers: {
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
           Accept:
             "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "Accept-Language": "en-US,en;q=0.9",
+          "Accept-Encoding": "gzip, deflate, br, zstd",
         },
       });
 
@@ -134,18 +142,36 @@ export async function POST(request: NextRequest) {
         throw new Error(`Failed to fetch tokens: ${tokenResponse.status}`);
       }
 
-      // Extract cookies
+      // Extract cookies from Set-Cookie headers
       const setCookieHeaders = tokenResponse.headers.getSetCookie();
+      const cookies: string[] = [];
+
       for (const cookie of setCookieHeaders) {
+        // Extract cookie name and value (everything before the first semicolon)
+        const cookiePair = cookie.split(";")[0];
+        cookies.push(cookiePair);
+
         if (cookie.startsWith("FormsWebSessionId=")) {
-          formsSessionId = cookie.split("FormsWebSessionId=")[1].split(";")[0];
+          formsSessionId = cookiePair.split("FormsWebSessionId=")[1];
         }
         if (cookie.startsWith("__RequestVerificationToken=")) {
-          requestVerificationToken = cookie
-            .split("__RequestVerificationToken=")[1]
-            .split(";")[0];
+          requestVerificationToken = cookiePair.split(
+            "__RequestVerificationToken="
+          )[1];
+        }
+        if (cookie.startsWith("MUID=")) {
+          muid = cookiePair.split("MUID=")[1];
+        }
+        if (cookie.startsWith("msal.cache.encryption=")) {
+          msalCacheEncryption = cookiePair.split("msal.cache.encryption=")[1];
         }
       }
+
+      // Build cookie string for POST request
+      cookieString = cookies.join("; ");
+
+      // Extract x-usersessionid from response headers (if present)
+      userSessionId = tokenResponse.headers.get("x-usersessionid") || "";
 
       // Extract __RequestVerificationToken from response body (it's in a hidden input)
       const html = await tokenResponse.text();
@@ -192,6 +218,14 @@ export async function POST(request: NextRequest) {
     const startDate = new Date().toISOString();
     const submitDate = new Date().toISOString();
 
+    // Generate correlation ID
+    const correlationId = randomUUID();
+
+    // Generate user session ID if not extracted from headers
+    if (!userSessionId) {
+      userSessionId = randomUUID();
+    }
+
     const answers = [
       {
         questionId: QUESTION_IDS.agentType,
@@ -208,6 +242,10 @@ export async function POST(request: NextRequest) {
       {
         questionId: QUESTION_IDS.agentMobile,
         answer1: `254${INTERNAL_DEFAULTS.agentMobile.replace(/^0/, "")}`,
+      },
+      {
+        questionId: QUESTION_IDS.totalUnitsRequired,
+        answer1: "1",
       },
       {
         questionId: QUESTION_IDS.leadType,
@@ -271,12 +309,28 @@ export async function POST(request: NextRequest) {
           "Content-Type": "application/json",
           __requestverificationtoken: requestVerificationToken,
           accept: "application/json",
+          "Accept-Encoding": "gzip, deflate, br, zstd",
+          "Accept-Language": "en-US,en;q=0.9",
+          Connection: "keep-alive",
+          Cookie: cookieString,
+          Origin: "https://forms.office.com",
+          Referer: MS_FORMS_RESPONSE_PAGE_URL,
           "odata-version": "4.0",
           "odata-maxversion": "4.0",
+          "sec-ch-ua":
+            '"Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"',
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": '"Windows"',
+          "Sec-Fetch-Dest": "empty",
+          "Sec-Fetch-Mode": "cors",
+          "Sec-Fetch-Site": "same-origin",
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+          "x-correlationid": correlationId,
+          "x-ms-form-muid": muid || "",
           "x-ms-form-request-ring": "business",
           "x-ms-form-request-source": "ms-formweb",
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+          "x-usersessionid": userSessionId,
         },
         body: JSON.stringify(msFormsPayload),
       });
@@ -291,9 +345,9 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Extract response ID if available
+      // Extract response ID if available (prioritize 'id' field as per new API structure)
       const responseId =
-        formsResponseData?.ResponseId || formsResponseData?.id || null;
+        formsResponseData?.id || formsResponseData?.ResponseId || null;
 
       // Step 5: Update Supabase with success
       await supabaseAdmin
