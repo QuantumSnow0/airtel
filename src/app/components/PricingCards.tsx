@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
 
@@ -11,21 +10,11 @@ const poppins = Poppins({
 });
 
 export default function PricingCards() {
-  const router = useRouter();
   const { selectedPackage, setSelectedPackage } = usePackage();
-
-  // Map package selection to form package option
-  const packageMap: Record<string, string> = {
-    standard: "5G_15Mbps_30days at Ksh.2999",
-    premium: "5G_30Mbps_30days at Ksh.3999",
-  };
 
   const handleCardClick = (packageName: string) => {
     setSelectedPackage(packageName);
-    const packageOption = packageMap[packageName] || packageMap.premium;
-    router.push(
-      `/request-installation?package=${encodeURIComponent(packageOption)}`
-    );
+    // Form is on the same page, so no redirect needed
   };
 
   return (
@@ -62,43 +51,67 @@ export default function PricingCards() {
         }}
       />
       {/* Mobile Pricing Cards */}
-      <div className={`md:hidden space-y-3 ${poppins.variable}`}>
-        <div className="flex flex-col gap-3">
+      <div className={`md:hidden ${poppins.variable}`}>
+        <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-2">
           {/* Package 1 - Standard */}
           <label
-            className={`group relative overflow-hidden rounded-xl bg-slate-800/90 backdrop-blur-sm border-2 transition-all duration-300 cursor-pointer w-full ${
+            className={`group relative rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 transition-all duration-300 cursor-pointer w-full ${
               selectedPackage === "standard"
-                ? "border-yellow-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)]"
+                ? "border-yellow-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)] scale-105"
+                : selectedPackage === "premium"
+                ? "border-slate-700/50 hover:border-slate-600 scale-95"
                 : "border-slate-700/50 hover:border-slate-600"
             }`}
             onClick={() => handleCardClick("standard")}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
           >
-            <div className="p-3">
-              {/* Radio Button */}
-              <div className="absolute top-2.5 right-2.5 z-20">
+            {/* Price - Top Left with border cut effect */}
+            <div className="absolute -top-2.5 left-2" style={{ zIndex: 5, pointerEvents: 'none' }}>
+              <div className="px-1.5 py-0.5 rounded" style={{
+                background: 'linear-gradient(to bottom, rgb(15, 23, 42), rgba(30, 41, 59, 0.9))',
+                backdropFilter: 'blur(4px)',
+                WebkitBackdropFilter: 'blur(4px)'
+              }}>
                 <div
-                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${
+                  className="text-lg font-extrabold leading-tight"
+                  style={{
+                    background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  Ksh. 1,999
+                </div>
+              </div>
+            </div>
+            <div className="overflow-hidden rounded-lg relative" style={{ zIndex: 10 }}>
+            <div className="p-2.5 pt-4 relative" style={{ zIndex: 10 }}>
+
+              {/* Radio Button */}
+              <div className="absolute top-2 right-2 z-20">
+                <div
+                  className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center transition-all ${
                     selectedPackage === "standard"
                       ? "border-yellow-400 bg-yellow-400/20"
                       : "border-slate-500"
                   }`}
                 >
                   {selectedPackage === "standard" && (
-                    <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
                   )}
                 </div>
               </div>
 
               {/* Content */}
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-2">
                 {/* Top Section - Package Name and Speed */}
-                <div className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400/20 to-yellow-500/10 border border-yellow-400/30 flex items-center justify-center overflow-hidden shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-yellow-400/20 to-yellow-500/10 border border-yellow-400/30 flex items-center justify-center overflow-hidden shrink-0">
                     <img
                       src="/icon.png"
                       alt="5G Icon"
-                      className="w-full h-full object-contain p-1.5"
+                      className="w-full h-full object-contain p-1"
                       style={{
                         filter: "drop-shadow(0 0 8px rgba(251, 191, 36, 0.5))",
                       }}
@@ -106,7 +119,7 @@ export default function PricingCards() {
                   </div>
                   <div className="flex flex-col flex-1">
                     <div
-                      className="text-base font-bold text-white leading-tight"
+                      className="text-sm font-bold text-white leading-tight"
                       style={{
                         background:
                           selectedPackage === "standard"
@@ -122,56 +135,40 @@ export default function PricingCards() {
                     >
                       Standard
                     </div>
-                    <div className="text-xs text-slate-300 mt-0.5">
+                    <div className="text-[10px] text-slate-300 mt-0.5">
                       15 Mbps
                     </div>
                   </div>
                 </div>
 
-                {/* Price Section */}
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-baseline gap-1.5">
-                    <div
-                      className="text-2xl font-extrabold leading-tight"
-                      style={{
-                        background: "linear-gradient(135deg, #ffffff, #fbbf24)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                      }}
-                    >
-                      Ksh. 1,999
-                    </div>
-                    <div className="text-xs text-slate-400">/month</div>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-300">
-                    <svg
-                      className="w-3.5 h-3.5 text-yellow-400 shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      />
-                    </svg>
-                    <span>
-                      Installation:{" "}
-                      <span className="font-semibold text-yellow-400">
-                        Ksh. 1,000
-                      </span>
+                {/* Installation Section */}
+                <div className="flex items-center gap-1 text-[10px] text-slate-300">
+                  <svg
+                    className="w-3 h-3 text-yellow-400 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
+                  </svg>
+                  <span>
+                    Installation:{" "}
+                    <span className="font-semibold text-yellow-400">
+                      Ksh. 1,000
                     </span>
-                  </div>
+                  </span>
                 </div>
 
                 {/* Bottom Section - Features */}
-                <div className="pt-2 border-t border-slate-700/50">
-                  <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                <div className="pt-1.5 border-t border-slate-700/50">
+                  <div className="flex items-center gap-1 text-[10px] text-slate-300">
                     <svg
-                      className="w-3.5 h-3.5 text-yellow-400 shrink-0"
+                      className="w-3 h-3 text-yellow-400 shrink-0"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -186,56 +183,68 @@ export default function PricingCards() {
                 </div>
               </div>
             </div>
+            </div>
           </label>
 
           {/* Package 2 - Premium */}
           <label
-            className={`group relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border-2 transition-all duration-300 cursor-pointer w-full ${
+            className={`group relative rounded-lg bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border-2 transition-all duration-300 cursor-pointer w-full ${
               selectedPackage === "premium"
-                ? "border-yellow-400/80 shadow-[0_0_25px_rgba(251,191,36,0.4)]"
+                ? "border-yellow-400/80 shadow-[0_0_25px_rgba(251,191,36,0.4)] scale-105"
+                : selectedPackage === "standard"
+                ? "border-slate-700/50 hover:border-slate-600 scale-95"
                 : "border-slate-700/50 hover:border-slate-600"
             }`}
             onClick={() => handleCardClick("premium")}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
           >
-            {/* Premium Badge */}
-            <div className="absolute top-2 left-2 z-10">
-              <div
-                className="px-1.5 py-0.5 rounded text-[10px] font-bold"
-                style={{
-                  background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
-                  color: "#000000",
-                }}
-              >
-                POPULAR
+            {/* Price - Top Left with border cut effect */}
+            <div className="absolute -top-2.5 left-2" style={{ zIndex: 5, pointerEvents: 'none' }}>
+              <div className="px-1.5 py-0.5 rounded" style={{
+                background: 'linear-gradient(to bottom, rgb(15, 23, 42), rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9))',
+                backdropFilter: 'blur(4px)',
+                WebkitBackdropFilter: 'blur(4px)'
+              }}>
+                <div
+                  className="text-lg font-extrabold leading-tight"
+                  style={{
+                    background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  Ksh. 2,999
+                </div>
               </div>
             </div>
+            <div className="overflow-hidden rounded-lg relative" style={{ zIndex: 10 }}>
+            <div className="p-2.5 pt-4 relative" style={{ zIndex: 10 }}>
 
-            <div className="p-3">
               {/* Radio Button */}
-              <div className="absolute top-2.5 right-2.5 z-20">
+              <div className="absolute top-2 right-2 z-20">
                 <div
-                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${
+                  className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center transition-all ${
                     selectedPackage === "premium"
                       ? "border-yellow-400 bg-yellow-400/20"
                       : "border-slate-500"
                   }`}
                 >
                   {selectedPackage === "premium" && (
-                    <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
                   )}
                 </div>
               </div>
 
               {/* Content */}
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-2">
                 {/* Top Section - Package Name and Speed */}
-                <div className="flex items-center gap-2.5 mt-1">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400/30 to-yellow-500/20 border border-yellow-400/50 flex items-center justify-center overflow-hidden shrink-0 shadow-lg shadow-yellow-400/20">
+                <div className="flex items-center gap-2 mt-0.5">
+                  <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-yellow-400/30 to-yellow-500/20 border border-yellow-400/50 flex items-center justify-center overflow-hidden shrink-0 shadow-lg shadow-yellow-400/20">
                     <img
                       src="/icon.png"
                       alt="5G Icon"
-                      className="w-full h-full object-contain p-1.5"
+                      className="w-full h-full object-contain p-1"
                       style={{
                         filter: "drop-shadow(0 0 10px rgba(251, 191, 36, 0.6))",
                       }}
@@ -243,7 +252,7 @@ export default function PricingCards() {
                   </div>
                   <div className="flex flex-col flex-1">
                     <div
-                      className="text-base font-bold text-white leading-tight"
+                      className="text-sm font-bold text-white leading-tight"
                       style={{
                         background:
                           selectedPackage === "premium"
@@ -259,56 +268,40 @@ export default function PricingCards() {
                     >
                       Premium
                     </div>
-                    <div className="text-xs text-slate-300 mt-0.5">
+                    <div className="text-[10px] text-slate-300 mt-0.5">
                       30 Mbps
                     </div>
                   </div>
                 </div>
 
-                {/* Price Section */}
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-baseline gap-1.5">
-                    <div
-                      className="text-2xl font-extrabold leading-tight"
-                      style={{
-                        background: "linear-gradient(135deg, #ffffff, #fbbf24)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                      }}
-                    >
-                      Ksh. 2,999
-                    </div>
-                    <div className="text-xs text-slate-400">/month</div>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-300">
-                    <svg
-                      className="w-3.5 h-3.5 text-yellow-400 shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      />
-                    </svg>
-                    <span>
-                      Installation:{" "}
-                      <span className="font-semibold text-yellow-400">
-                        Ksh. 1,000
-                      </span>
+                {/* Installation Section */}
+                <div className="flex items-center gap-1 text-[10px] text-slate-300">
+                  <svg
+                    className="w-3 h-3 text-yellow-400 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
+                  </svg>
+                  <span>
+                    Installation:{" "}
+                    <span className="font-semibold text-yellow-400">
+                      Ksh. 1,000
                     </span>
-                  </div>
+                  </span>
                 </div>
 
                 {/* Bottom Section - Features */}
-                <div className="pt-2 border-t border-slate-700/50">
-                  <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                <div className="pt-1.5 border-t border-slate-700/50">
+                  <div className="flex items-center gap-1 text-[10px] text-slate-300">
                     <svg
-                      className="w-3.5 h-3.5 text-yellow-400 shrink-0"
+                      className="w-3 h-3 text-yellow-400 shrink-0"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -322,6 +315,7 @@ export default function PricingCards() {
                   </div>
                 </div>
               </div>
+            </div>
             </div>
           </label>
         </div>
