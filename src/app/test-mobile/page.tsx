@@ -961,6 +961,53 @@ export default function TestMobilePage() {
 
       <ProductCarousel />
 
+      {/* How to Order Section */}
+      <section className="px-3 py-4">
+        <div className="w-full">
+          <div className="text-center mb-4">
+            <h2
+              className={`text-lg font-semibold text-white mb-3 ${poppins.variable}`}
+              style={{
+                fontFamily: "var(--font-poppins), sans-serif",
+                background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              How to Order
+            </h2>
+            <div className="space-y-2">
+              <p
+                className={`text-sm text-white/80 ${poppins.variable}`}
+                style={{
+                  fontFamily: "var(--font-poppins), sans-serif",
+                }}
+              >
+                1. Choose your preferred package below
+              </p>
+              <p
+                className={`text-sm text-white/80 ${poppins.variable}`}
+                style={{
+                  fontFamily: "var(--font-poppins), sans-serif",
+                }}
+              >
+                2. Fill in your details and installation preferences
+              </p>
+              <p
+                className={`text-sm text-white/80 ${poppins.variable}`}
+                style={{
+                  fontFamily: "var(--font-poppins), sans-serif",
+                }}
+              >
+                3. Submit your request and our qualified technician will contact
+                you
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Step 1: Choose Your Package */}
       <section className="px-3 py-2" style={{ marginTop: "0" }}>
         <div className="w-full">
@@ -977,14 +1024,6 @@ export default function TestMobilePage() {
             >
               Step 1: Choose Your Package
             </h2>
-            <p
-              className={`text-sm text-white/70 ${poppins.variable}`}
-              style={{
-                fontFamily: "var(--font-poppins), sans-serif",
-              }}
-            >
-              Select the perfect plan for your needs
-            </p>
           </div>
           <PricingCards />
         </div>
@@ -1006,15 +1045,6 @@ export default function TestMobilePage() {
             >
               Step 2: Almost There
             </h2>
-            <p
-              className={`text-sm text-white/70 ${poppins.variable}`}
-              style={{
-                fontFamily: "var(--font-poppins), sans-serif",
-              }}
-            >
-              Just a few details and our certified technician will schedule your
-              installation
-            </p>
           </div>
 
           {/* Sample Form Field - Customer Name */}
