@@ -15,26 +15,195 @@ const poppins = Poppins({
 export default function TestMobilePage() {
   const step2Ref = useRef<HTMLDivElement>(null);
   const messageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+  const alternativeInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const deliveryLocationInputRef = useRef<HTMLInputElement>(null);
+  const dateInputRef = useRef<HTMLInputElement>(null);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        townDropdownRef.current &&
+        townButtonRef.current &&
+        !townDropdownRef.current.contains(event.target as Node) &&
+        !townButtonRef.current.contains(event.target as Node)
+      ) {
+        setShowTownDropdown(false);
+      }
+      if (
+        timeDropdownRef.current &&
+        timeButtonRef.current &&
+        !timeDropdownRef.current.contains(event.target as Node) &&
+        !timeButtonRef.current.contains(event.target as Node)
+      ) {
+        setShowTimeDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   const { selectedPackage } = usePackage();
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerAlternativeNumber, setCustomerAlternativeNumber] =
     useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [installationTown, setInstallationTown] = useState("");
+  const [deliveryLocation, setDeliveryLocation] = useState("");
+  const [preferredDate, setPreferredDate] = useState("");
+  const [preferredTime, setPreferredTime] = useState("");
   const [nameBlurred, setNameBlurred] = useState(false);
   const [phoneBlurred, setPhoneBlurred] = useState(false);
   const [alternativeBlurred, setAlternativeBlurred] = useState(false);
+  const [emailBlurred, setEmailBlurred] = useState(false);
+  const [townBlurred, setTownBlurred] = useState(false);
+  const [deliveryLocationBlurred, setDeliveryLocationBlurred] = useState(false);
+  const [preferredDateBlurred, setPreferredDateBlurred] = useState(false);
+  const [preferredTimeBlurred, setPreferredTimeBlurred] = useState(false);
+  const [showTownDropdown, setShowTownDropdown] = useState(false);
+  const [showTimeDropdown, setShowTimeDropdown] = useState(false);
+  const townDropdownRef = useRef<HTMLDivElement>(null);
+  const townButtonRef = useRef<HTMLButtonElement>(null);
+  const timeDropdownRef = useRef<HTMLDivElement>(null);
+  const timeButtonRef = useRef<HTMLButtonElement>(null);
   const [robotMessage, setRobotMessage] = useState("");
   const [robotVisible, setRobotVisible] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [previousPackage, setPreviousPackage] = useState<string | null>(null);
   const [robotBottom, setRobotBottom] = useState("1rem");
   const [robotTop, setRobotTop] = useState<string | null>(null);
+  const [viewportScrollOffset, setViewportScrollOffset] = useState(0);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   const isNameValid = customerName.trim().length >= 2;
   const isPhoneValid = /^[0-9]{10,12}$/.test(customerPhone.replace(/\s/g, ""));
   const isAlternativeValid = /^[0-9]{10,12}$/.test(
     customerAlternativeNumber.replace(/\s/g, "")
   );
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim());
+  const isTownValid = installationTown.trim().length > 0;
+  const isDeliveryLocationValid = deliveryLocation.trim().length >= 5;
+  const isPreferredDateValid = preferredDate.trim().length > 0;
+  const isPreferredTimeValid = preferredTime.trim().length > 0;
+
+  // Town options for dropdown (Kenyan towns)
+  const townOptions = [
+    "Nairobi",
+    "Mombasa",
+    "Kisumu",
+    "Nakuru",
+    "Eldoret",
+    "Thika",
+    "Malindi",
+    "Kitale",
+    "Garissa",
+    "Kakamega",
+    "Nyeri",
+    "Meru",
+    "Machakos",
+    "Embu",
+    "Kericho",
+    "Bungoma",
+    "Busia",
+    "Homa Bay",
+    "Kisii",
+    "Lamu",
+    "Other",
+  ];
+
+  // Detect autofill and mark fields as blurred if they have valid values
+  useEffect(() => {
+    const checkAutofill = () => {
+      // Check name field
+      if (
+        nameInputRef.current &&
+        customerName.trim().length >= 2 &&
+        !nameBlurred
+      ) {
+        setNameBlurred(true);
+      }
+      // Check phone field
+      if (phoneInputRef.current && isPhoneValid && !phoneBlurred) {
+        setPhoneBlurred(true);
+      }
+      // Check alternative field
+      if (
+        alternativeInputRef.current &&
+        isAlternativeValid &&
+        !alternativeBlurred
+      ) {
+        setAlternativeBlurred(true);
+      }
+      // Check email field
+      if (emailInputRef.current && isEmailValid && !emailBlurred) {
+        setEmailBlurred(true);
+      }
+      // Check delivery location field
+      if (
+        deliveryLocationInputRef.current &&
+        isDeliveryLocationValid &&
+        !deliveryLocationBlurred
+      ) {
+        setDeliveryLocationBlurred(true);
+      }
+      // Check date field
+      if (
+        dateInputRef.current &&
+        isPreferredDateValid &&
+        !preferredDateBlurred
+      ) {
+        setPreferredDateBlurred(true);
+      }
+    };
+
+    // Check immediately
+    checkAutofill();
+
+    // Check periodically to catch autofill that happens after initial render
+    const interval = setInterval(checkAutofill, 500);
+
+    // Also check on window focus (autofill often happens when window regains focus)
+    window.addEventListener("focus", checkAutofill);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("focus", checkAutofill);
+    };
+  }, [
+    customerName,
+    isPhoneValid,
+    isAlternativeValid,
+    isEmailValid,
+    isDeliveryLocationValid,
+    isPreferredDateValid,
+    nameBlurred,
+    phoneBlurred,
+    alternativeBlurred,
+    emailBlurred,
+    deliveryLocationBlurred,
+    preferredDateBlurred,
+  ]);
+
+  // Time options for dropdown (1 hour apart)
+  const timeOptions = [
+    "8:00 AM",
+    "9:00 AM",
+    "10:00 AM",
+    "11:00 AM",
+    "12:00 PM",
+    "1:00 PM",
+    "2:00 PM",
+    "3:00 PM",
+    "4:00 PM",
+    "5:00 PM",
+    "6:00 PM",
+  ];
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -135,25 +304,42 @@ export default function TestMobilePage() {
         const windowHeight = window.innerHeight;
         const heightDiff = windowHeight - viewportHeight;
 
-        // If keyboard is open (viewport is smaller), keep robot visible above keyboard
+        // If keyboard is open (viewport is smaller), position robot at top-right
         if (heightDiff > 150) {
-          // Keyboard is open - position robot from top of visual viewport
-          // This ensures it stays visible above the keyboard
-          const padding = 20;
-          const robotHeight = 80; // Approximate height
-          // Position from top of visible viewport, leaving space for robot
-          const topPosition = viewportHeight - robotHeight - padding;
-          setRobotTop(`${topPosition}px`);
+          // Keyboard is open - position robot at top-right of visible viewport
+          setIsKeyboardOpen(true);
+          setRobotTop("1rem");
           setRobotBottom("");
+          // Track visual viewport scroll offset
+          setViewportScrollOffset(viewport.offsetTop || 0);
         } else {
           // Keyboard is closed, use normal bottom position
+          setIsKeyboardOpen(false);
           setRobotTop(null);
           setRobotBottom("1rem");
+          setViewportScrollOffset(0);
         }
       } else {
         // Fallback for browsers without visual viewport API
+        setIsKeyboardOpen(false);
         setRobotTop(null);
         setRobotBottom("1rem");
+        setViewportScrollOffset(0);
+      }
+    };
+
+    const handleViewportScroll = () => {
+      if (window.visualViewport) {
+        const viewport = window.visualViewport;
+        const viewportHeight = viewport.height;
+        const windowHeight = window.innerHeight;
+        const heightDiff = windowHeight - viewportHeight;
+
+        // Only track scroll offset when keyboard is open
+        if (heightDiff > 150) {
+          // Update scroll offset when visual viewport scrolls
+          setViewportScrollOffset(viewport.offsetTop || 0);
+        }
       }
     };
 
@@ -163,7 +349,7 @@ export default function TestMobilePage() {
     // Listen for viewport changes
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", updateRobotPosition);
-      window.visualViewport.addEventListener("scroll", updateRobotPosition);
+      window.visualViewport.addEventListener("scroll", handleViewportScroll);
     } else {
       // Fallback to window resize
       window.addEventListener("resize", updateRobotPosition);
@@ -177,7 +363,7 @@ export default function TestMobilePage() {
         );
         window.visualViewport.removeEventListener(
           "scroll",
-          updateRobotPosition
+          handleViewportScroll
         );
       } else {
         window.removeEventListener("resize", updateRobotPosition);
@@ -190,7 +376,10 @@ export default function TestMobilePage() {
     const hasContent =
       customerName.trim().length > 0 ||
       customerPhone.trim().length > 0 ||
-      customerAlternativeNumber.trim().length > 0;
+      customerAlternativeNumber.trim().length > 0 ||
+      deliveryLocation.trim().length > 0 ||
+      preferredDate.trim().length > 0 ||
+      preferredTime.trim().length > 0;
 
     if (hasContent && !robotVisible) {
       setRobotVisible(true);
@@ -221,10 +410,16 @@ export default function TestMobilePage() {
     customerName,
     customerPhone,
     customerAlternativeNumber,
+    deliveryLocation,
+    preferredDate,
+    preferredTime,
     robotVisible,
     nameBlurred,
     phoneBlurred,
     alternativeBlurred,
+    deliveryLocationBlurred,
+    preferredDateBlurred,
+    preferredTimeBlurred,
   ]);
 
   // Show typing encouragement messages (only when actively typing, not blurred)
@@ -236,7 +431,10 @@ export default function TestMobilePage() {
     const isTyping =
       (customerName.trim().length > 0 && !nameBlurred) ||
       (customerPhone.trim().length > 0 && !phoneBlurred) ||
-      (customerAlternativeNumber.trim().length > 0 && !alternativeBlurred);
+      (customerAlternativeNumber.trim().length > 0 && !alternativeBlurred) ||
+      (deliveryLocation.trim().length > 0 && !deliveryLocationBlurred) ||
+      (preferredDate.trim().length > 0 && !preferredDateBlurred) ||
+      (preferredTime.trim().length > 0 && !preferredTimeBlurred);
 
     if (!isTyping) return;
 
@@ -289,25 +487,205 @@ export default function TestMobilePage() {
       } else {
         setRobotMessage("Perfect! That looks right! ✅");
       }
+    } else if (deliveryLocation.trim().length > 0 && !deliveryLocationBlurred) {
+      if (!isDeliveryLocationValid) {
+        const locationTypingMessages = [
+          "Tell me about a nearby landmark! 🗺️",
+          "Keep typing! Describe the location! 📍",
+          "Almost there! Add more details about the location! 🏠",
+        ];
+        const randomMessage =
+          locationTypingMessages[
+            Math.floor(Math.random() * locationTypingMessages.length)
+          ];
+        setRobotMessage(randomMessage);
+      } else {
+        setRobotMessage("Perfect! That location sounds clear! ✅");
+      }
+    } else if (preferredDate.trim().length > 0 && !preferredDateBlurred) {
+      setRobotMessage("Great! Pick a date that works for you! 📅");
+    } else if (preferredTime.trim().length > 0 && !preferredTimeBlurred) {
+      setRobotMessage("Perfect time slot! ⏰");
     }
   }, [
     customerName,
     customerPhone,
     customerAlternativeNumber,
+    deliveryLocation,
+    preferredDate,
+    preferredTime,
     robotVisible,
     nameBlurred,
     phoneBlurred,
     alternativeBlurred,
+    deliveryLocationBlurred,
+    preferredDateBlurred,
+    preferredTimeBlurred,
     isPhoneValid,
     isAlternativeValid,
+    isDeliveryLocationValid,
+  ]);
+
+  // Check form completion when last question (time) is answered
+  useEffect(() => {
+    if (!robotVisible) return;
+    if (!preferredTimeBlurred || !isPreferredTimeValid) return;
+
+    // When last question is completed, check all fields for errors
+    const errors: string[] = [];
+
+    if (!isNameValid || !nameBlurred) {
+      errors.push("name");
+    }
+    if (!isPhoneValid || !phoneBlurred) {
+      errors.push("phone number");
+    }
+    if (!isAlternativeValid || !alternativeBlurred) {
+      errors.push("alternative number");
+    }
+    if (!isEmailValid || !emailBlurred) {
+      errors.push("email address");
+    }
+    if (!isTownValid || !townBlurred) {
+      errors.push("installation town");
+    }
+    if (!isDeliveryLocationValid || !deliveryLocationBlurred) {
+      errors.push("delivery location");
+    }
+    if (!isPreferredDateValid || !preferredDateBlurred) {
+      errors.push("preferred date");
+    }
+    // Time is already validated since we're in this block
+
+    // Clear any existing timeout before setting a new one
+    if (messageTimeoutRef.current) {
+      clearTimeout(messageTimeoutRef.current);
+    }
+
+    if (errors.length > 0) {
+      // There are errors - mention them
+      const errorMessages = [
+        `Almost there! But I noticed some issues: ${errors.join(
+          ", "
+        )}. Please check and fix them! 🔍`,
+        `You're so close! However, there are a few fields that need attention: ${errors.join(
+          ", "
+        )}. Let's fix them together! ✨`,
+        `Great progress! But we need to fix: ${errors.join(
+          ", "
+        )}. Once done, you're all set! 🚀`,
+      ];
+      const randomMessage =
+        errorMessages[Math.floor(Math.random() * errorMessages.length)];
+      setRobotMessage(randomMessage);
+    } else {
+      // All fields are valid - congratulate!
+      const firstName = customerName.trim().split(" ")[0] || "there";
+      const congratulations = [
+        `🎉 Amazing ${firstName}! All done! Your form is perfect and ready to submit! Now click the Submit button! 🎉`,
+        `✨ Fantastic ${firstName}! Everything looks great! You've completed the form successfully! Go ahead and submit it! ✨`,
+        `🚀 Excellent work ${firstName}! All your information is correct. You're all set! Now submit it! 🚀`,
+        `💫 Perfect ${firstName}! The form is complete and ready. Great job! Click Submit to finish! 💫`,
+      ];
+      const randomMessage =
+        congratulations[Math.floor(Math.random() * congratulations.length)];
+      setRobotMessage(randomMessage);
+    }
+  }, [
+    preferredTimeBlurred,
+    isPreferredTimeValid,
+    robotVisible,
+    isNameValid,
+    nameBlurred,
+    isPhoneValid,
+    phoneBlurred,
+    isAlternativeValid,
+    alternativeBlurred,
+    isEmailValid,
+    emailBlurred,
+    isTownValid,
+    townBlurred,
+    isDeliveryLocationValid,
+    deliveryLocationBlurred,
+    isPreferredDateValid,
+    preferredDateBlurred,
+    customerName,
   ]);
 
   // Update robot message based on form state (only if robot is visible)
   useEffect(() => {
     if (!robotVisible) return;
 
+    // Priority 1: If last question (time) is completed, skip other messages
+    // (The form completion check useEffect will handle this)
+    if (preferredTimeBlurred && isPreferredTimeValid) {
+      return;
+    }
+
+    // Check if we're on the last 3 questions - show encouragement
+    const completedFields = [
+      isNameValid && nameBlurred,
+      isPhoneValid && phoneBlurred,
+      isAlternativeValid && alternativeBlurred,
+    ].filter(Boolean).length;
+
+    const isOnLastThreeQuestions =
+      (deliveryLocation.trim().length > 0 && !deliveryLocationBlurred) ||
+      (preferredDate.trim().length > 0 && !preferredDateBlurred) ||
+      (preferredTime.trim().length > 0 && !preferredTimeBlurred);
+
+    // Show "only 3 questions to go" message when starting the last 3 questions
+    // Show it when user starts typing in any of the last 3 questions and has completed at least 2 previous fields
+    if (
+      isOnLastThreeQuestions &&
+      !deliveryLocationBlurred &&
+      !preferredDateBlurred &&
+      !preferredTimeBlurred &&
+      completedFields >= 2
+    ) {
+      const encouragementMessages = [
+        "Wow! Only 2 questions to go! You're almost done! 🎉",
+        "Amazing progress! Just 3 more questions and you're all set! ✨",
+        "You're doing fantastic! Only 3 questions left! 🚀",
+        "Almost there! Just 3 more questions to complete! 💫",
+      ];
+      const randomMessage =
+        encouragementMessages[
+          Math.floor(Math.random() * encouragementMessages.length)
+        ];
+      setRobotMessage(randomMessage);
+      return;
+    }
+
     // Priority: Show errors first, then success messages
-    if (alternativeBlurred && !isAlternativeValid) {
+    if (preferredTimeBlurred && !isPreferredTimeValid) {
+      const timeErrors = [
+        "Please select a preferred time for your visit! ⏰",
+        "We need to know when you'd like us to visit! 📅",
+        "Please choose a time slot that works for you! 🕐",
+      ];
+      const randomMessage =
+        timeErrors[Math.floor(Math.random() * timeErrors.length)];
+      setRobotMessage(randomMessage);
+    } else if (preferredDateBlurred && !isPreferredDateValid) {
+      const dateErrors = [
+        "Please select a preferred date for your visit! 📅",
+        "We need to know when you'd like us to visit! 📆",
+        "Please choose a date that works for you! 🗓️",
+      ];
+      const randomMessage =
+        dateErrors[Math.floor(Math.random() * dateErrors.length)];
+      setRobotMessage(randomMessage);
+    } else if (deliveryLocationBlurred && !isDeliveryLocationValid) {
+      const locationErrors = [
+        "Please provide a more detailed location (at least 5 characters)! 🗺️",
+        "We need a clearer location description. Add more details! 📍",
+        "The location seems too short. Please add more information! 🏠",
+      ];
+      const randomMessage =
+        locationErrors[Math.floor(Math.random() * locationErrors.length)];
+      setRobotMessage(randomMessage);
+    } else if (alternativeBlurred && !isAlternativeValid) {
       // Alternative number error - most recent field
       const alternativeErrors = [
         "Oops! Please enter a valid alternative phone number (10-12 digits) 📱",
@@ -371,6 +749,30 @@ export default function TestMobilePage() {
           Math.floor(Math.random() * alternativeSuccess.length)
         ];
       setRobotMessage(randomMessage);
+    } else if (deliveryLocationBlurred && isDeliveryLocationValid) {
+      const firstName = customerName.trim().split(" ")[0] || "there";
+      const locationSuccess = [
+        `Perfect ${firstName}! We've got your location! 📍`,
+        `Excellent ${firstName}! Location saved! 🗺️`,
+        `Great ${firstName}! We know where to find you! 🏠`,
+      ];
+      const randomMessage =
+        locationSuccess[Math.floor(Math.random() * locationSuccess.length)];
+      setRobotMessage(randomMessage);
+    } else if (preferredDateBlurred && isPreferredDateValid) {
+      const firstName = customerName.trim().split(" ")[0] || "there";
+      const dateSuccess = [
+        `Perfect ${firstName}! Date saved! 📅`,
+        `Great ${firstName}! We've noted your preferred date! 📆`,
+        `Excellent ${firstName}! Date confirmed! 🗓️`,
+      ];
+      const randomMessage =
+        dateSuccess[Math.floor(Math.random() * dateSuccess.length)];
+      setRobotMessage(randomMessage);
+    } else if (preferredTimeBlurred && isPreferredTimeValid) {
+      // Don't show individual success message here - let the form completion check handle it
+      // This prevents duplicate messages
+      return;
     }
   }, [
     nameBlurred,
@@ -379,8 +781,21 @@ export default function TestMobilePage() {
     isPhoneValid,
     alternativeBlurred,
     isAlternativeValid,
+    emailBlurred,
+    isEmailValid,
+    townBlurred,
+    isTownValid,
+    deliveryLocationBlurred,
+    isDeliveryLocationValid,
+    preferredDateBlurred,
+    isPreferredDateValid,
+    preferredTimeBlurred,
+    isPreferredTimeValid,
     robotVisible,
     customerName,
+    deliveryLocation,
+    preferredDate,
+    preferredTime,
   ]);
 
   const scrollToStep2 = () => {
@@ -415,6 +830,12 @@ export default function TestMobilePage() {
   const showNameCheck = nameBlurred && isNameValid;
   const showPhoneCheck = phoneBlurred && isPhoneValid;
   const showAlternativeCheck = alternativeBlurred && isAlternativeValid;
+  const showEmailCheck = emailBlurred && isEmailValid;
+  const showTownCheck = townBlurred && isTownValid;
+  const showDeliveryLocationCheck =
+    deliveryLocationBlurred && isDeliveryLocationValid;
+  const showPreferredDateCheck = preferredDateBlurred && isPreferredDateValid;
+  const showPreferredTimeCheck = preferredTimeBlurred && isPreferredTimeValid;
 
   return (
     <div className="min-h-screen bg-slate-900">
@@ -428,9 +849,17 @@ export default function TestMobilePage() {
             position: "fixed",
             zIndex: 2147483647, // Maximum z-index value
             isolation: "isolate", // Create new stacking context
+            transform:
+              isKeyboardOpen && viewportScrollOffset > 0
+                ? `translateY(${viewportScrollOffset}px)`
+                : undefined,
+            overflow: "visible",
           }}
         >
-          <div className="relative" style={{ overflow: "visible" }}>
+          <div
+            className="relative"
+            style={{ overflow: "visible", minHeight: "fit-content" }}
+          >
             {/* Speech bubble - positioned to the left of robot */}
             {robotMessage && (
               <div
@@ -439,17 +868,20 @@ export default function TestMobilePage() {
                   fontFamily: "var(--font-poppins), sans-serif",
                   boxShadow:
                     "0 4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(251, 191, 36, 0.2)",
-                  maxWidth: "320px",
-                  minWidth: "140px",
+                  maxWidth: "min(calc(100vw - 10px), 440px)",
+                  minWidth: "240px",
                   zIndex: 2147483647,
                   marginRight: "8px",
                   top: "50%",
-                  transform: "translateY(calc(-50% - 4px))",
+                  transform: "translateY(-50%)",
                   paddingTop: "12px",
                   paddingBottom: "12px",
                   paddingLeft: "12px",
                   paddingRight: "12px",
                   overflow: "visible",
+                  left: "auto",
+                  right: "100%",
+                  maxHeight: "none",
                 }}
               >
                 <span
@@ -457,15 +889,17 @@ export default function TestMobilePage() {
                   style={{
                     display: "block",
                     whiteSpace: "normal",
-                    wordBreak: "normal",
-                    overflowWrap: "normal",
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
                     wordSpacing: "normal",
                     lineHeight: "1.5",
                     width: "100%",
+                    maxWidth: "100%",
                     margin: 0,
                     padding: 0,
                     writingMode: "horizontal-tb",
                     textOrientation: "mixed",
+                    overflow: "visible",
                   }}
                 >
                   {robotMessage}
@@ -618,6 +1052,7 @@ export default function TestMobilePage() {
             </div>
             <div className="relative">
               <input
+                ref={nameInputRef}
                 type="text"
                 placeholder="Enter your full name"
                 value={customerName}
@@ -692,6 +1127,7 @@ export default function TestMobilePage() {
             </div>
             <div className="relative">
               <input
+                ref={phoneInputRef}
                 type="tel"
                 placeholder="Enter your Airtel phone number"
                 value={customerPhone}
@@ -803,11 +1239,617 @@ export default function TestMobilePage() {
               )}
             </div>
           </div>
+
+          {/* Customer Email Address */}
+          <div className="mb-6 relative">
+            <div
+              className="absolute left-3 pointer-events-none"
+              style={{ zIndex: 30, top: "-2px" }}
+            >
+              <div
+                className="absolute left-0"
+                style={{
+                  top: "2px",
+                  background: "rgb(30, 41, 59)",
+                  height: "2px",
+                  width: "calc(100% + 4px)",
+                  marginLeft: "-4px",
+                  borderTopLeftRadius: "8px",
+                }}
+              />
+              <div
+                className="px-1.5 relative"
+                style={{ top: "-50%", transform: "translateY(-50%)" }}
+              >
+                <span
+                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  style={{
+                    fontFamily: "var(--font-poppins), sans-serif",
+                  }}
+                >
+                  Customer Email Address{" "}
+                  <span className="text-yellow-400">*</span>
+                </span>
+              </div>
+            </div>
+            <div className="relative">
+              <input
+                ref={emailInputRef}
+                type="email"
+                placeholder="Enter your email address"
+                value={customerEmail}
+                onChange={(e) => setCustomerEmail(e.target.value)}
+                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                  emailBlurred && isEmailValid
+                    ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                    : "border-slate-700/50"
+                } text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                  poppins.variable
+                }`}
+                style={{
+                  fontFamily: "var(--font-poppins), sans-serif",
+                  WebkitBoxShadow: "0 0 0 1000px rgb(30, 41, 59) inset",
+                  WebkitTextFillColor: "#ffffff",
+                  caretColor: "#ffffff",
+                }}
+                onClick={scrollToStep2}
+                onFocus={scrollToStep2}
+                onBlur={() => setEmailBlurred(true)}
+                spellCheck={false}
+                autoComplete="email"
+              />
+              {emailBlurred && isEmailValid && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                  <svg
+                    className="w-5 h-5 text-yellow-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Customer Installation Town */}
+          <div className="mb-6 relative">
+            <div
+              className="absolute left-3 pointer-events-none"
+              style={{ zIndex: 30, top: "-2px" }}
+            >
+              <div
+                className="absolute left-0"
+                style={{
+                  top: "2px",
+                  background: "rgb(30, 41, 59)",
+                  height: "2px",
+                  width: "calc(100% + 4px)",
+                  marginLeft: "-4px",
+                  borderTopLeftRadius: "8px",
+                }}
+              />
+              <div
+                className="px-1.5 relative"
+                style={{ top: "-50%", transform: "translateY(-50%)" }}
+              >
+                <span
+                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  style={{
+                    fontFamily: "var(--font-poppins), sans-serif",
+                  }}
+                >
+                  Customer Installation Town{" "}
+                  <span className="text-yellow-400">*</span>
+                </span>
+              </div>
+            </div>
+            <div className="relative">
+              <button
+                ref={townButtonRef}
+                type="button"
+                onClick={() => {
+                  setShowTownDropdown(!showTownDropdown);
+                  scrollToStep2();
+                }}
+                onBlur={() => {
+                  setTimeout(() => setTownBlurred(true), 200);
+                }}
+                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                  townBlurred && isTownValid
+                    ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                    : "border-slate-700/50"
+                } text-left text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                  poppins.variable
+                } ${!installationTown ? "text-slate-400" : ""}`}
+                style={{
+                  fontFamily: "var(--font-poppins), sans-serif",
+                }}
+              >
+                <span className="block truncate">
+                  {installationTown || "Select installation town"}
+                </span>
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                  {townBlurred && isTownValid ? (
+                    <svg
+                      className="w-5 h-5 text-yellow-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      className="w-5 h-5 text-slate-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  )}
+                </div>
+              </button>
+              {showTownDropdown && (
+                <div
+                  ref={townDropdownRef}
+                  className="absolute z-50 w-full bottom-full mb-1 bg-slate-800/95 backdrop-blur-sm border-2 border-slate-700/50 rounded-lg shadow-lg max-h-60 overflow-auto"
+                  style={{
+                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+                  }}
+                >
+                  {townOptions.map((option, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => {
+                        setInstallationTown(option);
+                        setShowTownDropdown(false);
+                        setTownBlurred(true);
+                      }}
+                      className={`w-full px-4 py-3 text-left text-white hover:bg-slate-700/50 transition-colors ${
+                        poppins.variable
+                      } ${
+                        installationTown === option
+                          ? "bg-slate-700/70 text-yellow-400"
+                          : ""
+                      }`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span>{option}</span>
+                        {installationTown === option && (
+                          <svg
+                            className="w-5 h-5 text-yellow-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Specific Delivery Location (Nearest Landmark) */}
+          <div className="mb-6 relative">
+            <div
+              className="absolute left-3 pointer-events-none"
+              style={{ zIndex: 30, top: "-2px" }}
+            >
+              {/* Transparent div to cut the border - positioned at the border line */}
+              <div
+                className="absolute left-0"
+                style={{
+                  top: "2px",
+                  background: "rgb(30, 41, 59)",
+                  height: "2px",
+                  width: "calc(100% + 4px)",
+                  marginLeft: "-4px",
+                  borderTopLeftRadius: "8px",
+                }}
+              />
+              {/* Label text */}
+              <div
+                className="px-1.5 relative"
+                style={{ top: "-50%", transform: "translateY(-50%)" }}
+              >
+                <span
+                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  style={{
+                    fontFamily: "var(--font-poppins), sans-serif",
+                  }}
+                >
+                  Specific Delivery Location (Nearest Landmark){" "}
+                  <span className="text-yellow-400">*</span>
+                </span>
+              </div>
+            </div>
+            <div className="relative">
+              <input
+                ref={deliveryLocationInputRef}
+                type="text"
+                placeholder="e.g., Near ABC Mall, Next to XYZ School"
+                value={deliveryLocation}
+                onChange={(e) => setDeliveryLocation(e.target.value)}
+                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                  showDeliveryLocationCheck
+                    ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                    : "border-slate-700/50"
+                } text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                  poppins.variable
+                }`}
+                style={{
+                  fontFamily: "var(--font-poppins), sans-serif",
+                  WebkitBoxShadow: "0 0 0 1000px rgb(30, 41, 59) inset",
+                  WebkitTextFillColor: "#ffffff",
+                  caretColor: "#ffffff",
+                }}
+                onClick={scrollToStep2}
+                onFocus={scrollToStep2}
+                onBlur={() => setDeliveryLocationBlurred(true)}
+                spellCheck={false}
+                autoComplete="off"
+              />
+              {showDeliveryLocationCheck && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                  <svg
+                    className="w-5 h-5 text-yellow-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Preferred Date of Visit/Installation */}
+          <div className="mb-6 relative">
+            <div
+              className="absolute left-3 pointer-events-none"
+              style={{ zIndex: 30, top: "-2px" }}
+            >
+              {/* Transparent div to cut the border - positioned at the border line */}
+              <div
+                className="absolute left-0"
+                style={{
+                  top: "2px",
+                  background: "rgb(30, 41, 59)",
+                  height: "2px",
+                  width: "calc(100% + 4px)",
+                  marginLeft: "-4px",
+                  borderTopLeftRadius: "8px",
+                }}
+              />
+              {/* Label text */}
+              <div
+                className="px-1.5 relative"
+                style={{ top: "-50%", transform: "translateY(-50%)" }}
+              >
+                <span
+                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  style={{
+                    fontFamily: "var(--font-poppins), sans-serif",
+                  }}
+                >
+                  Preferred Date of Visit/Installation{" "}
+                  <span className="text-yellow-400">*</span>
+                </span>
+              </div>
+            </div>
+            <div className="relative">
+              <input
+                ref={dateInputRef}
+                type="date"
+                value={preferredDate}
+                onChange={(e) => setPreferredDate(e.target.value)}
+                min={new Date().toISOString().split("T")[0]}
+                className={`w-full px-4 py-3 pt-5 pr-12 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                  showPreferredDateCheck
+                    ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                    : "border-slate-700/50"
+                } text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 date-input-custom ${
+                  poppins.variable
+                } ${!preferredDate ? "date-placeholder" : ""}`}
+                style={{
+                  fontFamily: "var(--font-poppins), sans-serif",
+                  WebkitBoxShadow: "0 0 0 1000px rgb(30, 41, 59) inset",
+                  WebkitTextFillColor: preferredDate
+                    ? "#ffffff"
+                    : "transparent",
+                  caretColor: "#ffffff",
+                  colorScheme: "dark",
+                }}
+                onClick={scrollToStep2}
+                onFocus={scrollToStep2}
+                onBlur={() => setPreferredDateBlurred(true)}
+              />
+              {/* Placeholder text when no date is selected */}
+              {!preferredDate && (
+                <div
+                  className="absolute left-4 pointer-events-none flex items-center"
+                  style={{
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    height: "100%",
+                    fontFamily: "var(--font-poppins), sans-serif",
+                  }}
+                >
+                  <span className="text-sm text-slate-400">Select date</span>
+                </div>
+              )}
+              {/* Calendar icon indicator - shown when no date is selected */}
+              {!preferredDate && !showPreferredDateCheck && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                  <svg
+                    className="w-5 h-5 text-yellow-400/70"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+              )}
+              {showPreferredDateCheck && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                  <svg
+                    className="w-5 h-5 text-yellow-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Preferred Time of Visit/Installation */}
+          <div className="mb-6 relative">
+            <div
+              className="absolute left-3 pointer-events-none"
+              style={{ zIndex: 30, top: "-2px" }}
+            >
+              {/* Transparent div to cut the border - positioned at the border line */}
+              <div
+                className="absolute left-0"
+                style={{
+                  top: "2px",
+                  background: "rgb(30, 41, 59)",
+                  height: "2px",
+                  width: "calc(100% + 4px)",
+                  marginLeft: "-4px",
+                  borderTopLeftRadius: "8px",
+                }}
+              />
+              {/* Label text */}
+              <div
+                className="px-1.5 relative"
+                style={{ top: "-50%", transform: "translateY(-50%)" }}
+              >
+                <span
+                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  style={{
+                    fontFamily: "var(--font-poppins), sans-serif",
+                  }}
+                >
+                  Preferred Time of Visit/Installation{" "}
+                  <span className="text-yellow-400">*</span>
+                </span>
+              </div>
+            </div>
+            <div className="relative">
+              <button
+                ref={timeButtonRef}
+                type="button"
+                onClick={() => {
+                  setShowTimeDropdown(!showTimeDropdown);
+                  scrollToStep2();
+                }}
+                onBlur={() => {
+                  // Delay to allow option click
+                  setTimeout(() => setPreferredTimeBlurred(true), 200);
+                }}
+                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                  showPreferredTimeCheck
+                    ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                    : "border-slate-700/50"
+                } text-left text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                  poppins.variable
+                } ${!preferredTime ? "text-slate-400" : ""}`}
+                style={{
+                  fontFamily: "var(--font-poppins), sans-serif",
+                }}
+              >
+                <span className="block truncate">
+                  {preferredTime || "Select preferred time"}
+                </span>
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                  {showPreferredTimeCheck ? (
+                    <svg
+                      className="w-5 h-5 text-yellow-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      className="w-5 h-5 text-slate-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  )}
+                </div>
+              </button>
+              {showTimeDropdown && (
+                <div
+                  ref={timeDropdownRef}
+                  className="absolute z-50 w-full bottom-full mb-1 bg-slate-800/95 backdrop-blur-sm border-2 border-slate-700/50 rounded-lg shadow-lg max-h-60 overflow-auto"
+                  style={{
+                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+                  }}
+                >
+                  {timeOptions.map((option, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => {
+                        setPreferredTime(option);
+                        setShowTimeDropdown(false);
+                        setPreferredTimeBlurred(true);
+                      }}
+                      className={`w-full px-4 py-3 text-left text-white hover:bg-slate-700/50 transition-colors ${
+                        poppins.variable
+                      } ${
+                        preferredTime === option
+                          ? "bg-slate-700/70 text-yellow-400"
+                          : ""
+                      }`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span>{option}</span>
+                        {preferredTime === option && (
+                          <svg
+                            className="w-5 h-5 text-yellow-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="mb-4 mt-6">
+            <button
+              type="button"
+              onClick={() => {
+                // TODO: Add form submission logic
+                console.log("Form submitted");
+              }}
+              disabled={
+                !(nameBlurred && isNameValid) ||
+                !(phoneBlurred && isPhoneValid) ||
+                !(alternativeBlurred && isAlternativeValid) ||
+                !(emailBlurred && isEmailValid) ||
+                !(townBlurred && isTownValid) ||
+                !(deliveryLocationBlurred && isDeliveryLocationValid) ||
+                !(preferredDateBlurred && isPreferredDateValid) ||
+                !(preferredTimeBlurred && isPreferredTimeValid)
+              }
+              className={`w-full py-4 px-6 rounded-lg font-semibold text-base transition-all duration-300 ${
+                poppins.variable
+              } ${
+                nameBlurred &&
+                isNameValid &&
+                phoneBlurred &&
+                isPhoneValid &&
+                alternativeBlurred &&
+                isAlternativeValid &&
+                emailBlurred &&
+                isEmailValid &&
+                townBlurred &&
+                isTownValid &&
+                deliveryLocationBlurred &&
+                isDeliveryLocationValid &&
+                preferredDateBlurred &&
+                isPreferredDateValid &&
+                preferredTimeBlurred &&
+                isPreferredTimeValid
+                  ? "bg-yellow-400 hover:bg-yellow-500 text-slate-900 shadow-[0_0_20px_rgba(251,191,36,0.4)] active:scale-95"
+                  : "bg-slate-700 text-slate-400 cursor-not-allowed opacity-50"
+              }`}
+              style={{
+                fontFamily: "var(--font-poppins), sans-serif",
+              }}
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </section>
 
       {/* Spacer to ensure enough content for scrolling */}
-      <div style={{ minHeight: "100vh" }}></div>
+      <div style={{ minHeight: "10vh" }}></div>
     </div>
   );
 }
