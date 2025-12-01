@@ -15,88 +15,26 @@ const poppins = Poppins({
 export default function TestMobilePage() {
   const step2Ref = useRef<HTMLDivElement>(null);
   const messageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const townDropdownRef = useRef<HTMLDivElement>(null);
-  const townButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedPackage } = usePackage();
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerAlternativeNumber, setCustomerAlternativeNumber] =
     useState("");
-  const [customerEmail, setCustomerEmail] = useState("");
-  const [installationTown, setInstallationTown] = useState("");
   const [nameBlurred, setNameBlurred] = useState(false);
   const [phoneBlurred, setPhoneBlurred] = useState(false);
   const [alternativeBlurred, setAlternativeBlurred] = useState(false);
-  const [emailBlurred, setEmailBlurred] = useState(false);
-  const [townBlurred, setTownBlurred] = useState(false);
   const [robotMessage, setRobotMessage] = useState("");
   const [robotVisible, setRobotVisible] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [previousPackage, setPreviousPackage] = useState<string | null>(null);
   const [robotBottom, setRobotBottom] = useState("1rem");
   const [robotTop, setRobotTop] = useState<string | null>(null);
-  const [isInputFocused, setIsInputFocused] = useState(false);
-  const [viewportScrollOffset, setViewportScrollOffset] = useState(0);
-  const [showTownDropdown, setShowTownDropdown] = useState(false);
 
   const isNameValid = customerName.trim().length >= 2;
   const isPhoneValid = /^[0-9]{10,12}$/.test(customerPhone.replace(/\s/g, ""));
   const isAlternativeValid = /^[0-9]{10,12}$/.test(
     customerAlternativeNumber.replace(/\s/g, "")
   );
-  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim());
-  const isTownValid = installationTown.trim().length > 0;
-
-  // Town options
-  const townOptions = [
-    "Baringo",
-    "Bomet",
-    "Bungoma",
-    "Busia",
-    "Elgeyo-Marakwet",
-    "Embu",
-    "Garissa",
-    "Homa Bay",
-    "Isiolo",
-    "Kajiado",
-    "Kakamega",
-    "Kericho",
-    "Kiambu",
-    "Kilifi",
-    "Kirinyaga",
-    "Kisii",
-    "Kisumu",
-    "Kitui",
-    "Kwale",
-    "Laikipia",
-    "Lamu",
-    "Machakos",
-    "Makueni",
-    "Mandera",
-    "Marsabit",
-    "Meru",
-    "Migori",
-    "Mombasa",
-    "Murang'a",
-    "Nairobi",
-    "Nakuru",
-    "Nandi",
-    "Narok",
-    "Nyamira",
-    "Nyandarua",
-    "Nyeri",
-    "Samburu",
-    "Siaya",
-    "Taita-Taveta",
-    "Tana River",
-    "Tharaka-Nithi",
-    "Trans Nzoia",
-    "Turkana",
-    "Uasin Gishu",
-    "Vihiga",
-    "Wajir",
-    "West Pokot",
-  ];
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -187,23 +125,9 @@ export default function TestMobilePage() {
     setPreviousPackage(selectedPackage);
   }, [selectedPackage, previousPackage, robotVisible]);
 
-  // Handle viewport changes (keyboard appearing/disappearing) and input focus
+  // Handle viewport changes (keyboard appearing/disappearing)
   useEffect(() => {
     const updateRobotPosition = () => {
-      // If any input is focused, always keep robot at top-right (fixed to viewport)
-      if (isInputFocused) {
-        // Account for visual viewport scroll offset to keep robot visible
-        if (window.visualViewport) {
-          const viewport = window.visualViewport;
-          const topPosition = viewport.offsetTop + 16; // 1rem = 16px from viewport top
-          setRobotTop(`${topPosition}px`);
-        } else {
-          setRobotTop("1rem");
-        }
-        setRobotBottom("");
-        return;
-      }
-
       // Use visual viewport if available (for mobile keyboards)
       if (window.visualViewport) {
         const viewport = window.visualViewport;
@@ -211,13 +135,18 @@ export default function TestMobilePage() {
         const windowHeight = window.innerHeight;
         const heightDiff = windowHeight - viewportHeight;
 
-        // If keyboard is open (viewport is smaller), move robot to top-right
+        // If keyboard is open (viewport is smaller), keep robot visible above keyboard
         if (heightDiff > 150) {
-          // Keyboard is open - position robot at top-right to avoid overlapping form
-          setRobotTop("1rem");
+          // Keyboard is open - position robot from top of visual viewport
+          // This ensures it stays visible above the keyboard
+          const padding = 20;
+          const robotHeight = 80; // Approximate height
+          // Position from top of visible viewport, leaving space for robot
+          const topPosition = viewportHeight - robotHeight - padding;
+          setRobotTop(`${topPosition}px`);
           setRobotBottom("");
         } else {
-          // Keyboard is closed, use normal bottom-right position
+          // Keyboard is closed, use normal bottom position
           setRobotTop(null);
           setRobotBottom("1rem");
         }
@@ -231,48 +160,10 @@ export default function TestMobilePage() {
     // Initial position
     updateRobotPosition();
 
-    // Initialize viewport scroll offset
-    if (window.visualViewport) {
-      setViewportScrollOffset(window.visualViewport.offsetTop);
-    }
-
     // Listen for viewport changes
-    let handleScroll: (() => void) | null = null;
-
-    let handleResize: (() => void) | null = null;
-
     if (window.visualViewport) {
-      handleResize = () => {
-        if (window.visualViewport) {
-          const viewport = window.visualViewport;
-          setViewportScrollOffset(viewport.offsetTop);
-
-          if (isInputFocused) {
-            // When input is focused, keep robot at top of visible viewport
-            setRobotTop("1rem");
-            setRobotBottom("");
-          } else {
-            updateRobotPosition();
-          }
-        }
-      };
-      window.visualViewport.addEventListener("resize", handleResize);
-      // Update position on scroll - when input is focused, keep robot at top of viewport
-      handleScroll = () => {
-        if (window.visualViewport) {
-          const viewport = window.visualViewport;
-          setViewportScrollOffset(viewport.offsetTop);
-
-          if (isInputFocused) {
-            // When input is focused, keep robot at top of visible viewport
-            setRobotTop("1rem");
-            setRobotBottom("");
-          } else {
-            updateRobotPosition();
-          }
-        }
-      };
-      window.visualViewport.addEventListener("scroll", handleScroll);
+      window.visualViewport.addEventListener("resize", updateRobotPosition);
+      window.visualViewport.addEventListener("scroll", updateRobotPosition);
     } else {
       // Fallback to window resize
       window.addEventListener("resize", updateRobotPosition);
@@ -280,51 +171,26 @@ export default function TestMobilePage() {
 
     return () => {
       if (window.visualViewport) {
-        if (handleResize) {
-          window.visualViewport.removeEventListener("resize", handleResize);
-        }
-        if (handleScroll) {
-          window.visualViewport.removeEventListener("scroll", handleScroll);
-        }
+        window.visualViewport.removeEventListener(
+          "resize",
+          updateRobotPosition
+        );
+        window.visualViewport.removeEventListener(
+          "scroll",
+          updateRobotPosition
+        );
       } else {
         window.removeEventListener("resize", updateRobotPosition);
       }
     };
-  }, [isInputFocused]);
-
-  // Close town dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: Event) => {
-      if (
-        showTownDropdown &&
-        townDropdownRef.current &&
-        !townDropdownRef.current.contains(event.target as Node) &&
-        townButtonRef.current &&
-        !townButtonRef.current.contains(event.target as Node)
-      ) {
-        setShowTownDropdown(false);
-        setTownBlurred(true);
-        setIsInputFocused(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, [showTownDropdown]);
+  }, []);
 
   // Show robot when user starts typing or when there are errors
   useEffect(() => {
     const hasContent =
       customerName.trim().length > 0 ||
       customerPhone.trim().length > 0 ||
-      customerAlternativeNumber.trim().length > 0 ||
-      customerEmail.trim().length > 0 ||
-      installationTown.trim().length > 0;
+      customerAlternativeNumber.trim().length > 0;
 
     if (hasContent && !robotVisible) {
       setRobotVisible(true);
@@ -355,14 +221,10 @@ export default function TestMobilePage() {
     customerName,
     customerPhone,
     customerAlternativeNumber,
-    customerEmail,
-    installationTown,
     robotVisible,
     nameBlurred,
     phoneBlurred,
     alternativeBlurred,
-    emailBlurred,
-    townBlurred,
   ]);
 
   // Show typing encouragement messages (only when actively typing, not blurred)
@@ -374,9 +236,7 @@ export default function TestMobilePage() {
     const isTyping =
       (customerName.trim().length > 0 && !nameBlurred) ||
       (customerPhone.trim().length > 0 && !phoneBlurred) ||
-      (customerAlternativeNumber.trim().length > 0 && !alternativeBlurred) ||
-      (customerEmail.trim().length > 0 && !emailBlurred) ||
-      (installationTown.trim().length > 0 && !townBlurred);
+      (customerAlternativeNumber.trim().length > 0 && !alternativeBlurred);
 
     if (!isTyping) return;
 
@@ -429,53 +289,17 @@ export default function TestMobilePage() {
       } else {
         setRobotMessage("Perfect! That looks right! ✅");
       }
-    } else if (customerEmail.trim().length > 0 && !emailBlurred) {
-      if (!isEmailValid) {
-        const emailTypingMessages = [
-          "Enter your email address 📧",
-          "Keep typing your email! ✉️",
-          "Make sure to include @ and domain! 📮",
-        ];
-        const randomMessage =
-          emailTypingMessages[
-            Math.floor(Math.random() * emailTypingMessages.length)
-          ];
-        setRobotMessage(randomMessage);
-      } else {
-        setRobotMessage("Perfect! That looks right! ✅");
-      }
-    } else if (installationTown.trim().length > 0 && !townBlurred) {
-      if (!isTownValid) {
-        const townTypingMessages = [
-          "Select your installation town from the dropdown 🏙️",
-          "Choose your town for installation 📍",
-          "Pick a town from the list! 🗺️",
-        ];
-        const randomMessage =
-          townTypingMessages[
-            Math.floor(Math.random() * townTypingMessages.length)
-          ];
-        setRobotMessage(randomMessage);
-      } else {
-        setRobotMessage("Perfect! Great choice! ✅");
-      }
     }
   }, [
     customerName,
     customerPhone,
     customerAlternativeNumber,
-    customerEmail,
-    installationTown,
     robotVisible,
     nameBlurred,
     phoneBlurred,
     alternativeBlurred,
-    emailBlurred,
-    townBlurred,
     isPhoneValid,
     isAlternativeValid,
-    isEmailValid,
-    isTownValid,
   ]);
 
   // Update robot message based on form state (only if robot is visible)
@@ -483,28 +307,8 @@ export default function TestMobilePage() {
     if (!robotVisible) return;
 
     // Priority: Show errors first, then success messages
-    if (townBlurred && !isTownValid) {
-      // Town error - most recent field
-      const townErrors = [
-        "Please select your installation town from the list 🏙️",
-        "Oops! You need to select a town for installation 📍",
-        "Don't forget to choose your installation town! 🗺️",
-      ];
-      const randomMessage =
-        townErrors[Math.floor(Math.random() * townErrors.length)];
-      setRobotMessage(randomMessage);
-    } else if (emailBlurred && !isEmailValid) {
-      // Email error - most recent field
-      const emailErrors = [
-        "Oops! Please enter a valid email address 📧",
-        "The email needs to include @ and a domain. Try again! ✉️",
-        "Hmm, that email doesn't look right. Check and try again! 📮",
-      ];
-      const randomMessage =
-        emailErrors[Math.floor(Math.random() * emailErrors.length)];
-      setRobotMessage(randomMessage);
-    } else if (alternativeBlurred && !isAlternativeValid) {
-      // Alternative number error
+    if (alternativeBlurred && !isAlternativeValid) {
+      // Alternative number error - most recent field
       const alternativeErrors = [
         "Oops! Please enter a valid alternative phone number (10-12 digits) 📱",
         "The alternative number needs to be 10-12 digits. Try again! 🔢",
@@ -567,26 +371,6 @@ export default function TestMobilePage() {
           Math.floor(Math.random() * alternativeSuccess.length)
         ];
       setRobotMessage(randomMessage);
-    } else if (emailBlurred && isEmailValid) {
-      const firstName = customerName.trim().split(" ")[0] || "there";
-      const emailSuccess = [
-        `Great ${firstName}! Email saved! 📧`,
-        `Perfect ${firstName}! We've got your email! ✉️`,
-        `Excellent ${firstName}! Your email is set! 📮`,
-      ];
-      const randomMessage =
-        emailSuccess[Math.floor(Math.random() * emailSuccess.length)];
-      setRobotMessage(randomMessage);
-    } else if (townBlurred && isTownValid) {
-      const firstName = customerName.trim().split(" ")[0] || "there";
-      const townSuccess = [
-        `Great ${firstName}! ${installationTown} is a beautiful place! 🏙️`,
-        `Perfect ${firstName}! We'll install in ${installationTown}! 📍`,
-        `Excellent ${firstName}! ${installationTown} selected! 🗺️`,
-      ];
-      const randomMessage =
-        townSuccess[Math.floor(Math.random() * townSuccess.length)];
-      setRobotMessage(randomMessage);
     }
   }, [
     nameBlurred,
@@ -595,8 +379,6 @@ export default function TestMobilePage() {
     isPhoneValid,
     alternativeBlurred,
     isAlternativeValid,
-    emailBlurred,
-    isEmailValid,
     robotVisible,
     customerName,
   ]);
@@ -633,8 +415,6 @@ export default function TestMobilePage() {
   const showNameCheck = nameBlurred && isNameValid;
   const showPhoneCheck = phoneBlurred && isPhoneValid;
   const showAlternativeCheck = alternativeBlurred && isAlternativeValid;
-  const showEmailCheck = emailBlurred && isEmailValid;
-  const showTownCheck = townBlurred && isTownValid;
 
   return (
     <div className="min-h-screen bg-slate-900">
@@ -648,10 +428,6 @@ export default function TestMobilePage() {
             position: "fixed",
             zIndex: 2147483647, // Maximum z-index value
             isolation: "isolate", // Create new stacking context
-            transform:
-              isInputFocused && viewportScrollOffset > 0
-                ? `translateY(${viewportScrollOffset}px)`
-                : undefined,
           }}
         >
           <div className="relative" style={{ overflow: "visible" }}>
@@ -855,34 +631,10 @@ export default function TestMobilePage() {
                 }`}
                 style={{
                   fontFamily: "var(--font-poppins), sans-serif",
-                  WebkitBoxShadow: "0 0 0 1000px rgb(30, 41, 59) inset",
-                  WebkitTextFillColor: "#ffffff",
-                  caretColor: "#ffffff",
-                  backgroundColor: "rgb(30, 41, 59)",
-                  color: "#ffffff",
                 }}
-                spellCheck={false}
                 onClick={scrollToStep2}
-                onFocus={(e) => {
-                  setIsInputFocused(true);
-                  if (window.visualViewport) {
-                    setViewportScrollOffset(window.visualViewport.offsetTop);
-                  }
-                  scrollToStep2();
-                }}
-                onBlur={(e) => {
-                  setNameBlurred(true);
-                  // Check if another input is now focused
-                  setTimeout(() => {
-                    const activeElement = document.activeElement;
-                    if (
-                      activeElement?.tagName !== "INPUT" &&
-                      activeElement?.tagName !== "TEXTAREA"
-                    ) {
-                      setIsInputFocused(false);
-                    }
-                  }, 100);
-                }}
+                onFocus={scrollToStep2}
+                onBlur={() => setNameBlurred(true)}
               />
               {showNameCheck && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -953,33 +705,10 @@ export default function TestMobilePage() {
                 }`}
                 style={{
                   fontFamily: "var(--font-poppins), sans-serif",
-                  WebkitBoxShadow: "0 0 0 1000px rgb(30, 41, 59) inset",
-                  WebkitTextFillColor: "#ffffff",
-                  caretColor: "#ffffff",
-                  backgroundColor: "rgb(30, 41, 59)",
-                  color: "#ffffff",
                 }}
                 onClick={scrollToStep2}
-                onFocus={(e) => {
-                  setIsInputFocused(true);
-                  if (window.visualViewport) {
-                    setViewportScrollOffset(window.visualViewport.offsetTop);
-                  }
-                  scrollToStep2();
-                }}
-                onBlur={(e) => {
-                  setPhoneBlurred(true);
-                  // Check if another input is now focused
-                  setTimeout(() => {
-                    const activeElement = document.activeElement;
-                    if (
-                      activeElement?.tagName !== "INPUT" &&
-                      activeElement?.tagName !== "TEXTAREA"
-                    ) {
-                      setIsInputFocused(false);
-                    }
-                  }, 100);
-                }}
+                onFocus={scrollToStep2}
+                onBlur={() => setPhoneBlurred(true)}
               />
               {showPhoneCheck && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -1050,33 +779,10 @@ export default function TestMobilePage() {
                 }`}
                 style={{
                   fontFamily: "var(--font-poppins), sans-serif",
-                  WebkitBoxShadow: "0 0 0 1000px rgb(30, 41, 59) inset",
-                  WebkitTextFillColor: "#ffffff",
-                  caretColor: "#ffffff",
-                  backgroundColor: "rgb(30, 41, 59)",
-                  color: "#ffffff",
                 }}
                 onClick={scrollToStep2}
-                onFocus={(e) => {
-                  setIsInputFocused(true);
-                  if (window.visualViewport) {
-                    setViewportScrollOffset(window.visualViewport.offsetTop);
-                  }
-                  scrollToStep2();
-                }}
-                onBlur={(e) => {
-                  setAlternativeBlurred(true);
-                  // Check if another input is now focused
-                  setTimeout(() => {
-                    const activeElement = document.activeElement;
-                    if (
-                      activeElement?.tagName !== "INPUT" &&
-                      activeElement?.tagName !== "TEXTAREA"
-                    ) {
-                      setIsInputFocused(false);
-                    }
-                  }, 100);
-                }}
+                onFocus={scrollToStep2}
+                onBlur={() => setAlternativeBlurred(true)}
               />
               {showAlternativeCheck && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -1093,263 +799,6 @@ export default function TestMobilePage() {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Customer Email Address */}
-          <div className="mb-6 relative">
-            <div
-              className="absolute left-3 pointer-events-none"
-              style={{ zIndex: 30, top: "-2px" }}
-            >
-              {/* Transparent div to cut the border - positioned at the border line */}
-              <div
-                className="absolute left-0"
-                style={{
-                  top: "2px",
-                  background: "rgb(30, 41, 59)",
-                  height: "2px",
-                  width: "calc(100% + 4px)",
-                  marginLeft: "-4px",
-                  borderTopLeftRadius: "8px",
-                }}
-              />
-              {/* Label text */}
-              <div
-                className="px-1.5 relative"
-                style={{ top: "-50%", transform: "translateY(-50%)" }}
-              >
-                <span
-                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                  }}
-                >
-                  Customer Email Address{" "}
-                  <span className="text-yellow-400">*</span>
-                </span>
-              </div>
-            </div>
-            <div className="relative">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                value={customerEmail}
-                onChange={(e) => setCustomerEmail(e.target.value)}
-                spellCheck={false}
-                autoComplete="email"
-                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
-                  showEmailCheck
-                    ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                    : "border-slate-700/50"
-                } text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                  poppins.variable
-                }`}
-                style={{
-                  fontFamily: "var(--font-poppins), sans-serif",
-                  WebkitBoxShadow: "0 0 0 1000px rgb(30, 41, 59) inset",
-                  WebkitTextFillColor: "#ffffff",
-                  caretColor: "#ffffff",
-                  backgroundColor: "rgb(30, 41, 59)",
-                  color: "#ffffff",
-                }}
-                onClick={scrollToStep2}
-                onFocus={(e) => {
-                  setIsInputFocused(true);
-                  if (window.visualViewport) {
-                    setViewportScrollOffset(window.visualViewport.offsetTop);
-                  }
-                  scrollToStep2();
-                }}
-                onBlur={(e) => {
-                  setEmailBlurred(true);
-                  // Check if another input is now focused
-                  setTimeout(() => {
-                    const activeElement = document.activeElement;
-                    if (
-                      activeElement?.tagName !== "INPUT" &&
-                      activeElement?.tagName !== "TEXTAREA"
-                    ) {
-                      setIsInputFocused(false);
-                    }
-                  }, 100);
-                }}
-              />
-              {showEmailCheck && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                  <svg
-                    className="w-5 h-5 text-yellow-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Customer Installation Town */}
-          <div className="mb-6 relative">
-            <div
-              className="absolute left-3 pointer-events-none"
-              style={{ zIndex: 30, top: "-2px" }}
-            >
-              {/* Transparent div to cut the border - positioned at the border line */}
-              <div
-                className="absolute left-0"
-                style={{
-                  top: "2px",
-                  background: "rgb(30, 41, 59)",
-                  height: "2px",
-                  width: "calc(100% + 4px)",
-                  marginLeft: "-4px",
-                  borderTopLeftRadius: "8px",
-                }}
-              />
-              {/* Label text */}
-              <div
-                className="px-1.5 relative"
-                style={{ top: "-50%", transform: "translateY(-50%)" }}
-              >
-                <span
-                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                  }}
-                >
-                  Customer Installation Town{" "}
-                  <span className="text-yellow-400">*</span>
-                </span>
-              </div>
-            </div>
-            <div className="relative">
-              <button
-                ref={townButtonRef}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowTownDropdown(!showTownDropdown);
-                  setIsInputFocused(true);
-                  if (window.visualViewport) {
-                    setViewportScrollOffset(window.visualViewport.offsetTop);
-                  }
-                  scrollToStep2();
-                }}
-                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
-                  showTownCheck
-                    ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                    : showTownDropdown
-                    ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                    : "border-slate-700/50"
-                } text-left text-white focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                  poppins.variable
-                } ${!installationTown ? "text-slate-400" : "text-white"}`}
-                style={{
-                  fontFamily: "var(--font-poppins), sans-serif",
-                  backgroundColor: "rgb(30, 41, 59)",
-                }}
-              >
-                <span>
-                  {installationTown || "Select your installation town"}
-                </span>
-                {/* Dropdown arrow */}
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                  <svg
-                    className={`w-5 h-5 transition-transform duration-200 ${
-                      showTownDropdown ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    style={{ color: showTownDropdown ? "#fbbf24" : "#ffffff" }}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-              </button>
-              {showTownCheck && !showTownDropdown && (
-                <div className="absolute right-10 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                  <svg
-                    className="w-5 h-5 text-yellow-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-              )}
-              {/* Custom Dropdown */}
-              {showTownDropdown && (
-                <div
-                  ref={townDropdownRef}
-                  className="absolute z-50 w-full mt-1 rounded-lg bg-slate-800/95 backdrop-blur-sm border-2 border-slate-700/50 shadow-lg max-h-64 overflow-y-auto"
-                  style={{
-                    top: "100%",
-                    marginTop: "4px",
-                  }}
-                >
-                  {townOptions.map((town) => (
-                    <button
-                      key={town}
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setInstallationTown(town);
-                        setShowTownDropdown(false);
-                        setTownBlurred(true);
-                        setIsInputFocused(false);
-                      }}
-                      className={`w-full px-4 py-3 text-left text-white hover:bg-slate-700/50 transition-colors ${
-                        poppins.variable
-                      } ${
-                        installationTown === town
-                          ? "bg-slate-700/70 border-l-2 border-yellow-400"
-                          : ""
-                      }`}
-                      style={{
-                        fontFamily: "var(--font-poppins), sans-serif",
-                      }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span>{town}</span>
-                        {installationTown === town && (
-                          <svg
-                            className="w-5 h-5 text-yellow-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                    </button>
-                  ))}
                 </div>
               )}
             </div>
