@@ -97,42 +97,18 @@ export default function ProductCarousel() {
       >
         {/* Title on the left */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
-            <span
-              className="text-base font-bold"
-              style={{
-                background: "linear-gradient(135deg, #ffffff, #fbbf24)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
-              }}
-            >
-              Airt
-            </span>
-            <img
-              src="/icon.png"
-              alt="Airtel 5G Icon"
-              className="w-5 h-5 object-contain block"
-              style={{
-                marginLeft: "-5px",
-                marginRight: "-5px",
-                filter: "drop-shadow(0 0 8px rgba(251, 191, 36, 0.5))",
-              }}
-            />
-            <span
-              className="text-base font-bold"
-              style={{
-                background: "linear-gradient(135deg, #ffffff, #fbbf24)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
-              }}
-            >
-              l
-            </span>
-          </div>
+          <span
+            className="text-base font-bold"
+            style={{
+              background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+            }}
+          >
+            Airtel
+          </span>
           <div className="h-4 w-px bg-white/30 mx-1" />
           <span
             className="text-sm font-bold tracking-wide"
@@ -298,7 +274,7 @@ export default function ProductCarousel() {
                     style={{
                       height: "60px",
                       background:
-                        "linear-gradient(to bottom, transparent, rgb(15, 23, 42))",
+                        "linear-gradient(to bottom, transparent, rgb(10, 10, 10))",
                       zIndex: 2,
                     }}
                   />

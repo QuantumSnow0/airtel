@@ -55,10 +55,10 @@ export default function PricingCards() {
         <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-2">
           {/* Package 1 - Standard */}
           <div
-            className={`group relative rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
+            className={`group relative rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
               selectedPackage === "standard"
                 ? "border-yellow-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)]"
-                : "border-slate-700/50 hover:border-slate-600"
+                : "border-neutral-800/50 hover:border-neutral-700"
             }`}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
           >
@@ -79,7 +79,7 @@ export default function PricingCards() {
                 className="absolute left-0"
                 style={{
                   top: "0px",
-                  background: "rgb(30, 41, 59)",
+                  background: "rgb(38, 38, 38)",
                   height: "2px",
                   width: "calc(100% + 8px)",
                   marginLeft: "-4px",
@@ -111,7 +111,7 @@ export default function PricingCards() {
                 className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center transition-all ${
                   selectedPackage === "standard"
                     ? "border-yellow-400 bg-yellow-400/20"
-                    : "border-slate-500"
+                    : "border-neutral-600"
                 }`}
               >
                 {selectedPackage === "standard" && (
@@ -155,14 +155,14 @@ export default function PricingCards() {
                     >
                       Standard
                     </div>
-                    <div className="text-[10px] text-slate-300 mt-0.5">
+                    <div className="text-[10px] text-neutral-200 mt-0.5">
                       15 Mbps
                     </div>
                   </div>
                 </div>
 
                 {/* Installation Section */}
-                <div className="flex items-center gap-1 text-[10px] text-slate-300">
+                <div className="flex items-center gap-1 text-[10px] text-neutral-200">
                   <svg
                     className="w-3 h-3 text-yellow-400 shrink-0"
                     fill="none"
@@ -185,8 +185,8 @@ export default function PricingCards() {
                 </div>
 
                 {/* Bottom Section - Features */}
-                <div className="pt-1.5 border-t border-slate-700/50">
-                  <div className="flex items-center gap-1 text-[10px] text-slate-300">
+                <div className="pt-1.5 border-t border-neutral-800/50">
+                  <div className="flex items-center gap-1 text-[10px] text-neutral-200">
                     <svg
                       className="w-3 h-3 text-yellow-400 shrink-0"
                       fill="currentColor"
@@ -207,10 +207,10 @@ export default function PricingCards() {
 
           {/* Package 2 - Premium */}
           <div
-            className={`group relative rounded-lg bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
+            className={`group relative rounded-lg bg-gradient-to-br from-neutral-900/90 to-neutral-950/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
               selectedPackage === "premium"
                 ? "border-yellow-400/80 shadow-[0_0_25px_rgba(251,191,36,0.4)]"
-                : "border-slate-700/50 hover:border-slate-600"
+                : "border-neutral-800/50 hover:border-neutral-700"
             }`}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
           >
@@ -231,7 +231,7 @@ export default function PricingCards() {
                 className="absolute left-0"
                 style={{
                   top: "0px",
-                  background: "rgb(30, 41, 59)",
+                  background: "rgb(38, 38, 38)",
                   height: "2px",
                   width: "calc(100% + 8px)",
                   marginLeft: "-4px",
@@ -263,7 +263,7 @@ export default function PricingCards() {
                 className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center transition-all ${
                   selectedPackage === "premium"
                     ? "border-yellow-400 bg-yellow-400/20"
-                    : "border-slate-500"
+                    : "border-neutral-600"
                 }`}
               >
                 {selectedPackage === "premium" && (
@@ -307,14 +307,14 @@ export default function PricingCards() {
                     >
                       Premium
                     </div>
-                    <div className="text-[10px] text-slate-300 mt-0.5">
+                    <div className="text-[10px] text-neutral-200 mt-0.5">
                       30 Mbps
                     </div>
                   </div>
                 </div>
 
                 {/* Installation Section */}
-                <div className="flex items-center gap-1 text-[10px] text-slate-300">
+                <div className="flex items-center gap-1 text-[10px] text-neutral-200">
                   <svg
                     className="w-3 h-3 text-yellow-400 shrink-0"
                     fill="none"
@@ -337,8 +337,8 @@ export default function PricingCards() {
                 </div>
 
                 {/* Bottom Section - Features */}
-                <div className="pt-1.5 border-t border-slate-700/50">
-                  <div className="flex items-center gap-1 text-[10px] text-slate-300">
+                <div className="pt-1.5 border-t border-neutral-800/50">
+                  <div className="flex items-center gap-1 text-[10px] text-neutral-200">
                     <svg
                       className="w-3 h-3 text-yellow-400 shrink-0"
                       fill="currentColor"

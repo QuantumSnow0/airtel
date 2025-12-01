@@ -202,9 +202,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Status Bar Theme - Dark Slate to match theme */}
-        <meta name="theme-color" content="#0f172a" />
-        <meta name="msapplication-navbutton-color" content="#0f172a" />
+        {/* Status Bar Theme - Dark Neutral to match theme */}
+        <meta name="theme-color" content="#0a0a0a" />
+        <meta name="msapplication-navbutton-color" content="#0a0a0a" />
         <meta
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"

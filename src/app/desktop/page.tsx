@@ -224,11 +224,11 @@ export default function TestDesktopPage() {
   const showPreferredTimeCheck = preferredTimeBlurred && isPreferredTimeValid;
 
   return (
-    <div className="min-h-screen bg-slate-900 overflow-y-auto h-screen">
+    <div className="min-h-screen bg-neutral-950 overflow-y-auto h-screen">
       {/* Desktop Layout: Product Left, Form Right */}
       <div className="grid grid-cols-2 gap-0  min-h-full">
         {/* Left Side - Product Display */}
-        <div className="col-span-1 flex justify-center pt-1 px-8 pb-8 bg-slate-800/50">
+        <div className="col-span-1 flex justify-center pt-1 px-8 pb-8 bg-neutral-900/50">
           <div className="w-full max-w-lg">
             {/* Product Image */}
             <div className="mb-6 rounded-lg overflow-hidden">
@@ -256,7 +256,7 @@ export default function TestDesktopPage() {
 
             {/* Features List */}
             <div className="space-y-4">
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/60 border border-yellow-400/20">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-900/60 border border-yellow-400/20">
                 <svg
                   className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5"
                   fill="currentColor"
@@ -278,7 +278,7 @@ export default function TestDesktopPage() {
                     Weather-Resistant Design
                   </p>
                   <p
-                    className={`text-sm text-slate-300 mt-1 ${poppins.variable}`}
+                    className={`text-sm text-neutral-200 mt-1 ${poppins.variable}`}
                     style={{
                       fontFamily: "var(--font-poppins), sans-serif",
                     }}
@@ -288,7 +288,7 @@ export default function TestDesktopPage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/60 border border-yellow-400/20">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-900/60 border border-yellow-400/20">
                 <svg
                   className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5"
                   fill="currentColor"
@@ -310,7 +310,7 @@ export default function TestDesktopPage() {
                     High-Gain Antenna
                   </p>
                   <p
-                    className={`text-sm text-slate-300 mt-1 ${poppins.variable}`}
+                    className={`text-sm text-neutral-200 mt-1 ${poppins.variable}`}
                     style={{
                       fontFamily: "var(--font-poppins), sans-serif",
                     }}
@@ -320,7 +320,7 @@ export default function TestDesktopPage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/60 border border-yellow-400/20">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-900/60 border border-yellow-400/20">
                 <svg
                   className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5"
                   fill="currentColor"
@@ -342,7 +342,7 @@ export default function TestDesktopPage() {
                     Signal Amplification
                   </p>
                   <p
-                    className={`text-sm text-slate-300 mt-1 ${poppins.variable}`}
+                    className={`text-sm text-neutral-200 mt-1 ${poppins.variable}`}
                     style={{
                       fontFamily: "var(--font-poppins), sans-serif",
                     }}
@@ -353,7 +353,7 @@ export default function TestDesktopPage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/60 border border-yellow-400/20">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-900/60 border border-yellow-400/20">
                 <svg
                   className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5"
                   fill="currentColor"
@@ -375,7 +375,7 @@ export default function TestDesktopPage() {
                     Flexible Mounting Options
                   </p>
                   <p
-                    className={`text-sm text-slate-300 mt-1 ${poppins.variable}`}
+                    className={`text-sm text-neutral-200 mt-1 ${poppins.variable}`}
                     style={{
                       fontFamily: "var(--font-poppins), sans-serif",
                     }}
@@ -392,46 +392,22 @@ export default function TestDesktopPage() {
         {/* Right Side - Form Sections */}
         <div className="col-span-1">
           {/* Header - Desktop Only */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700/50">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800/50">
             {/* Title on the left */}
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1">
-                <span
-                  className="text-base font-bold"
-                  style={{
-                    background: "linear-gradient(135deg, #ffffff, #fbbf24)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
-                  }}
-                >
-                  Airt
-                </span>
-                <img
-                  src="/icon.png"
-                  alt="Airtel 5G Icon"
-                  className="w-5 h-5 object-contain block"
-                  style={{
-                    marginLeft: "-5px",
-                    marginRight: "-5px",
-                    filter: "drop-shadow(0 0 8px rgba(251, 191, 36, 0.5))",
-                  }}
-                />
-                <span
-                  className="text-base font-bold"
-                  style={{
-                    background: "linear-gradient(135deg, #ffffff, #fbbf24)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
-                  }}
-                >
-                  l
-                </span>
-              </div>
-              <div className="h-4 w-px bg-slate-600 mx-1" />
+              <span
+                className="text-base font-bold"
+                style={{
+                  background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+                }}
+              >
+                Airtel
+              </span>
+              <div className="h-4 w-px bg-neutral-700 mx-1" />
               <span
                 className="text-sm font-bold tracking-wide"
                 style={{
@@ -512,7 +488,7 @@ export default function TestDesktopPage() {
                   How to Order
                 </h2>
                 {/* All 3 steps in one line */}
-                <div className="flex gap-4 rounded-lg bg-slate-800/60 backdrop-blur-sm border border-yellow-400/30 p-4">
+                <div className="flex gap-4 rounded-lg bg-neutral-900/60 backdrop-blur-sm border border-yellow-400/30 p-4">
                   {/* Step 1 */}
                   <div className="flex-1 flex items-start gap-3">
                     <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
@@ -626,7 +602,7 @@ export default function TestDesktopPage() {
                       className="absolute left-0"
                       style={{
                         top: "2px",
-                        background: "rgb(30, 41, 59)",
+                        background: "rgb(38, 38, 38)",
                         height: "2px",
                         width: "calc(100% + 4px)",
                         marginLeft: "-4px",
@@ -657,11 +633,11 @@ export default function TestDesktopPage() {
                       placeholder=""
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
-                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
+                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                         showNameCheck
                           ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                          : "border-slate-700/50"
-                      } text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                          : "border-neutral-800/50"
+                      } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
                         poppins.variable
                       }`}
                       style={{
@@ -699,7 +675,7 @@ export default function TestDesktopPage() {
                       className="absolute left-0"
                       style={{
                         top: "2px",
-                        background: "rgb(30, 41, 59)",
+                        background: "rgb(38, 38, 38)",
                         height: "2px",
                         width: "calc(100% + 4px)",
                         marginLeft: "-4px",
@@ -730,11 +706,11 @@ export default function TestDesktopPage() {
                       placeholder=""
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
-                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
+                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                         showPhoneCheck
                           ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                          : "border-slate-700/50"
-                      } text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                          : "border-neutral-800/50"
+                      } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
                         poppins.variable
                       }`}
                       style={{
@@ -772,7 +748,7 @@ export default function TestDesktopPage() {
                       className="absolute left-0"
                       style={{
                         top: "2px",
-                        background: "rgb(30, 41, 59)",
+                        background: "rgb(38, 38, 38)",
                         height: "2px",
                         width: "calc(100% + 4px)",
                         marginLeft: "-4px",
@@ -805,11 +781,11 @@ export default function TestDesktopPage() {
                       onChange={(e) =>
                         setCustomerAlternativeNumber(e.target.value)
                       }
-                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
+                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                         showAlternativeCheck
                           ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                          : "border-slate-700/50"
-                      } text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                          : "border-neutral-800/50"
+                      } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
                         poppins.variable
                       }`}
                       style={{
@@ -847,7 +823,7 @@ export default function TestDesktopPage() {
                       className="absolute left-0"
                       style={{
                         top: "2px",
-                        background: "rgb(30, 41, 59)",
+                        background: "rgb(38, 38, 38)",
                         height: "2px",
                         width: "calc(100% + 4px)",
                         marginLeft: "-4px",
@@ -878,16 +854,16 @@ export default function TestDesktopPage() {
                       placeholder=""
                       value={customerEmail}
                       onChange={(e) => setCustomerEmail(e.target.value)}
-                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
+                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                         showEmailCheck
                           ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                          : "border-slate-700/50"
-                      } text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                          : "border-neutral-800/50"
+                      } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
                         poppins.variable
                       }`}
                       style={{
                         fontFamily: "var(--font-poppins), sans-serif",
-                        WebkitBoxShadow: "0 0 0 1000px rgb(30, 41, 59) inset",
+                        WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
                         WebkitTextFillColor: "#ffffff",
                         caretColor: "#ffffff",
                       }}
@@ -925,7 +901,7 @@ export default function TestDesktopPage() {
                       className="absolute left-0"
                       style={{
                         top: "2px",
-                        background: "rgb(30, 41, 59)",
+                        background: "rgb(38, 38, 38)",
                         height: "2px",
                         width: "calc(100% + 4px)",
                         marginLeft: "-4px",
@@ -960,13 +936,13 @@ export default function TestDesktopPage() {
                       onBlur={() => {
                         setTimeout(() => setTownBlurred(true), 200);
                       }}
-                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
+                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                         showTownCheck
                           ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                          : "border-slate-700/50"
-                      } text-left text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                          : "border-neutral-800/50"
+                      } text-left text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
                         poppins.variable
-                      } ${!installationTown ? "text-slate-400" : ""}`}
+                      } ${!installationTown ? "text-neutral-300" : ""}`}
                       style={{
                         fontFamily: "var(--font-poppins), sans-serif",
                       }}
@@ -991,7 +967,7 @@ export default function TestDesktopPage() {
                           </svg>
                         ) : (
                           <svg
-                            className="w-5 h-5 text-slate-400"
+                            className="w-5 h-5 text-neutral-300"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -1009,7 +985,7 @@ export default function TestDesktopPage() {
                     {showTownDropdown && (
                       <div
                         ref={townDropdownRef}
-                        className="absolute z-50 w-full bottom-full mb-1 bg-slate-800/95 backdrop-blur-sm border-2 border-slate-700/50 rounded-lg shadow-lg max-h-60 overflow-auto"
+                        className="absolute z-50 w-full bottom-full mb-1 bg-neutral-900/95 backdrop-blur-sm border-2 border-neutral-800/50 rounded-lg shadow-lg max-h-60 overflow-auto"
                         style={{
                           boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
                         }}
@@ -1023,11 +999,11 @@ export default function TestDesktopPage() {
                               setShowTownDropdown(false);
                               setTownBlurred(true);
                             }}
-                            className={`w-full px-4 py-3 text-left text-white hover:bg-slate-700/50 transition-colors ${
+                            className={`w-full px-4 py-3 text-left text-white hover:bg-neutral-800/50 transition-colors ${
                               poppins.variable
                             } ${
                               installationTown === option
-                                ? "bg-slate-700/70 text-yellow-400"
+                                ? "bg-neutral-800/70 text-yellow-400"
                                 : ""
                             }`}
                             style={{
@@ -1069,7 +1045,7 @@ export default function TestDesktopPage() {
                       className="absolute left-0"
                       style={{
                         top: "2px",
-                        background: "rgb(30, 41, 59)",
+                        background: "rgb(38, 38, 38)",
                         height: "2px",
                         width: "calc(100% + 4px)",
                         marginLeft: "-4px",
@@ -1101,16 +1077,16 @@ export default function TestDesktopPage() {
                       placeholder=""
                       value={deliveryLocation}
                       onChange={(e) => setDeliveryLocation(e.target.value)}
-                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
+                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                         showDeliveryLocationCheck
                           ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                          : "border-slate-700/50"
-                      } text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                          : "border-neutral-800/50"
+                      } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
                         poppins.variable
                       }`}
                       style={{
                         fontFamily: "var(--font-poppins), sans-serif",
-                        WebkitBoxShadow: "0 0 0 1000px rgb(30, 41, 59) inset",
+                        WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
                         WebkitTextFillColor: "#ffffff",
                         caretColor: "#ffffff",
                       }}
@@ -1148,7 +1124,7 @@ export default function TestDesktopPage() {
                       className="absolute left-0"
                       style={{
                         top: "2px",
-                        background: "rgb(30, 41, 59)",
+                        background: "rgb(38, 38, 38)",
                         height: "2px",
                         width: "calc(100% + 4px)",
                         marginLeft: "-4px",
@@ -1180,16 +1156,16 @@ export default function TestDesktopPage() {
                       value={preferredDate}
                       onChange={(e) => setPreferredDate(e.target.value)}
                       min={new Date().toISOString().split("T")[0]}
-                      className={`w-full px-3 py-2.5 pt-4 pr-12 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
+                      className={`w-full px-3 py-2.5 pt-4 pr-12 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                         showPreferredDateCheck
                           ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                          : "border-slate-700/50"
-                      } text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 date-input-custom ${
+                          : "border-neutral-800/50"
+                      } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 date-input-custom ${
                         poppins.variable
                       } ${!preferredDate ? "date-placeholder" : ""}`}
                       style={{
                         fontFamily: "var(--font-poppins), sans-serif",
-                        WebkitBoxShadow: "0 0 0 1000px rgb(30, 41, 59) inset",
+                        WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
                         WebkitTextFillColor: preferredDate
                           ? "#ffffff"
                           : "transparent",
@@ -1217,7 +1193,7 @@ export default function TestDesktopPage() {
                           fontFamily: "var(--font-poppins), sans-serif",
                         }}
                       >
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-neutral-300">
                           Select date
                         </span>
                       </div>
@@ -1277,7 +1253,7 @@ export default function TestDesktopPage() {
                       className="absolute left-0"
                       style={{
                         top: "2px",
-                        background: "rgb(30, 41, 59)",
+                        background: "rgb(38, 38, 38)",
                         height: "2px",
                         width: "calc(100% + 4px)",
                         marginLeft: "-4px",
@@ -1312,13 +1288,13 @@ export default function TestDesktopPage() {
                       onBlur={() => {
                         setTimeout(() => setPreferredTimeBlurred(true), 200);
                       }}
-                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
+                      className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                         showPreferredTimeCheck
                           ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                          : "border-slate-700/50"
-                      } text-left text-white placeholder:text-slate-400 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                          : "border-neutral-800/50"
+                      } text-left text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
                         poppins.variable
-                      } ${!preferredTime ? "text-slate-400" : ""}`}
+                      } ${!preferredTime ? "text-neutral-300" : ""}`}
                       style={{
                         fontFamily: "var(--font-poppins), sans-serif",
                       }}
@@ -1343,7 +1319,7 @@ export default function TestDesktopPage() {
                           </svg>
                         ) : (
                           <svg
-                            className="w-5 h-5 text-slate-400"
+                            className="w-5 h-5 text-neutral-300"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -1361,7 +1337,7 @@ export default function TestDesktopPage() {
                     {showTimeDropdown && (
                       <div
                         ref={timeDropdownRef}
-                        className="absolute z-50 w-full bottom-full mb-1 bg-slate-800/95 backdrop-blur-sm border-2 border-slate-700/50 rounded-lg shadow-lg max-h-60 overflow-auto"
+                        className="absolute z-50 w-full bottom-full mb-1 bg-neutral-900/95 backdrop-blur-sm border-2 border-neutral-800/50 rounded-lg shadow-lg max-h-60 overflow-auto"
                         style={{
                           boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
                         }}
@@ -1375,11 +1351,11 @@ export default function TestDesktopPage() {
                               setShowTimeDropdown(false);
                               setPreferredTimeBlurred(true);
                             }}
-                            className={`w-full px-4 py-3 text-left text-white hover:bg-slate-700/50 transition-colors ${
+                            className={`w-full px-4 py-3 text-left text-white hover:bg-neutral-800/50 transition-colors ${
                               poppins.variable
                             } ${
                               preferredTime === option
-                                ? "bg-slate-700/70 text-yellow-400"
+                                ? "bg-neutral-800/70 text-yellow-400"
                                 : ""
                             }`}
                             style={{
@@ -1587,8 +1563,8 @@ export default function TestDesktopPage() {
                     preferredTimeBlurred &&
                     isPreferredTimeValid &&
                     selectedPackage
-                      ? "bg-yellow-400 hover:bg-yellow-500 text-slate-900 shadow-[0_0_20px_rgba(251,191,36,0.4)] active:scale-95"
-                      : "bg-slate-700 text-slate-400 cursor-not-allowed opacity-50"
+                      ? "bg-yellow-400 hover:bg-yellow-500 text-neutral-50 shadow-[0_0_20px_rgba(251,191,36,0.4)] active:scale-95"
+                      : "bg-neutral-800 text-neutral-300 cursor-not-allowed opacity-50"
                   }`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
