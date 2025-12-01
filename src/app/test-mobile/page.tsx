@@ -80,6 +80,8 @@ export default function TestMobilePage() {
   const [robotTop, setRobotTop] = useState<string | null>(null);
   const [viewportScrollOffset, setViewportScrollOffset] = useState(0);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [howToOrderSlide, setHowToOrderSlide] = useState(0);
+  const howToOrderSliderRef = useRef<HTMLDivElement>(null);
 
   const isNameValid = customerName.trim().length >= 2;
   const isPhoneValid = /^[0-9]{10,12}$/.test(customerPhone.replace(/\s/g, ""));
@@ -116,6 +118,26 @@ export default function TestMobilePage() {
     "Lamu",
     "Other",
   ];
+
+  // Auto-scroll How to Order slider
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHowToOrderSlide((prev) => (prev + 1) % 3);
+    }, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Scroll to the active slide
+  useEffect(() => {
+    if (howToOrderSliderRef.current) {
+      const slideWidth = howToOrderSliderRef.current.offsetWidth;
+      howToOrderSliderRef.current.scrollTo({
+        left: slideWidth * howToOrderSlide,
+        behavior: "smooth",
+      });
+    }
+  }, [howToOrderSlide]);
 
   // Detect autofill and mark fields as blurred if they have valid values
   useEffect(() => {
@@ -977,32 +999,102 @@ export default function TestMobilePage() {
             >
               How to Order
             </h2>
-            <div className="space-y-2">
-              <p
-                className={`text-sm text-white/80 ${poppins.variable}`}
-                style={{
-                  fontFamily: "var(--font-poppins), sans-serif",
-                }}
+            {/* Compact Slider */}
+            <div className="relative overflow-hidden rounded-lg bg-slate-800/60 backdrop-blur-sm border border-yellow-400/30 p-4">
+              <div
+                ref={howToOrderSliderRef}
+                className="flex gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
-                1. Choose your preferred package below
-              </p>
-              <p
-                className={`text-sm text-white/80 ${poppins.variable}`}
-                style={{
-                  fontFamily: "var(--font-poppins), sans-serif",
-                }}
-              >
-                2. Fill in your details and installation preferences
-              </p>
-              <p
-                className={`text-sm text-white/80 ${poppins.variable}`}
-                style={{
-                  fontFamily: "var(--font-poppins), sans-serif",
-                }}
-              >
-                3. Submit your request and our qualified technician will contact
-                you
-              </p>
+                {/* Step 1 */}
+                <div className="shrink-0 w-full snap-center">
+                  <div className="flex items-start gap-3">
+                    <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
+                      <span className="text-yellow-400 text-sm font-bold">
+                        1
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <p
+                        className={`text-sm text-white/90 ${poppins.variable}`}
+                        style={{
+                          fontFamily: "var(--font-poppins), sans-serif",
+                        }}
+                      >
+                        Choose your preferred package below
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="shrink-0 w-full snap-center">
+                  <div className="flex items-start gap-3">
+                    <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
+                      <span className="text-yellow-400 text-sm font-bold">
+                        2
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <p
+                        className={`text-sm text-white/90 ${poppins.variable}`}
+                        style={{
+                          fontFamily: "var(--font-poppins), sans-serif",
+                        }}
+                      >
+                        Fill in your details and installation preferences
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="shrink-0 w-full snap-center">
+                  <div className="flex items-start gap-3">
+                    <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
+                      <span className="text-yellow-400 text-sm font-bold">
+                        3
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <p
+                        className={`text-sm text-white/90 ${poppins.variable}`}
+                        style={{
+                          fontFamily: "var(--font-poppins), sans-serif",
+                        }}
+                      >
+                        Submit your request and our qualified technician will
+                        contact you
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Slider Indicators */}
+              <div className="flex justify-center gap-2 mt-4">
+                <div
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    howToOrderSlide === 0
+                      ? "bg-yellow-400 w-6"
+                      : "bg-yellow-400/30"
+                  }`}
+                ></div>
+                <div
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    howToOrderSlide === 1
+                      ? "bg-yellow-400 w-6"
+                      : "bg-yellow-400/30"
+                  }`}
+                ></div>
+                <div
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    howToOrderSlide === 2
+                      ? "bg-yellow-400 w-6"
+                      : "bg-yellow-400/30"
+                  }`}
+                ></div>
+              </div>
             </div>
           </div>
         </div>
