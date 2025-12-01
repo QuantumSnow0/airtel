@@ -82,6 +82,11 @@ export default function TestMobilePage() {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [howToOrderSlide, setHowToOrderSlide] = useState(0);
   const howToOrderSliderRef = useRef<HTMLDivElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    state: "idle" | "success" | "error";
+    message: string;
+  }>({ state: "idle", message: "" });
 
   const isNameValid = customerName.trim().length >= 2;
   const isPhoneValid = /^[0-9]{10,12}$/.test(customerPhone.replace(/\s/g, ""));
@@ -1940,13 +1945,150 @@ export default function TestMobilePage() {
 
           {/* Submit Button */}
           <div className="mb-4 mt-6">
+            {submitStatus.state === "error" && (
+              <div className="mb-4 rounded-lg bg-rose-900/50 border border-rose-500/50 p-3">
+                <p className="text-sm font-medium text-rose-200">
+                  {submitStatus.message}
+                </p>
+              </div>
+            )}
+            {submitStatus.state === "success" && (
+              <div className="mb-4 rounded-lg bg-emerald-900/50 border border-emerald-500/50 p-3">
+                <p className="text-sm font-medium text-emerald-200">
+                  ✓ {submitStatus.message}
+                </p>
+              </div>
+            )}
             <button
               type="button"
-              onClick={() => {
-                // TODO: Add form submission logic
-                console.log("Form submitted");
+              onClick={async () => {
+                if (
+                  !(nameBlurred && isNameValid) ||
+                  !(phoneBlurred && isPhoneValid) ||
+                  !(alternativeBlurred && isAlternativeValid) ||
+                  !(emailBlurred && isEmailValid) ||
+                  !(townBlurred && isTownValid) ||
+                  !(deliveryLocationBlurred && isDeliveryLocationValid) ||
+                  !(preferredDateBlurred && isPreferredDateValid) ||
+                  !(preferredTimeBlurred && isPreferredTimeValid) ||
+                  !selectedPackage
+                ) {
+                  return;
+                }
+
+                setIsSubmitting(true);
+                setSubmitStatus({ state: "idle", message: "" });
+
+                try {
+                  const response = await fetch("/api/submit", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      customerName: customerName.trim(),
+                      airtelNumber: customerPhone,
+                      alternateNumber: customerAlternativeNumber,
+                      email: customerEmail.trim(),
+                      preferredPackage: selectedPackage,
+                      installationTown: installationTown,
+                      deliveryLandmark: deliveryLocation.trim(),
+                      visitDate: preferredDate,
+                      visitTime: preferredTime,
+                    }),
+                  });
+
+                  const data = await response.json();
+
+                  if (!response.ok) {
+                    // If data was saved to database but Microsoft Forms failed
+                    if (data.savedToDatabase) {
+                      const errorMsg = `Your information was saved, but there was an issue submitting to our system. Our team will process it manually. Reference: ${
+                        data.leadId || "saved"
+                      }`;
+                      setSubmitStatus({
+                        state: "error",
+                        message: errorMsg,
+                      });
+                      setRobotMessage(
+                        "✅ Your info was saved! Our team will process it manually."
+                      );
+                      // Reset form since data is saved
+                      setCustomerName("");
+                      setCustomerPhone("");
+                      setCustomerAlternativeNumber("");
+                      setCustomerEmail("");
+                      setInstallationTown("");
+                      setDeliveryLocation("");
+                      setPreferredDate("");
+                      setPreferredTime("");
+                      setNameBlurred(false);
+                      setPhoneBlurred(false);
+                      setAlternativeBlurred(false);
+                      setEmailBlurred(false);
+                      setTownBlurred(false);
+                      setDeliveryLocationBlurred(false);
+                      setPreferredDateBlurred(false);
+                      setPreferredTimeBlurred(false);
+                      setIsSubmitting(false);
+                      return;
+                    }
+                    // Otherwise, throw the error
+                    throw new Error(
+                      data.error || data.details || "Failed to submit form"
+                    );
+                  }
+
+                  setSubmitStatus({
+                    state: "success",
+                    message:
+                      "Form submitted successfully! We'll contact you soon.",
+                  });
+                  setRobotMessage(
+                    "🎉 Success! Your request has been submitted! We'll contact you soon!"
+                  );
+
+                  // Track Google Ads conversion
+                  if (typeof window !== "undefined" && (window as any).gtag) {
+                    (window as any).gtag("event", "ads_conversion_Contact_1", {
+                      event_category: "conversion",
+                      event_label: "Form Submission",
+                    });
+                  }
+
+                  // Reset form after successful submission
+                  setCustomerName("");
+                  setCustomerPhone("");
+                  setCustomerAlternativeNumber("");
+                  setCustomerEmail("");
+                  setInstallationTown("");
+                  setDeliveryLocation("");
+                  setPreferredDate("");
+                  setPreferredTime("");
+                  setNameBlurred(false);
+                  setPhoneBlurred(false);
+                  setAlternativeBlurred(false);
+                  setEmailBlurred(false);
+                  setTownBlurred(false);
+                  setDeliveryLocationBlurred(false);
+                  setPreferredDateBlurred(false);
+                  setPreferredTimeBlurred(false);
+                } catch (error) {
+                  const errorMessage =
+                    error instanceof Error
+                      ? error.message
+                      : "An error occurred. Please try again.";
+                  setSubmitStatus({
+                    state: "error",
+                    message: errorMessage,
+                  });
+                  setRobotMessage("❌ Something went wrong. Please try again.");
+                } finally {
+                  setIsSubmitting(false);
+                }
               }}
               disabled={
+                isSubmitting ||
                 !(nameBlurred && isNameValid) ||
                 !(phoneBlurred && isPhoneValid) ||
                 !(alternativeBlurred && isAlternativeValid) ||
@@ -1954,11 +2096,13 @@ export default function TestMobilePage() {
                 !(townBlurred && isTownValid) ||
                 !(deliveryLocationBlurred && isDeliveryLocationValid) ||
                 !(preferredDateBlurred && isPreferredDateValid) ||
-                !(preferredTimeBlurred && isPreferredTimeValid)
+                !(preferredTimeBlurred && isPreferredTimeValid) ||
+                !selectedPackage
               }
               className={`w-full py-4 px-6 rounded-lg font-semibold text-base transition-all duration-300 ${
                 poppins.variable
               } ${
+                !isSubmitting &&
                 nameBlurred &&
                 isNameValid &&
                 phoneBlurred &&
@@ -1974,7 +2118,8 @@ export default function TestMobilePage() {
                 preferredDateBlurred &&
                 isPreferredDateValid &&
                 preferredTimeBlurred &&
-                isPreferredTimeValid
+                isPreferredTimeValid &&
+                selectedPackage
                   ? "bg-yellow-400 hover:bg-yellow-500 text-slate-900 shadow-[0_0_20px_rgba(251,191,36,0.4)] active:scale-95"
                   : "bg-slate-700 text-slate-400 cursor-not-allowed opacity-50"
               }`}
@@ -1982,7 +2127,33 @@ export default function TestMobilePage() {
                 fontFamily: "var(--font-poppins), sans-serif",
               }}
             >
-              Submit
+              {isSubmitting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg
+                    className="animate-spin h-5 w-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Submitting...
+                </span>
+              ) : (
+                "Submit"
+              )}
             </button>
           </div>
         </div>
