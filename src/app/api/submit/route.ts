@@ -259,6 +259,15 @@ export async function POST(request: NextRequest) {
       userSessionId = randomUUID();
     }
 
+    // Map package names to full Microsoft Forms format
+    // Format must match exactly: "5G _[SPEED]Mbps_30days at Ksh.[PRICE]"
+    const packageMap: Record<string, string> = {
+      standard: "5G _15Mbps_30days at Ksh.2999",
+      premium: "5G _30Mbps_30days at Ksh.3999",
+    };
+    const fullPackageName =
+      packageMap[preferredPackage.toLowerCase()] || preferredPackage;
+
     // Build answers array in the exact order as Microsoft Forms expects
     const answers = [
       {
@@ -307,7 +316,7 @@ export async function POST(request: NextRequest) {
       },
       {
         questionId: QUESTION_IDS.preferredPackage,
-        answer1: preferredPackage,
+        answer1: fullPackageName,
       },
       {
         questionId: QUESTION_IDS.visitDate,
