@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
 
@@ -54,18 +55,23 @@ export default function PricingCards() {
       <div className={`${poppins.variable}`}>
         <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-2">
           {/* Package 1 - Standard */}
-          <div
+          <motion.div
             className={`group relative rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
               selectedPackage === "standard"
                 ? "border-yellow-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)]"
                 : "border-neutral-800/50 hover:border-neutral-700"
             }`}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
           >
             {/* Clickable Overlay - Covers entire card */}
             <div
               className="absolute inset-0 cursor-pointer z-20"
-              onClick={() => handleCardClick("standard")}
+            onClick={() => handleCardClick("standard")}
               onTouchStart={() => handleCardClick("standard")}
             />
 
@@ -189,29 +195,34 @@ export default function PricingCards() {
                   <div className="flex items-center gap-1 text-[10px] text-neutral-200">
                     <svg
                       className="w-3 h-3 text-yellow-400 shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
                     <span>30 days validity</span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Package 2 - Premium */}
-          <div
+          <motion.div
             className={`group relative rounded-lg bg-gradient-to-br from-neutral-900/90 to-neutral-950/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
               selectedPackage === "premium"
                 ? "border-yellow-400/80 shadow-[0_0_25px_rgba(251,191,36,0.4)]"
                 : "border-neutral-800/50 hover:border-neutral-700"
             }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
           >
             {/* Clickable Overlay - Covers entire card */}
@@ -334,7 +345,7 @@ export default function PricingCards() {
                       Ksh. 1,000
                     </span>
                   </span>
-                </div>
+      </div>
 
                 {/* Bottom Section - Features */}
                 <div className="pt-1.5 border-t border-neutral-800/50">
@@ -351,11 +362,11 @@ export default function PricingCards() {
                       />
                     </svg>
                     <span>30 days validity</span>
-                  </div>
                 </div>
               </div>
             </div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </>

@@ -5,10 +5,13 @@ import { randomUUID } from "crypto";
 
 const MS_FORMS_FORM_ID =
   process.env.MS_FORMS_FORM_ID ||
-  "JzfHFpyXgk2zp-tqL93-V1fdJne7SIlMnh7yZpkW8f5UQzJBMFE5VUpRSzM3VVFNRlJUNkY2QlBIRC4u";
+  "JzfHFpyXgk2zp-tqL93-V1fdJne7SIlMnh7yZpkW8f5UQjc4M0wwWU9HRTJPRjMxWlc5QjRLOUhaMC4u";
+const MS_FORMS_TENANT_ID =
+  process.env.MS_FORMS_TENANT_ID || "16c73727-979c-4d82-b3a7-eb6a2fddfe57";
+const MS_FORMS_USER_ID =
+  process.env.MS_FORMS_USER_ID || "7726dd57-48bb-4c89-9e1e-f2669916f1fe";
 const MS_FORMS_RESPONSE_PAGE_URL =
-  process.env.MS_FORMS_RESPONSE_PAGE_URL ||
-  "https://forms.office.com/pages/responsepage.aspx?id=JzfHFpyXgk2zp-tqL93-V1fdJne7SIlMnh7yZpkW8f5UQzJBMFE5VUpRSzM3VVFNRlJUNkY2QlBIRC4u&route=shorturl";
+  process.env.MS_FORMS_RESPONSE_PAGE_URL || "https://forms.cloud.microsoft/";
 
 // Question IDs from Microsoft Forms
 const QUESTION_IDS = {
@@ -16,7 +19,7 @@ const QUESTION_IDS = {
   enterpriseCP: "r52e9f6e788444e2a96d9e30de5d635d8",
   agentName: "rcf88d2d33e8c4ed4b33ccc91fec1d771",
   agentMobile: "r2855e7f8fcfb44c98a2c5797e8e9b087",
-  totalUnitsRequired: "rb1675e7eca79440e9aade6600fa4d22c", // Total Units Required (field 5)
+  totalUnitsRequired: "r5d2a658a265b4f3ea2ad9aee1c8bc9c5", // Total Units Required (field 5)
   leadType: "rd897bb0eb8344bafaaf8db07a535a049",
   connectionType: "r4ceb180775c04d5a92a39fd687573090",
   customerName: "r3af4eebb47ff46b78eb4118311884f53",
@@ -28,6 +31,8 @@ const QUESTION_IDS = {
   deliveryLandmark: "r7a69684d43ec4bf1b6971b21a8b4dd18",
   visitDate: "r68b858271107400189b8d681d1b19c38",
   visitTime: "rae98a58cb06949c1a3222443368aa64e",
+  installationLocation: "r55f328ec020a4a629f58639cd56ecd85", // Combined location field (e.g., "NAIROBI - Langata")
+  optionalField: "r1e3b5a91acaa465b8aab76bab2cad94a", // Optional field (can be null)
 };
 
 // Internal defaults
@@ -61,6 +66,9 @@ export async function POST(request: NextRequest) {
       visitDate,
       visitTime,
     } = body;
+
+    // Build installation location (town - landmark format)
+    const installationLocation = `${installationTown} - ${deliveryLandmark}`;
 
     // Format phone numbers (convert from 7XXXXXXXX to 2547XXXXXXXX)
     const formatPhone = (phone: string): string => {
@@ -188,13 +196,18 @@ export async function POST(request: NextRequest) {
       const userIdMatch = html.match(/"userId":"([^"]+)"/);
       const tenantMatch = html.match(/"tenantId":"([^"]+)"/);
 
-      // If not found in HTML, use the observed values from the captured request
-      userId = userIdMatch
-        ? userIdMatch[1]
-        : "7726dd57-48bb-4c89-9e1e-f2669916f1fe";
-      tenantId = tenantMatch
-        ? tenantMatch[1]
-        : "16c73727-979c-4d82-b3a7-eb6a2fddfe57";
+      // If not found in HTML, use the configured values
+      userId = userIdMatch ? userIdMatch[1] : MS_FORMS_USER_ID;
+      tenantId = tenantMatch ? tenantMatch[1] : MS_FORMS_TENANT_ID;
+
+      console.log("✅ Microsoft Forms tokens fetched successfully:", {
+        formsSessionId: formsSessionId ? "✓" : "✗",
+        requestVerificationToken: requestVerificationToken ? "✓" : "✗",
+        userSessionId: userSessionId || "generated",
+        userId: userId,
+        tenantId: tenantId,
+        timestamp: new Date().toISOString(),
+      });
     } catch (tokenError) {
       // Log error for debugging but don't fail the request - data is safely stored
       console.error(
@@ -246,6 +259,7 @@ export async function POST(request: NextRequest) {
       userSessionId = randomUUID();
     }
 
+    // Build answers array in the exact order as Microsoft Forms expects
     const answers = [
       {
         questionId: QUESTION_IDS.agentType,
@@ -264,12 +278,12 @@ export async function POST(request: NextRequest) {
         answer1: `254${INTERNAL_DEFAULTS.agentMobile.replace(/^0/, "")}`,
       },
       {
-        questionId: QUESTION_IDS.totalUnitsRequired,
-        answer1: "1",
-      },
-      {
         questionId: QUESTION_IDS.leadType,
         answer1: INTERNAL_DEFAULTS.leadType,
+      },
+      {
+        questionId: QUESTION_IDS.totalUnitsRequired,
+        answer1: "1",
       },
       {
         questionId: QUESTION_IDS.connectionType,
@@ -296,20 +310,28 @@ export async function POST(request: NextRequest) {
         answer1: preferredPackage,
       },
       {
-        questionId: QUESTION_IDS.installationTown,
-        answer1: installationTown,
-      },
-      {
-        questionId: QUESTION_IDS.deliveryLandmark,
-        answer1: deliveryLandmark,
-      },
-      {
         questionId: QUESTION_IDS.visitDate,
         answer1: visitDate,
       },
       {
         questionId: QUESTION_IDS.visitTime,
         answer1: visitTime,
+      },
+      {
+        questionId: QUESTION_IDS.deliveryLandmark,
+        answer1: deliveryLandmark,
+      },
+      {
+        questionId: QUESTION_IDS.installationTown,
+        answer1: installationTown,
+      },
+      {
+        questionId: QUESTION_IDS.installationLocation,
+        answer1: installationLocation,
+      },
+      {
+        questionId: QUESTION_IDS.optionalField,
+        answer1: null, // Optional field - set to null as per form structure
       },
     ];
 
@@ -320,30 +342,47 @@ export async function POST(request: NextRequest) {
     };
 
     // Step 4: Submit to Microsoft Forms
-    const msFormsUrl = `https://forms.office.com/formapi/api/${tenantId}/users/${userId}/forms('${MS_FORMS_FORM_ID}')/responses`;
+    // URL encode the form ID for the API endpoint
+    const encodedFormId = encodeURIComponent(MS_FORMS_FORM_ID);
+    const msFormsUrl = `https://forms.guest.usercontent.microsoft/formapi/api/${tenantId}/users/${userId}/forms(%27${encodedFormId}%27)/responses`;
+
+    console.log("📤 Submitting to Microsoft Forms:", {
+      url: msFormsUrl,
+      correlationId: correlationId,
+      userSessionId: userSessionId,
+      payloadSize: JSON.stringify(msFormsPayload).length,
+      timestamp: new Date().toISOString(),
+    });
+
+    console.log("📋 Request Body:", {
+      startDate: msFormsPayload.startDate,
+      submitDate: msFormsPayload.submitDate,
+      answers: JSON.parse(msFormsPayload.answers), // Parse to show readable format
+      answersString: msFormsPayload.answers, // Also show the stringified version
+    });
 
     try {
       const formsResponse = await fetch(msFormsUrl, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           __requestverificationtoken: requestVerificationToken,
           accept: "application/json",
           "Accept-Encoding": "gzip, deflate, br, zstd",
           "Accept-Language": "en-US,en;q=0.9",
           Connection: "keep-alive",
-          Cookie: cookieString,
-          Origin: "https://forms.office.com",
-          Referer: MS_FORMS_RESPONSE_PAGE_URL,
-          "odata-version": "4.0",
+          "Content-Type": "application/json",
+          Host: "forms.guest.usercontent.microsoft",
           "odata-maxversion": "4.0",
+          "odata-version": "4.0",
+          Origin: "https://forms.cloud.microsoft",
+          Referer: "https://forms.cloud.microsoft/",
           "sec-ch-ua":
             '"Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           "Sec-Fetch-Dest": "empty",
           "Sec-Fetch-Mode": "cors",
-          "Sec-Fetch-Site": "same-origin",
+          "Sec-Fetch-Site": "cross-site",
           "User-Agent":
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
           "x-correlationid": correlationId,
@@ -351,6 +390,7 @@ export async function POST(request: NextRequest) {
           "x-ms-form-request-ring": "business",
           "x-ms-form-request-source": "ms-formweb",
           "x-usersessionid": userSessionId,
+          Cookie: cookieString,
         },
         body: JSON.stringify(msFormsPayload),
       });
@@ -393,9 +433,22 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Extract response ID if available (prioritize 'id' field as per new API structure)
-      const responseId =
-        formsResponseData?.id || formsResponseData?.ResponseId || null;
+      // Extract response ID from the new API structure (201 Created response)
+      const responseId = formsResponseData?.id || null;
+
+      console.log("✅ Microsoft Forms submission SUCCESS:", {
+        status: formsResponse.status,
+        statusText: formsResponse.statusText,
+        responseId: responseId,
+        leadId: leadId,
+        submitDate: formsResponseData?.submitDate,
+        responder: formsResponseData?.responder,
+        timestamp: new Date().toISOString(),
+        responseHeaders: {
+          location: formsResponse.headers.get("Location"),
+          correlationId: formsResponse.headers.get("x-correlationid"),
+        },
+      });
 
       // Step 5: Update Supabase with success
       await supabaseAdmin

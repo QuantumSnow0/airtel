@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import ProductCarousel from "./ProductCarousel";
 import PricingCards from "../components/PricingCards";
 import { usePackage } from "../contexts/PackageContext";
@@ -75,6 +76,11 @@ export default function TestMobilePage() {
   const [robotMessage, setRobotMessage] = useState("");
   const [robotVisible, setRobotVisible] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const speechTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isTypingRef = useRef(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [previousPackage, setPreviousPackage] = useState<string | null>(null);
   const [robotBottom, setRobotBottom] = useState("1rem");
   const [robotTop, setRobotTop] = useState<string | null>(null);
@@ -143,6 +149,218 @@ export default function TestMobilePage() {
       });
     }
   }, [howToOrderSlide]);
+
+  // Track user interaction for audio autoplay
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      setHasUserInteracted(true);
+    };
+
+    // Listen for any user interaction
+    document.addEventListener("click", handleUserInteraction, { once: true });
+    document.addEventListener("touchstart", handleUserInteraction, {
+      once: true,
+    });
+    document.addEventListener("keydown", handleUserInteraction, { once: true });
+
+    return () => {
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("touchstart", handleUserInteraction);
+      document.removeEventListener("keydown", handleUserInteraction);
+    };
+  }, []);
+
+  // Function to strip emojis from text for TTS
+  const stripEmojis = (text: string): string => {
+    // Remove emojis using regex pattern
+    // This pattern matches most emoji ranges including:
+    // - Emoticons, Miscellaneous Symbols, Dingbats
+    // - Supplemental Symbols and Pictographs
+    // - Transport and Map Symbols
+    // - Enclosed characters
+    // - Flags
+    return text
+      .replace(
+        /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA00}-\u{1FA6F}]|[\u{1FA70}-\u{1FAFF}]|[\u{2190}-\u{21FF}]/gu,
+        ""
+      )
+      .replace(/\s+/g, " ") // Replace multiple spaces with single space
+      .trim();
+  };
+
+  // Function to speak text using Google Cloud TTS
+  const speakText = async (text: string) => {
+    if (!text || isMuted) return;
+
+    // Strip emojis from text before TTS
+    const cleanText = stripEmojis(text);
+    if (!cleanText) return; // If text is only emojis, don't speak
+
+    // Only play audio if user has interacted with the page
+    if (!hasUserInteracted) {
+      // Fallback to browser TTS which doesn't require user interaction
+      fallbackToBrowserTTS(cleanText);
+      return;
+    }
+
+    try {
+      // Check if audio is currently playing
+      const isAudioPlaying =
+        audioRef.current &&
+        !audioRef.current.paused &&
+        audioRef.current.currentTime > 0 &&
+        !audioRef.current.ended;
+
+      // If audio is playing and almost done (within 0.5 seconds), wait for it to finish
+      if (isAudioPlaying && audioRef.current) {
+        const timeRemaining =
+          audioRef.current.duration - audioRef.current.currentTime;
+        if (timeRemaining <= 0.5) {
+          // Wait for current audio to finish, then play new one
+          audioRef.current.addEventListener(
+            "ended",
+            async () => {
+              // Now play the new audio
+              await playNewAudio(cleanText);
+            },
+            { once: true }
+          );
+          return;
+        }
+      }
+
+      // Stop any currently playing audio (if it's not almost done)
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+
+      // Play new audio
+      await playNewAudio(cleanText);
+    } catch (error) {
+      console.error("TTS Error:", error);
+      // Fallback to browser TTS on error
+      fallbackToBrowserTTS(cleanText);
+    }
+  };
+
+  // Helper function to play new audio
+  const playNewAudio = async (cleanText: string) => {
+    try {
+      // Call TTS API
+      const response = await fetch("/api/tts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: cleanText }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("TTS API Error:", error);
+        // Fallback to browser TTS if API fails
+        fallbackToBrowserTTS(cleanText);
+        return;
+      }
+
+      const data = await response.json();
+
+      // Create audio element and play
+      const audio = new Audio(`data:audio/${data.format};base64,${data.audio}`);
+      audioRef.current = audio;
+
+      audio.play().catch((error) => {
+        console.error("Audio play error:", error);
+        // Fallback to browser TTS if audio play fails
+        fallbackToBrowserTTS(cleanText);
+      });
+    } catch (error) {
+      console.error("TTS Error:", error);
+      // Fallback to browser TTS on error
+      fallbackToBrowserTTS(cleanText);
+    }
+  };
+
+  // Fallback to browser TTS if Google Cloud TTS fails
+  const fallbackToBrowserTTS = (text: string) => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      utterance.pitch = 1.1;
+      utterance.volume = 0.8;
+
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(
+        (voice) =>
+          voice.name.includes("Google") ||
+          voice.name.includes("Samantha") ||
+          voice.name.includes("Karen")
+      );
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Check if user is currently typing in any input field
+  useEffect(() => {
+    const checkTyping = () => {
+      const activeElement = document.activeElement;
+      const isInputFocused =
+        activeElement?.tagName === "INPUT" ||
+        activeElement?.tagName === "TEXTAREA" ||
+        activeElement?.getAttribute("contenteditable") === "true";
+
+      isTypingRef.current = isInputFocused || false;
+    };
+
+    // Check on focus/blur events
+    document.addEventListener("focusin", checkTyping);
+    document.addEventListener("focusout", checkTyping);
+
+    // Also check periodically
+    const interval = setInterval(checkTyping, 100);
+
+    return () => {
+      document.removeEventListener("focusin", checkTyping);
+      document.removeEventListener("focusout", checkTyping);
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Speak robot messages with delay when user is typing
+  useEffect(() => {
+    if (robotMessage && !isMuted) {
+      // Clear any existing timeout
+      if (speechTimeoutRef.current) {
+        clearTimeout(speechTimeoutRef.current);
+      }
+
+      // Don't stop audio here - let speakText handle it
+      // This allows current audio to finish playing before starting new one
+
+      // Determine delay based on whether user is typing
+      const delay = isTypingRef.current ? 2000 : 500; // 2 seconds if typing, 0.5 seconds otherwise
+
+      // Set timeout to speak after delay
+      speechTimeoutRef.current = setTimeout(() => {
+        if (!isMuted && robotMessage) {
+          // Use Google Cloud TTS (it will handle stopping current audio if needed)
+          speakText(robotMessage);
+        }
+      }, delay);
+
+      // Cleanup on unmount or when message changes
+      return () => {
+        if (speechTimeoutRef.current) {
+          clearTimeout(speechTimeoutRef.current);
+        }
+      };
+    }
+  }, [robotMessage, isMuted]);
 
   // Detect autofill and mark fields as blurred if they have valid values
   useEffect(() => {
@@ -337,8 +555,9 @@ export default function TestMobilePage() {
           setIsKeyboardOpen(true);
           setRobotTop("1rem");
           setRobotBottom("");
-          // Track visual viewport scroll offset
-          setViewportScrollOffset(viewport.offsetTop || 0);
+          // Track visual viewport scroll offset to keep robot fixed at top
+          // Use pageTop instead of offsetTop for better accuracy
+          setViewportScrollOffset(viewport.pageTop || viewport.offsetTop || 0);
         } else {
           // Keyboard is closed, use normal bottom position
           setIsKeyboardOpen(false);
@@ -356,18 +575,25 @@ export default function TestMobilePage() {
     };
 
     const handleViewportScroll = () => {
-      if (window.visualViewport) {
-        const viewport = window.visualViewport;
-        const viewportHeight = viewport.height;
-        const windowHeight = window.innerHeight;
-        const heightDiff = windowHeight - viewportHeight;
+      // Use requestAnimationFrame for smooth updates
+      requestAnimationFrame(() => {
+        if (window.visualViewport) {
+          const viewport = window.visualViewport;
+          const viewportHeight = viewport.height;
+          const windowHeight = window.innerHeight;
+          const heightDiff = windowHeight - viewportHeight;
 
-        // Only track scroll offset when keyboard is open
-        if (heightDiff > 150) {
-          // Update scroll offset when visual viewport scrolls
-          setViewportScrollOffset(viewport.offsetTop || 0);
+          // Only track scroll offset when keyboard is open
+          if (heightDiff > 150) {
+            // Update scroll offset when visual viewport scrolls
+            // Use offsetTop to track visual viewport's position relative to layout viewport
+            const scrollOffset = viewport.offsetTop || 0;
+            setViewportScrollOffset(scrollOffset);
+          } else {
+            setViewportScrollOffset(0);
+          }
         }
-      }
+      });
     };
 
     // Initial position
@@ -865,21 +1091,35 @@ export default function TestMobilePage() {
   const showPreferredTimeCheck = preferredTimeBlurred && isPreferredTimeValid;
 
   return (
-    <div className="min-h-screen bg-neutral-950">
+    <motion.div
+      className="min-h-screen bg-neutral-950"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Floating Robot Guide - Appears on scroll */}
       {robotVisible && (
-        <div
-          className="fixed right-4 pointer-events-none animate-slide-up"
+        <motion.div
+          className="fixed right-4 pointer-events-none"
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{
+            type: "spring",
+            stiffness: 200,
+            damping: 20,
+            delay: 0.2,
+          }}
           style={{
             bottom: robotTop ? undefined : robotBottom,
             top: robotTop || undefined,
             position: "fixed",
             zIndex: 2147483647, // Maximum z-index value
             isolation: "isolate", // Create new stacking context
-            transform:
-              isKeyboardOpen && viewportScrollOffset > 0
-                ? `translateY(${viewportScrollOffset}px)`
-                : undefined,
+            // When keyboard is open, keep robot fixed at top of visual viewport
+            // Use transform to compensate for visual viewport scrolling
+            transform: isKeyboardOpen
+              ? `translateY(${viewportScrollOffset}px)`
+              : "none",
             overflow: "visible",
           }}
         >
@@ -982,14 +1222,87 @@ export default function TestMobilePage() {
                 ></div>
               </div>
             </div>
+
+            {/* Mute/Unmute Toggle Button */}
+            <button
+              onClick={() => {
+                setIsMuted(!isMuted);
+                // Stop audio if muting
+                if (!isMuted && audioRef.current) {
+                  audioRef.current.pause();
+                  audioRef.current.currentTime = 0;
+                }
+                // Also cancel browser TTS if it's being used as fallback
+                if (
+                  !isMuted &&
+                  typeof window !== "undefined" &&
+                  "speechSynthesis" in window
+                ) {
+                  window.speechSynthesis.cancel();
+                }
+              }}
+              className="absolute -bottom-2 -left-2 w-8 h-8 rounded-full bg-neutral-900/90 border-2 border-yellow-400/60 flex items-center justify-center hover:bg-neutral-800/90 transition-colors pointer-events-auto z-50"
+              style={{
+                boxShadow:
+                  "0 2px 10px rgba(0, 0, 0, 0.3), 0 0 8px rgba(251, 191, 36, 0.2)",
+              }}
+              aria-label={isMuted ? "Unmute robot" : "Mute robot"}
+            >
+              {isMuted ? (
+                <svg
+                  className="w-4 h-4 text-yellow-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-4 h-4 text-yellow-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                  />
+                </svg>
+              )}
+            </button>
           </div>
-        </div>
+        </motion.div>
       )}
 
-      <ProductCarousel />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+      >
+        <ProductCarousel />
+      </motion.div>
 
       {/* How to Order Section - Below Carousel with border cut effect */}
-      <div className="relative px-3 pt-4 pb-2">
+      <motion.div
+        className="relative px-3 pt-4 pb-2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
         <div className="relative rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 border-yellow-400/60 p-4">
           {/* Title with border cut effect */}
           <div
@@ -1120,10 +1433,16 @@ export default function TestMobilePage() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Step 1: Choose Your Package */}
-      <section className="px-3 py-2" style={{ marginTop: "0" }}>
+      <motion.section
+        className="px-3 py-2"
+        style={{ marginTop: "0" }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
         <div className="w-full">
           <div className="text-center mb-6">
             <h2
@@ -1141,10 +1460,17 @@ export default function TestMobilePage() {
           </div>
           <PricingCards />
         </div>
-      </section>
+      </motion.section>
 
       {/* Step 2: Almost There */}
-      <section id="step-2" ref={step2Ref} className="px-3 py-2">
+      <motion.section
+        id="step-2"
+        ref={step2Ref}
+        className="px-3 py-2"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+      >
         <div className="w-full">
           <div className="text-center mb-6">
             <h2
@@ -1976,8 +2302,13 @@ export default function TestMobilePage() {
                 </p>
               </div>
             )}
-            <button
+            <motion.button
               type="button"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.5 }}
               onClick={async () => {
                 if (
                   !(nameBlurred && isNameValid) ||
@@ -2171,13 +2502,13 @@ export default function TestMobilePage() {
               ) : (
                 "Submit"
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Spacer to ensure enough content for scrolling */}
       <div style={{ minHeight: "10vh" }}></div>
-    </div>
+    </motion.div>
   );
 }

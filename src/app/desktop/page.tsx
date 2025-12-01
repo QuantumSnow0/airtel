@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import ProductCarousel from "../mobile/ProductCarousel";
 import PricingCards from "../components/PricingCards";
 import { usePackage } from "../contexts/PackageContext";
@@ -75,6 +76,11 @@ export default function TestDesktopPage() {
   const [robotMessage, setRobotMessage] = useState("");
   const [robotVisible, setRobotVisible] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const speechTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isTypingRef = useRef(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [previousPackage, setPreviousPackage] = useState<string | null>(null);
   const [robotBottom, setRobotBottom] = useState("1rem");
   const [robotTop, setRobotTop] = useState<string | null>(null);
@@ -136,6 +142,218 @@ export default function TestDesktopPage() {
     "5:00 PM",
     "6:00 PM",
   ];
+
+  // Track user interaction for audio autoplay
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      setHasUserInteracted(true);
+    };
+
+    // Listen for any user interaction
+    document.addEventListener("click", handleUserInteraction, { once: true });
+    document.addEventListener("touchstart", handleUserInteraction, {
+      once: true,
+    });
+    document.addEventListener("keydown", handleUserInteraction, { once: true });
+
+    return () => {
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("touchstart", handleUserInteraction);
+      document.removeEventListener("keydown", handleUserInteraction);
+    };
+  }, []);
+
+  // Function to strip emojis from text for TTS
+  const stripEmojis = (text: string): string => {
+    // Remove emojis using regex pattern
+    // This pattern matches most emoji ranges including:
+    // - Emoticons, Miscellaneous Symbols, Dingbats
+    // - Supplemental Symbols and Pictographs
+    // - Transport and Map Symbols
+    // - Enclosed characters
+    // - Flags
+    return text
+      .replace(
+        /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA00}-\u{1FA6F}]|[\u{1FA70}-\u{1FAFF}]|[\u{2190}-\u{21FF}]/gu,
+        ""
+      )
+      .replace(/\s+/g, " ") // Replace multiple spaces with single space
+      .trim();
+  };
+
+  // Function to speak text using Google Cloud TTS
+  const speakText = async (text: string) => {
+    if (!text || isMuted) return;
+
+    // Strip emojis from text before TTS
+    const cleanText = stripEmojis(text);
+    if (!cleanText) return; // If text is only emojis, don't speak
+
+    // Only play audio if user has interacted with the page
+    if (!hasUserInteracted) {
+      // Fallback to browser TTS which doesn't require user interaction
+      fallbackToBrowserTTS(cleanText);
+      return;
+    }
+
+    try {
+      // Check if audio is currently playing
+      const isAudioPlaying =
+        audioRef.current &&
+        !audioRef.current.paused &&
+        audioRef.current.currentTime > 0 &&
+        !audioRef.current.ended;
+
+      // If audio is playing and almost done (within 0.5 seconds), wait for it to finish
+      if (isAudioPlaying && audioRef.current) {
+        const timeRemaining =
+          audioRef.current.duration - audioRef.current.currentTime;
+        if (timeRemaining <= 0.5) {
+          // Wait for current audio to finish, then play new one
+          audioRef.current.addEventListener(
+            "ended",
+            async () => {
+              // Now play the new audio
+              await playNewAudio(cleanText);
+            },
+            { once: true }
+          );
+          return;
+        }
+      }
+
+      // Stop any currently playing audio (if it's not almost done)
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+
+      // Play new audio
+      await playNewAudio(cleanText);
+    } catch (error) {
+      console.error("TTS Error:", error);
+      // Fallback to browser TTS on error
+      fallbackToBrowserTTS(cleanText);
+    }
+  };
+
+  // Helper function to play new audio
+  const playNewAudio = async (cleanText: string) => {
+    try {
+      // Call TTS API
+      const response = await fetch("/api/tts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: cleanText }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("TTS API Error:", error);
+        // Fallback to browser TTS if API fails
+        fallbackToBrowserTTS(cleanText);
+        return;
+      }
+
+      const data = await response.json();
+
+      // Create audio element and play
+      const audio = new Audio(`data:audio/${data.format};base64,${data.audio}`);
+      audioRef.current = audio;
+
+      audio.play().catch((error) => {
+        console.error("Audio play error:", error);
+        // Fallback to browser TTS if audio play fails
+        fallbackToBrowserTTS(cleanText);
+      });
+    } catch (error) {
+      console.error("TTS Error:", error);
+      // Fallback to browser TTS on error
+      fallbackToBrowserTTS(cleanText);
+    }
+  };
+
+  // Fallback to browser TTS if Google Cloud TTS fails
+  const fallbackToBrowserTTS = (text: string) => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      utterance.pitch = 1.1;
+      utterance.volume = 0.8;
+
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(
+        (voice) =>
+          voice.name.includes("Google") ||
+          voice.name.includes("Samantha") ||
+          voice.name.includes("Karen")
+      );
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Check if user is currently typing in any input field
+  useEffect(() => {
+    const checkTyping = () => {
+      const activeElement = document.activeElement;
+      const isInputFocused =
+        activeElement?.tagName === "INPUT" ||
+        activeElement?.tagName === "TEXTAREA" ||
+        activeElement?.getAttribute("contenteditable") === "true";
+
+      isTypingRef.current = isInputFocused || false;
+    };
+
+    // Check on focus/blur events
+    document.addEventListener("focusin", checkTyping);
+    document.addEventListener("focusout", checkTyping);
+
+    // Also check periodically
+    const interval = setInterval(checkTyping, 100);
+
+    return () => {
+      document.removeEventListener("focusin", checkTyping);
+      document.removeEventListener("focusout", checkTyping);
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Speak robot messages with delay when user is typing
+  useEffect(() => {
+    if (robotMessage && !isMuted) {
+      // Clear any existing timeout
+      if (speechTimeoutRef.current) {
+        clearTimeout(speechTimeoutRef.current);
+      }
+
+      // Don't stop audio here - let speakText handle it
+      // This allows current audio to finish playing before starting new one
+
+      // Determine delay based on whether user is typing
+      const delay = isTypingRef.current ? 2000 : 500; // 2 seconds if typing, 0.5 seconds otherwise
+
+      // Set timeout to speak after delay
+      speechTimeoutRef.current = setTimeout(() => {
+        if (!isMuted && robotMessage) {
+          // Use Google Cloud TTS (it will handle stopping current audio if needed)
+          speakText(robotMessage);
+        }
+      }, delay);
+
+      // Cleanup on unmount or when message changes
+      return () => {
+        if (speechTimeoutRef.current) {
+          clearTimeout(speechTimeoutRef.current);
+        }
+      };
+    }
+  }, [robotMessage, isMuted]);
 
   // Detect autofill and mark fields as blurred if they have valid values
   useEffect(() => {
@@ -224,7 +442,12 @@ export default function TestDesktopPage() {
   const showPreferredTimeCheck = preferredTimeBlurred && isPreferredTimeValid;
 
   return (
-    <div className="min-h-screen bg-neutral-950 overflow-y-auto h-screen">
+    <motion.div
+      className="min-h-screen bg-neutral-950 overflow-y-auto h-screen"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Desktop Layout: Product Left, Form Right */}
       <div className="grid grid-cols-2 gap-0  min-h-full">
         {/* Left Side - Product Display */}
@@ -1603,6 +1826,6 @@ export default function TestDesktopPage() {
           </section>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
