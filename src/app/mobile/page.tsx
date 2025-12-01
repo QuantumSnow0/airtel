@@ -245,6 +245,8 @@ export default function TestMobilePage() {
   // Helper function to play new audio
   const playNewAudio = async (cleanText: string) => {
     try {
+      console.log("🎙️ Frontend: Calling TTS API for text:", cleanText.substring(0, 50) + "...");
+      
       // Call TTS API
       const response = await fetch("/api/tts", {
         method: "POST",
@@ -254,25 +256,40 @@ export default function TestMobilePage() {
         body: JSON.stringify({ text: cleanText }),
       });
 
+      console.log("📡 Frontend: TTS API response status:", response.status, response.statusText);
+
       if (!response.ok) {
         const error = await response.json();
-        console.error("TTS API Error:", error);
+        console.error("❌ Frontend: TTS API Error:", {
+          status: response.status,
+          statusText: response.statusText,
+          error: error,
+        });
         // Only use Google Cloud TTS - no fallback
         return;
       }
 
       const data = await response.json();
+      console.log("✅ Frontend: TTS API success, audio format:", data.format, "size:", data.audio?.length || 0);
+
+      if (!data.audio) {
+        console.error("❌ Frontend: No audio data in response");
+        return;
+      }
 
       // Create audio element and play
       const audio = new Audio(`data:audio/${data.format};base64,${data.audio}`);
       audioRef.current = audio;
 
-      audio.play().catch((error) => {
-        console.error("Audio play error:", error);
+      console.log("🔊 Frontend: Attempting to play audio...");
+      audio.play().then(() => {
+        console.log("✅ Frontend: Audio playing successfully");
+      }).catch((error) => {
+        console.error("❌ Frontend: Audio play error:", error);
         // Only use Google Cloud TTS - no fallback
       });
     } catch (error) {
-      console.error("TTS Error:", error);
+      console.error("❌ Frontend: TTS Error:", error);
       // Only use Google Cloud TTS - no fallback
     }
   };
