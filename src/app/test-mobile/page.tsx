@@ -966,7 +966,7 @@ export default function TestMobilePage() {
         <div className="w-full">
           <div className="text-center mb-6">
             <h2
-              className={`text-xl font-bold text-white mb-2 ${poppins.variable}`}
+              className={`text-lg font-semibold text-white mb-2 ${poppins.variable}`}
               style={{
                 fontFamily: "var(--font-poppins), sans-serif",
                 background: "linear-gradient(135deg, #ffffff, #fbbf24)",
@@ -995,7 +995,7 @@ export default function TestMobilePage() {
         <div className="w-full">
           <div className="text-center mb-6">
             <h2
-              className={`text-xl font-bold text-white mb-2 ${poppins.variable}`}
+              className={`text-lg font-semibold text-white mb-2 ${poppins.variable}`}
               style={{
                 fontFamily: "var(--font-poppins), sans-serif",
                 background: "linear-gradient(135deg, #ffffff, #fbbf24)",
@@ -1041,12 +1041,12 @@ export default function TestMobilePage() {
                 style={{ top: "-50%", transform: "translateY(-50%)" }}
               >
                 <span
-                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  Customer Name <span className="text-yellow-400">*</span>
+                  Full Name <span className="text-yellow-400">*</span>
                 </span>
               </div>
             </div>
@@ -1054,10 +1054,10 @@ export default function TestMobilePage() {
               <input
                 ref={nameInputRef}
                 type="text"
-                placeholder="Enter your full name"
+                placeholder=""
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
                   showNameCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-slate-700/50"
@@ -1115,13 +1115,12 @@ export default function TestMobilePage() {
                 style={{ top: "-50%", transform: "translateY(-50%)" }}
               >
                 <span
-                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  Customer Phone (Airtel){" "}
-                  <span className="text-yellow-400">*</span>
+                  Airtel Number <span className="text-yellow-400">*</span>
                 </span>
               </div>
             </div>
@@ -1129,10 +1128,10 @@ export default function TestMobilePage() {
               <input
                 ref={phoneInputRef}
                 type="tel"
-                placeholder="Enter your Airtel phone number"
+                placeholder=""
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
-                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
                   showPhoneCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-slate-700/50"
@@ -1190,23 +1189,22 @@ export default function TestMobilePage() {
                 style={{ top: "-50%", transform: "translateY(-50%)" }}
               >
                 <span
-                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  Customer Alternative Number{" "}
-                  <span className="text-yellow-400">*</span>
+                  Alternative Number <span className="text-yellow-400">*</span>
                 </span>
               </div>
             </div>
             <div className="relative">
               <input
                 type="tel"
-                placeholder="Enter your alternative phone number"
+                placeholder=""
                 value={customerAlternativeNumber}
                 onChange={(e) => setCustomerAlternativeNumber(e.target.value)}
-                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
                   showAlternativeCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-slate-700/50"
@@ -1262,13 +1260,12 @@ export default function TestMobilePage() {
                 style={{ top: "-50%", transform: "translateY(-50%)" }}
               >
                 <span
-                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  Customer Email Address{" "}
-                  <span className="text-yellow-400">*</span>
+                  Email Address <span className="text-yellow-400">*</span>
                 </span>
               </div>
             </div>
@@ -1276,10 +1273,10 @@ export default function TestMobilePage() {
               <input
                 ref={emailInputRef}
                 type="email"
-                placeholder="Enter your email address"
+                placeholder=""
                 value={customerEmail}
                 onChange={(e) => setCustomerEmail(e.target.value)}
-                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
                   emailBlurred && isEmailValid
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-slate-700/50"
@@ -1340,13 +1337,12 @@ export default function TestMobilePage() {
                 style={{ top: "-50%", transform: "translateY(-50%)" }}
               >
                 <span
-                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  Customer Installation Town{" "}
-                  <span className="text-yellow-400">*</span>
+                  Installation Town <span className="text-yellow-400">*</span>
                 </span>
               </div>
             </div>
@@ -1361,7 +1357,7 @@ export default function TestMobilePage() {
                 onBlur={() => {
                   setTimeout(() => setTownBlurred(true), 200);
                 }}
-                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
                   townBlurred && isTownValid
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-slate-700/50"
@@ -1484,12 +1480,12 @@ export default function TestMobilePage() {
                 style={{ top: "-50%", transform: "translateY(-50%)" }}
               >
                 <span
-                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  Specific Delivery Location (Nearest Landmark){" "}
+                  Delivery Location (Nearest Landmark){" "}
                   <span className="text-yellow-400">*</span>
                 </span>
               </div>
@@ -1498,10 +1494,10 @@ export default function TestMobilePage() {
               <input
                 ref={deliveryLocationInputRef}
                 type="text"
-                placeholder="e.g., Near ABC Mall, Next to XYZ School"
+                placeholder=""
                 value={deliveryLocation}
                 onChange={(e) => setDeliveryLocation(e.target.value)}
-                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
                   showDeliveryLocationCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-slate-700/50"
@@ -1564,13 +1560,12 @@ export default function TestMobilePage() {
                 style={{ top: "-50%", transform: "translateY(-50%)" }}
               >
                 <span
-                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  Preferred Date of Visit/Installation{" "}
-                  <span className="text-yellow-400">*</span>
+                  Preferred Date <span className="text-yellow-400">*</span>
                 </span>
               </div>
             </div>
@@ -1581,7 +1576,7 @@ export default function TestMobilePage() {
                 value={preferredDate}
                 onChange={(e) => setPreferredDate(e.target.value)}
                 min={new Date().toISOString().split("T")[0]}
-                className={`w-full px-4 py-3 pt-5 pr-12 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                className={`w-full px-3 py-2.5 pt-4 pr-12 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
                   showPreferredDateCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-slate-700/50"
@@ -1612,7 +1607,7 @@ export default function TestMobilePage() {
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  <span className="text-sm text-slate-400">Select date</span>
+                  <span className="text-xs text-slate-400">Select date</span>
                 </div>
               )}
               {/* Calendar icon indicator - shown when no date is selected */}
@@ -1677,13 +1672,12 @@ export default function TestMobilePage() {
                 style={{ top: "-50%", transform: "translateY(-50%)" }}
               >
                 <span
-                  className={`text-sm font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  Preferred Time of Visit/Installation{" "}
-                  <span className="text-yellow-400">*</span>
+                  Preferred Time <span className="text-yellow-400">*</span>
                 </span>
               </div>
             </div>
@@ -1699,7 +1693,7 @@ export default function TestMobilePage() {
                   // Delay to allow option click
                   setTimeout(() => setPreferredTimeBlurred(true), 200);
                 }}
-                className={`w-full px-4 py-3 pt-5 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 ${
+                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 text-sm ${
                   showPreferredTimeCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-slate-700/50"

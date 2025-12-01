@@ -84,21 +84,22 @@ export default function ProductCarousel() {
     <div
       className="relative w-full"
       style={{
-        height: "clamp(250px, 45vw, 40vh)",
+        height: "clamp(250px, 45vw, 45vh)",
         overflow: "hidden",
       }}
     >
       {/* Title Section - Overlay on top of carousel */}
       <div
-        className="absolute top-0 left-0 right-0 flex items-center justify-center px-4 py-1"
+        className="absolute top-0 left-0 right-0 flex items-center justify-between px-4 py-2"
         style={{
           zIndex: 100,
         }}
       >
+        {/* Title on the left */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <span
-              className="text-2xl font-bold"
+              className="text-base font-bold"
               style={{
                 background: "linear-gradient(135deg, #ffffff, #fbbf24)",
                 WebkitBackgroundClip: "text",
@@ -112,15 +113,15 @@ export default function ProductCarousel() {
             <img
               src="/icon.png"
               alt="Airtel 5G Icon"
-              className="w-8 h-8 object-contain block"
+              className="w-5 h-5 object-contain block"
               style={{
-                marginLeft: "-8px",
-                marginRight: "-8px",
+                marginLeft: "-5px",
+                marginRight: "-5px",
                 filter: "drop-shadow(0 0 8px rgba(251, 191, 36, 0.5))",
               }}
             />
             <span
-              className="text-2xl font-bold"
+              className="text-base font-bold"
               style={{
                 background: "linear-gradient(135deg, #ffffff, #fbbf24)",
                 WebkitBackgroundClip: "text",
@@ -132,9 +133,9 @@ export default function ProductCarousel() {
               l
             </span>
           </div>
-          <div className="h-6 w-px bg-white/30 mx-1" />
+          <div className="h-4 w-px bg-white/30 mx-1" />
           <span
-            className="text-xl font-bold tracking-wide"
+            className="text-sm font-bold tracking-wide"
             style={{
               background: "linear-gradient(135deg, #ffffff, #fbbf24)",
               WebkitBackgroundClip: "text",
@@ -147,6 +148,56 @@ export default function ProductCarousel() {
             SmartConnect
           </span>
         </div>
+
+        {/* Phone number on the right */}
+        <a
+          href="tel:0700776994"
+          className="flex items-center gap-1.5 transition-colors"
+          style={{
+            textShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            style={{
+              filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))",
+            }}
+          >
+            <defs>
+              <linearGradient
+                id="phoneGradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
+                <stop offset="0%" stopColor="#ffffff" />
+                <stop offset="100%" stopColor="#fbbf24" />
+              </linearGradient>
+            </defs>
+            <path
+              stroke="url(#phoneGradient)"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+            />
+          </svg>
+          <span
+            className="text-sm font-semibold"
+            style={{
+              background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+            }}
+          >
+            0700776994
+          </span>
+        </a>
       </div>
 
       {/* Swiper Carousel Container */}
