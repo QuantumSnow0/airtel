@@ -191,8 +191,7 @@ export default function TestDesktopPage() {
 
     // Only play audio if user has interacted with the page
     if (!hasUserInteracted) {
-      // Fallback to browser TTS which doesn't require user interaction
-      fallbackToBrowserTTS(cleanText);
+      // Wait for user interaction before playing audio
       return;
     }
 
@@ -232,8 +231,7 @@ export default function TestDesktopPage() {
       await playNewAudio(cleanText);
     } catch (error) {
       console.error("TTS Error:", error);
-      // Fallback to browser TTS on error
-      fallbackToBrowserTTS(cleanText);
+      // Only use Google Cloud TTS - no fallback
     }
   };
 
@@ -252,8 +250,7 @@ export default function TestDesktopPage() {
       if (!response.ok) {
         const error = await response.json();
         console.error("TTS API Error:", error);
-        // Fallback to browser TTS if API fails
-        fallbackToBrowserTTS(cleanText);
+        // Only use Google Cloud TTS - no fallback
         return;
       }
 
@@ -265,36 +262,11 @@ export default function TestDesktopPage() {
 
       audio.play().catch((error) => {
         console.error("Audio play error:", error);
-        // Fallback to browser TTS if audio play fails
-        fallbackToBrowserTTS(cleanText);
+        // Only use Google Cloud TTS - no fallback
       });
     } catch (error) {
       console.error("TTS Error:", error);
-      // Fallback to browser TTS on error
-      fallbackToBrowserTTS(cleanText);
-    }
-  };
-
-  // Fallback to browser TTS if Google Cloud TTS fails
-  const fallbackToBrowserTTS = (text: string) => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      utterance.pitch = 1.1;
-      utterance.volume = 0.8;
-
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(
-        (voice) =>
-          voice.name.includes("Google") ||
-          voice.name.includes("Samantha") ||
-          voice.name.includes("Karen")
-      );
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
-      }
-
-      window.speechSynthesis.speak(utterance);
+      // Only use Google Cloud TTS - no fallback
     }
   };
 
