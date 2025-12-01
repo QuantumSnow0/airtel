@@ -196,21 +196,41 @@ export async function POST(request: NextRequest) {
         ? tenantMatch[1]
         : "16c73727-979c-4d82-b3a7-eb6a2fddfe57";
     } catch (tokenError) {
-      console.error("Error fetching Microsoft Forms tokens:", tokenError);
-      // Update Supabase with failed status
+      // Log error for debugging but don't fail the request - data is safely stored
+      console.error(
+        "Error fetching Microsoft Forms tokens (data saved to database):",
+        {
+          error: tokenError,
+          message:
+            tokenError instanceof Error
+              ? tokenError.message
+              : String(tokenError),
+          stack: tokenError instanceof Error ? tokenError.stack : undefined,
+          leadId: leadId,
+          timestamp: new Date().toISOString(),
+        }
+      );
+      // Update Supabase with pending status (will be submitted when form reopens)
       await supabaseAdmin
         .from("leads")
-        .update({ submission_status: "failed" })
+        .update({
+          submission_status: "pending",
+          error_details:
+            tokenError instanceof Error
+              ? tokenError.message
+              : String(tokenError),
+        })
         .eq("id", leadId);
 
+      // Return success to user - data is safely stored in database
       return NextResponse.json(
         {
-          error: "Failed to connect to Microsoft Forms",
-          details: String(tokenError),
-          savedToDatabase: true,
+          success: true,
+          message: "Form submitted successfully! We'll contact you soon.",
           leadId: leadId,
+          savedToDatabase: true,
         },
-        { status: 500 }
+        { status: 200 }
       );
     }
 
@@ -335,9 +355,37 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify(msFormsPayload),
       });
 
-      const formsResponseData = await formsResponse.json();
+      let formsResponseData;
+      try {
+        formsResponseData = await formsResponse.json();
+      } catch (jsonError) {
+        const textResponse = await formsResponse.text();
+        console.error("Microsoft Forms response (non-JSON):", textResponse);
+        throw new Error(
+          `Microsoft Forms submission failed: ${
+            formsResponse.status
+          } - ${textResponse.substring(0, 500)}`
+        );
+      }
 
       if (!formsResponse.ok) {
+        console.error("Microsoft Forms error response:", {
+          status: formsResponse.status,
+          statusText: formsResponse.statusText,
+          data: formsResponseData,
+          headers: Object.fromEntries(formsResponse.headers.entries()),
+        });
+
+        // Check if form is closed
+        if (
+          formsResponse.status === 403 &&
+          formsResponseData?.error?.message?.includes("closed")
+        ) {
+          throw new Error(
+            "Microsoft Forms form is closed. Please reopen the form in Microsoft Forms to enable submissions."
+          );
+        }
+
         throw new Error(
           `Microsoft Forms submission failed: ${
             formsResponse.status
@@ -369,22 +417,42 @@ export async function POST(request: NextRequest) {
         { status: 200 }
       );
     } catch (formsError) {
-      console.error("Microsoft Forms submission error:", formsError);
+      // Log error for debugging but don't fail the request - data is safely stored
+      console.error(
+        "Microsoft Forms submission error (data saved to database):",
+        {
+          error: formsError,
+          message:
+            formsError instanceof Error
+              ? formsError.message
+              : String(formsError),
+          stack: formsError instanceof Error ? formsError.stack : undefined,
+          leadId: leadId,
+          timestamp: new Date().toISOString(),
+        }
+      );
 
-      // Update Supabase with failed status
+      // Update Supabase with pending status (will be submitted when form reopens)
       await supabaseAdmin
         .from("leads")
-        .update({ submission_status: "failed" })
+        .update({
+          submission_status: "pending",
+          error_details:
+            formsError instanceof Error
+              ? formsError.message
+              : String(formsError),
+        })
         .eq("id", leadId);
 
+      // Return success to user - data is safely stored in database
       return NextResponse.json(
         {
-          error: "Failed to submit to Microsoft Forms",
-          details: String(formsError),
-          savedToDatabase: true,
+          success: true,
+          message: "Form submitted successfully! We'll contact you soon.",
           leadId: leadId,
+          savedToDatabase: true,
         },
-        { status: 500 }
+        { status: 200 }
       );
     }
   } catch (error) {
