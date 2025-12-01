@@ -449,7 +449,7 @@ export default function TestDesktopPage() {
 
             {/* Phone number on the right */}
             <a
-              href="tel:0700776994"
+              href="tel:0789457580"
               className="flex items-center gap-1.5 transition-colors"
             >
               <svg
@@ -490,7 +490,7 @@ export default function TestDesktopPage() {
                   textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
                 }}
               >
-                0700776994
+                0789457580
               </span>
             </a>
           </div>

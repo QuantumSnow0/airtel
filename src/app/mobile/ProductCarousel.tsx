@@ -151,7 +151,7 @@ export default function ProductCarousel() {
 
         {/* Phone number on the right */}
         <a
-          href="tel:0700776994"
+          href="tel:0789457580"
           className="flex items-center gap-1.5 transition-colors"
           style={{
             textShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
@@ -195,7 +195,7 @@ export default function ProductCarousel() {
               textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
             }}
           >
-            0700776994
+            0789457580
           </span>
         </a>
       </div>
