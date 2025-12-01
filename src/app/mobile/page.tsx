@@ -553,11 +553,12 @@ export default function TestMobilePage() {
         if (heightDiff > 150) {
           // Keyboard is open - position robot at top-right of visible viewport
           setIsKeyboardOpen(true);
-          setRobotTop("1rem");
+          // Calculate top position: visual viewport offset + 1rem (16px)
+          const visualViewportTop = viewport.offsetTop || 0;
+          setRobotTop(`${visualViewportTop + 16}px`);
           setRobotBottom("");
-          // Track visual viewport scroll offset to keep robot fixed at top
-          // Use pageTop instead of offsetTop for better accuracy
-          setViewportScrollOffset(viewport.pageTop || viewport.offsetTop || 0);
+          // Track visual viewport scroll offset for reference
+          setViewportScrollOffset(visualViewportTop);
         } else {
           // Keyboard is closed, use normal bottom position
           setIsKeyboardOpen(false);
@@ -583,13 +584,15 @@ export default function TestMobilePage() {
           const windowHeight = window.innerHeight;
           const heightDiff = windowHeight - viewportHeight;
 
-          // Only track scroll offset when keyboard is open
+          // Only update position when keyboard is open
           if (heightDiff > 150) {
-            // Update scroll offset when visual viewport scrolls
-            // Use offsetTop to track visual viewport's position relative to layout viewport
-            const scrollOffset = viewport.offsetTop || 0;
-            setViewportScrollOffset(scrollOffset);
+            // Update robot position to stay at top of visual viewport
+            // Calculate top position: visual viewport offset + 1rem (16px)
+            const visualViewportTop = viewport.offsetTop || 0;
+            setRobotTop(`${visualViewportTop + 16}px`);
+            setViewportScrollOffset(visualViewportTop);
           } else {
+            setRobotTop(null);
             setViewportScrollOffset(0);
           }
         }
@@ -1115,11 +1118,6 @@ export default function TestMobilePage() {
             position: "fixed",
             zIndex: 2147483647, // Maximum z-index value
             isolation: "isolate", // Create new stacking context
-            // When keyboard is open, keep robot fixed at top of visual viewport
-            // Use transform to compensate for visual viewport scrolling
-            transform: isKeyboardOpen
-              ? `translateY(${viewportScrollOffset}px)`
-              : "none",
             overflow: "visible",
           }}
         >
