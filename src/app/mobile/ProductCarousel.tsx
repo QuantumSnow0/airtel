@@ -96,7 +96,20 @@ export default function ProductCarousel() {
         }}
       >
         {/* Title on the left */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          <img
+            src="/icon.png"
+            alt="Airtel"
+            className="h-8 w-8 object-contain"
+            style={{
+              filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))",
+              margin: 0,
+              padding: 0,
+              display: "block",
+              flexShrink: 0,
+              lineHeight: 0,
+            }}
+          />
           <span
             className="text-base font-bold"
             style={{
