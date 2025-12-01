@@ -67,6 +67,14 @@ export default function TestMobilePage() {
   const [deliveryLocationBlurred, setDeliveryLocationBlurred] = useState(false);
   const [preferredDateBlurred, setPreferredDateBlurred] = useState(false);
   const [preferredTimeBlurred, setPreferredTimeBlurred] = useState(false);
+  const [nameFocused, setNameFocused] = useState(false);
+  const [phoneFocused, setPhoneFocused] = useState(false);
+  const [alternativeFocused, setAlternativeFocused] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [townFocused, setTownFocused] = useState(false);
+  const [deliveryLocationFocused, setDeliveryLocationFocused] = useState(false);
+  const [dateFocused, setDateFocused] = useState(false);
+  const [timeFocused, setTimeFocused] = useState(false);
   const [showTownDropdown, setShowTownDropdown] = useState(false);
   const [showTimeDropdown, setShowTimeDropdown] = useState(false);
   const townDropdownRef = useRef<HTMLDivElement>(null);
@@ -1476,37 +1484,51 @@ export default function TestMobilePage() {
 
           {/* Sample Form Field - Customer Name */}
           <div className="mb-6 relative">
+            {/* Floating Label */}
             <div
-              className="absolute left-3 pointer-events-none"
-              style={{ zIndex: 30, top: "-2px" }}
+              className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                nameFocused || customerName
+                  ? "top-0 transform -translate-y-1/2"
+                  : "top-1/2 transform -translate-y-1/2"
+              }`}
+              style={{ zIndex: 30 }}
             >
-              {/* Transparent div to cut the border - positioned at the border line */}
-              <div
-                className="absolute left-0"
-                style={{
-                  top: "2px",
-                  background: "rgb(38, 38, 38)",
-                  height: "2px",
-                  width: "calc(100% + 4px)",
-                  marginLeft: "-4px",
-                  borderTopLeftRadius: "8px",
-                }}
-              />
+              {/* Border cut background */}
+              {(nameFocused || customerName) && (
+                <div
+                  className="absolute left-0"
+                  style={{
+                    top: "50%",
+                    background: "rgb(38, 38, 38)",
+                    height: "2px",
+                    width: "calc(100% + 4px)",
+                    marginLeft: "-4px",
+                    borderTopLeftRadius: "8px",
+                  }}
+                />
+              )}
               {/* Label text */}
-              <div
-                className="px-1.5 relative"
-                style={{ top: "-50%", transform: "translateY(-50%)" }}
-              >
+              <div className="px-1.5 relative">
                 <span
-                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium transition-all duration-300 ${
+                    nameFocused || customerName
+                      ? "text-white/90"
+                      : "text-neutral-400"
+                  } ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                    1
-                  </span>
-                  Full Name <span className="text-yellow-400">*</span>
+                  {nameFocused || customerName ? (
+                    <>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                        1
+                      </span>
+                      Full Name <span className="text-yellow-400">*</span>
+                    </>
+                  ) : (
+                    "Enter your Full Name"
+                  )}
                 </span>
               </div>
             </div>
@@ -1517,7 +1539,17 @@ export default function TestMobilePage() {
                 placeholder=""
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                onFocus={() => {
+                  setNameFocused(true);
+                  scrollToStep2();
+                }}
+                onBlur={() => {
+                  setNameFocused(false);
+                  setNameBlurred(true);
+                }}
+                className={`w-full px-3 py-3.5 ${
+                  nameFocused || customerName ? "pt-5" : "pt-3.5"
+                } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   showNameCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-neutral-800/50"
@@ -1528,8 +1560,6 @@ export default function TestMobilePage() {
                   fontFamily: "var(--font-poppins), sans-serif",
                 }}
                 onClick={scrollToStep2}
-                onFocus={scrollToStep2}
-                onBlur={() => setNameBlurred(true)}
               />
               {showNameCheck && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -1553,37 +1583,51 @@ export default function TestMobilePage() {
 
           {/* Customer Phone (Airtel) */}
           <div className="mb-6 relative">
+            {/* Floating Label */}
             <div
-              className="absolute left-3 pointer-events-none"
-              style={{ zIndex: 30, top: "-2px" }}
+              className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                phoneFocused || customerPhone
+                  ? "top-0 transform -translate-y-1/2"
+                  : "top-1/2 transform -translate-y-1/2"
+              }`}
+              style={{ zIndex: 30 }}
             >
-              {/* Transparent div to cut the border - positioned at the border line */}
-              <div
-                className="absolute left-0"
-                style={{
-                  top: "2px",
-                  background: "rgb(38, 38, 38)",
-                  height: "2px",
-                  width: "calc(100% + 4px)",
-                  marginLeft: "-4px",
-                  borderTopLeftRadius: "8px",
-                }}
-              />
+              {/* Border cut background */}
+              {(phoneFocused || customerPhone) && (
+                <div
+                  className="absolute left-0"
+                  style={{
+                    top: "50%",
+                    background: "rgb(38, 38, 38)",
+                    height: "2px",
+                    width: "calc(100% + 4px)",
+                    marginLeft: "-4px",
+                    borderTopLeftRadius: "8px",
+                  }}
+                />
+              )}
               {/* Label text */}
-              <div
-                className="px-1.5 relative"
-                style={{ top: "-50%", transform: "translateY(-50%)" }}
-              >
+              <div className="px-1.5 relative">
                 <span
-                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium transition-all duration-300 ${
+                    phoneFocused || customerPhone
+                      ? "text-white/90"
+                      : "text-neutral-400"
+                  } ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                    2
-                  </span>
-                  Airtel Number <span className="text-yellow-400">*</span>
+                  {phoneFocused || customerPhone ? (
+                    <>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                        2
+                      </span>
+                      Airtel Number <span className="text-yellow-400">*</span>
+                    </>
+                  ) : (
+                    "Enter your Airtel Number"
+                  )}
                 </span>
               </div>
             </div>
@@ -1594,7 +1638,17 @@ export default function TestMobilePage() {
                 placeholder=""
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
-                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                onFocus={() => {
+                  setPhoneFocused(true);
+                  scrollToStep2();
+                }}
+                onBlur={() => {
+                  setPhoneFocused(false);
+                  setPhoneBlurred(true);
+                }}
+                className={`w-full px-3 py-3.5 ${
+                  phoneFocused || customerPhone ? "pt-5" : "pt-3.5"
+                } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   showPhoneCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-neutral-800/50"
@@ -1605,8 +1659,6 @@ export default function TestMobilePage() {
                   fontFamily: "var(--font-poppins), sans-serif",
                 }}
                 onClick={scrollToStep2}
-                onFocus={scrollToStep2}
-                onBlur={() => setPhoneBlurred(true)}
               />
               {showPhoneCheck && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -1630,47 +1682,72 @@ export default function TestMobilePage() {
 
           {/* Customer Alternative Number */}
           <div className="mb-6 relative">
+            {/* Floating Label */}
             <div
-              className="absolute left-3 pointer-events-none"
-              style={{ zIndex: 30, top: "-2px" }}
+              className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                alternativeFocused || customerAlternativeNumber
+                  ? "top-0 transform -translate-y-1/2"
+                  : "top-1/2 transform -translate-y-1/2"
+              }`}
+              style={{ zIndex: 30 }}
             >
-              {/* Transparent div to cut the border - positioned at the border line */}
-              <div
-                className="absolute left-0"
-                style={{
-                  top: "2px",
-                  background: "rgb(38, 38, 38)",
-                  height: "2px",
-                  width: "calc(100% + 4px)",
-                  marginLeft: "-4px",
-                  borderTopLeftRadius: "8px",
-                }}
-              />
+              {/* Border cut background */}
+              {(alternativeFocused || customerAlternativeNumber) && (
+                <div
+                  className="absolute left-0"
+                  style={{
+                    top: "50%",
+                    background: "rgb(38, 38, 38)",
+                    height: "2px",
+                    width: "calc(100% + 4px)",
+                    marginLeft: "-4px",
+                    borderTopLeftRadius: "8px",
+                  }}
+                />
+              )}
               {/* Label text */}
-              <div
-                className="px-1.5 relative"
-                style={{ top: "-50%", transform: "translateY(-50%)" }}
-              >
+              <div className="px-1.5 relative">
                 <span
-                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium transition-all duration-300 ${
+                    alternativeFocused || customerAlternativeNumber
+                      ? "text-white/90"
+                      : "text-neutral-400"
+                  } ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                    3
-                  </span>
-                  Alternative Number <span className="text-yellow-400">*</span>
+                  {alternativeFocused || customerAlternativeNumber ? (
+                    <>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                        3
+                      </span>
+                      Alternative Number <span className="text-yellow-400">*</span>
+                    </>
+                  ) : (
+                    "Enter your Alternative Number"
+                  )}
                 </span>
               </div>
             </div>
             <div className="relative">
               <input
+                ref={alternativeInputRef}
                 type="tel"
                 placeholder=""
                 value={customerAlternativeNumber}
                 onChange={(e) => setCustomerAlternativeNumber(e.target.value)}
-                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                onFocus={() => {
+                  setAlternativeFocused(true);
+                  scrollToStep2();
+                }}
+                onBlur={() => {
+                  setAlternativeFocused(false);
+                  setAlternativeBlurred(true);
+                }}
+                className={`w-full px-3 py-3.5 ${
+                  alternativeFocused || customerAlternativeNumber ? "pt-5" : "pt-3.5"
+                } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   showAlternativeCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-neutral-800/50"
@@ -1681,8 +1758,6 @@ export default function TestMobilePage() {
                   fontFamily: "var(--font-poppins), sans-serif",
                 }}
                 onClick={scrollToStep2}
-                onFocus={scrollToStep2}
-                onBlur={() => setAlternativeBlurred(true)}
               />
               {showAlternativeCheck && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -1706,35 +1781,51 @@ export default function TestMobilePage() {
 
           {/* Customer Email Address */}
           <div className="mb-6 relative">
+            {/* Floating Label */}
             <div
-              className="absolute left-3 pointer-events-none"
-              style={{ zIndex: 30, top: "-2px" }}
+              className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                emailFocused || customerEmail
+                  ? "top-0 transform -translate-y-1/2"
+                  : "top-1/2 transform -translate-y-1/2"
+              }`}
+              style={{ zIndex: 30 }}
             >
-              <div
-                className="absolute left-0"
-                style={{
-                  top: "2px",
-                  background: "rgb(38, 38, 38)",
-                  height: "2px",
-                  width: "calc(100% + 4px)",
-                  marginLeft: "-4px",
-                  borderTopLeftRadius: "8px",
-                }}
-              />
-              <div
-                className="px-1.5 relative"
-                style={{ top: "-50%", transform: "translateY(-50%)" }}
-              >
+              {/* Border cut background */}
+              {(emailFocused || customerEmail) && (
+                <div
+                  className="absolute left-0"
+                  style={{
+                    top: "50%",
+                    background: "rgb(38, 38, 38)",
+                    height: "2px",
+                    width: "calc(100% + 4px)",
+                    marginLeft: "-4px",
+                    borderTopLeftRadius: "8px",
+                  }}
+                />
+              )}
+              {/* Label text */}
+              <div className="px-1.5 relative">
                 <span
-                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium transition-all duration-300 ${
+                    emailFocused || customerEmail
+                      ? "text-white/90"
+                      : "text-neutral-400"
+                  } ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                    4
-                  </span>
-                  Email Address <span className="text-yellow-400">*</span>
+                  {emailFocused || customerEmail ? (
+                    <>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                        4
+                      </span>
+                      Email Address <span className="text-yellow-400">*</span>
+                    </>
+                  ) : (
+                    "Enter your Email Address"
+                  )}
                 </span>
               </div>
             </div>
@@ -1745,7 +1836,17 @@ export default function TestMobilePage() {
                 placeholder=""
                 value={customerEmail}
                 onChange={(e) => setCustomerEmail(e.target.value)}
-                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                onFocus={() => {
+                  setEmailFocused(true);
+                  scrollToStep2();
+                }}
+                onBlur={() => {
+                  setEmailFocused(false);
+                  setEmailBlurred(true);
+                }}
+                className={`w-full px-3 py-3.5 ${
+                  emailFocused || customerEmail ? "pt-5" : "pt-3.5"
+                } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   emailBlurred && isEmailValid
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-neutral-800/50"
@@ -1759,8 +1860,6 @@ export default function TestMobilePage() {
                   caretColor: "#ffffff",
                 }}
                 onClick={scrollToStep2}
-                onFocus={scrollToStep2}
-                onBlur={() => setEmailBlurred(true)}
                 spellCheck={false}
                 autoComplete="email"
               />
@@ -1786,35 +1885,51 @@ export default function TestMobilePage() {
 
           {/* Customer Installation Town */}
           <div className="mb-6 relative">
+            {/* Floating Label */}
             <div
-              className="absolute left-3 pointer-events-none"
-              style={{ zIndex: 30, top: "-2px" }}
+              className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                townFocused || showTownDropdown || installationTown
+                  ? "top-0 transform -translate-y-1/2"
+                  : "top-1/2 transform -translate-y-1/2"
+              }`}
+              style={{ zIndex: 30 }}
             >
-              <div
-                className="absolute left-0"
-                style={{
-                  top: "2px",
-                  background: "rgb(38, 38, 38)",
-                  height: "2px",
-                  width: "calc(100% + 4px)",
-                  marginLeft: "-4px",
-                  borderTopLeftRadius: "8px",
-                }}
-              />
-              <div
-                className="px-1.5 relative"
-                style={{ top: "-50%", transform: "translateY(-50%)" }}
-              >
+              {/* Border cut background */}
+              {(townFocused || showTownDropdown || installationTown) && (
+                <div
+                  className="absolute left-0"
+                  style={{
+                    top: "50%",
+                    background: "rgb(38, 38, 38)",
+                    height: "2px",
+                    width: "calc(100% + 4px)",
+                    marginLeft: "-4px",
+                    borderTopLeftRadius: "8px",
+                  }}
+                />
+              )}
+              {/* Label text */}
+              <div className="px-1.5 relative">
                 <span
-                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium transition-all duration-300 ${
+                    townFocused || showTownDropdown || installationTown
+                      ? "text-white/90"
+                      : "text-neutral-400"
+                  } ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                    5
-                  </span>
-                  Installation Town <span className="text-yellow-400">*</span>
+                  {townFocused || showTownDropdown || installationTown ? (
+                    <>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                        5
+                      </span>
+                      Installation Town <span className="text-yellow-400">*</span>
+                    </>
+                  ) : (
+                    "Enter your Installation Town"
+                  )}
                 </span>
               </div>
             </div>
@@ -1824,12 +1939,17 @@ export default function TestMobilePage() {
                 type="button"
                 onClick={() => {
                   setShowTownDropdown(!showTownDropdown);
+                  setTownFocused(true);
                   scrollToStep2();
                 }}
+                onFocus={() => setTownFocused(true)}
                 onBlur={() => {
+                  setTownFocused(false);
                   setTimeout(() => setTownBlurred(true), 200);
                 }}
-                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                className={`w-full px-3 py-3.5 ${
+                  townFocused || showTownDropdown || installationTown ? "pt-5" : "pt-3.5"
+                } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   townBlurred && isTownValid
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-neutral-800/50"
@@ -1838,10 +1958,11 @@ export default function TestMobilePage() {
                 } ${!installationTown ? "text-neutral-300" : ""}`}
                 style={{
                   fontFamily: "var(--font-poppins), sans-serif",
+                  minHeight: townFocused || showTownDropdown || installationTown ? "56px" : "48px",
                 }}
               >
                 <span className="block truncate">
-                  {installationTown || "Select installation town"}
+                  {installationTown || ""}
                 </span>
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                   {townBlurred && isTownValid ? (
@@ -1930,38 +2051,52 @@ export default function TestMobilePage() {
 
           {/* Specific Delivery Location (Nearest Landmark) */}
           <div className="mb-6 relative">
+            {/* Floating Label */}
             <div
-              className="absolute left-3 pointer-events-none"
-              style={{ zIndex: 30, top: "-2px" }}
+              className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                deliveryLocationFocused || deliveryLocation
+                  ? "top-0 transform -translate-y-1/2"
+                  : "top-1/2 transform -translate-y-1/2"
+              }`}
+              style={{ zIndex: 30 }}
             >
-              {/* Transparent div to cut the border - positioned at the border line */}
-              <div
-                className="absolute left-0"
-                style={{
-                  top: "2px",
-                  background: "rgb(38, 38, 38)",
-                  height: "2px",
-                  width: "calc(100% + 4px)",
-                  marginLeft: "-4px",
-                  borderTopLeftRadius: "8px",
-                }}
-              />
+              {/* Border cut background */}
+              {(deliveryLocationFocused || deliveryLocation) && (
+                <div
+                  className="absolute left-0"
+                  style={{
+                    top: "50%",
+                    background: "rgb(38, 38, 38)",
+                    height: "2px",
+                    width: "calc(100% + 4px)",
+                    marginLeft: "-4px",
+                    borderTopLeftRadius: "8px",
+                  }}
+                />
+              )}
               {/* Label text */}
-              <div
-                className="px-1.5 relative"
-                style={{ top: "-50%", transform: "translateY(-50%)" }}
-              >
+              <div className="px-1.5 relative">
                 <span
-                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium transition-all duration-300 ${
+                    deliveryLocationFocused || deliveryLocation
+                      ? "text-white/90"
+                      : "text-neutral-400"
+                  } ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                    6
-                  </span>
-                  Delivery Location (Nearest Landmark){" "}
-                  <span className="text-yellow-400">*</span>
+                  {deliveryLocationFocused || deliveryLocation ? (
+                    <>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                        6
+                      </span>
+                      Delivery Location (Nearest Landmark){" "}
+                      <span className="text-yellow-400">*</span>
+                    </>
+                  ) : (
+                    "Enter your Delivery Location"
+                  )}
                 </span>
               </div>
             </div>
@@ -1972,7 +2107,17 @@ export default function TestMobilePage() {
                 placeholder=""
                 value={deliveryLocation}
                 onChange={(e) => setDeliveryLocation(e.target.value)}
-                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                onFocus={() => {
+                  setDeliveryLocationFocused(true);
+                  scrollToStep2();
+                }}
+                onBlur={() => {
+                  setDeliveryLocationFocused(false);
+                  setDeliveryLocationBlurred(true);
+                }}
+                className={`w-full px-3 py-3.5 ${
+                  deliveryLocationFocused || deliveryLocation ? "pt-5" : "pt-3.5"
+                } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   showDeliveryLocationCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-neutral-800/50"
@@ -1986,8 +2131,6 @@ export default function TestMobilePage() {
                   caretColor: "#ffffff",
                 }}
                 onClick={scrollToStep2}
-                onFocus={scrollToStep2}
-                onBlur={() => setDeliveryLocationBlurred(true)}
                 spellCheck={false}
                 autoComplete="off"
               />
@@ -2013,37 +2156,51 @@ export default function TestMobilePage() {
 
           {/* Preferred Date of Visit/Installation */}
           <div className="mb-6 relative">
+            {/* Floating Label */}
             <div
-              className="absolute left-3 pointer-events-none"
-              style={{ zIndex: 30, top: "-2px" }}
+              className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                dateFocused || preferredDate
+                  ? "top-0 transform -translate-y-1/2"
+                  : "top-1/2 transform -translate-y-1/2"
+              }`}
+              style={{ zIndex: 30 }}
             >
-              {/* Transparent div to cut the border - positioned at the border line */}
-              <div
-                className="absolute left-0"
-                style={{
-                  top: "2px",
-                  background: "rgb(38, 38, 38)",
-                  height: "2px",
-                  width: "calc(100% + 4px)",
-                  marginLeft: "-4px",
-                  borderTopLeftRadius: "8px",
-                }}
-              />
+              {/* Border cut background */}
+              {(dateFocused || preferredDate) && (
+                <div
+                  className="absolute left-0"
+                  style={{
+                    top: "50%",
+                    background: "rgb(38, 38, 38)",
+                    height: "2px",
+                    width: "calc(100% + 4px)",
+                    marginLeft: "-4px",
+                    borderTopLeftRadius: "8px",
+                  }}
+                />
+              )}
               {/* Label text */}
-              <div
-                className="px-1.5 relative"
-                style={{ top: "-50%", transform: "translateY(-50%)" }}
-              >
+              <div className="px-1.5 relative">
                 <span
-                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium transition-all duration-300 ${
+                    dateFocused || preferredDate
+                      ? "text-white/90"
+                      : "text-neutral-400"
+                  } ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                    7
-                  </span>
-                  Preferred Date <span className="text-yellow-400">*</span>
+                  {dateFocused || preferredDate ? (
+                    <>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                        7
+                      </span>
+                      Preferred Date <span className="text-yellow-400">*</span>
+                    </>
+                  ) : (
+                    "Enter your Preferred Date"
+                  )}
                 </span>
               </div>
             </div>
@@ -2054,7 +2211,17 @@ export default function TestMobilePage() {
                 value={preferredDate}
                 onChange={(e) => setPreferredDate(e.target.value)}
                 min={new Date().toISOString().split("T")[0]}
-                className={`w-full px-3 py-2.5 pt-4 pr-12 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                onFocus={() => {
+                  setDateFocused(true);
+                  scrollToStep2();
+                }}
+                onBlur={() => {
+                  setDateFocused(false);
+                  setPreferredDateBlurred(true);
+                }}
+                className={`w-full px-3 py-3.5 ${
+                  dateFocused || preferredDate ? "pt-5" : "pt-3.5"
+                } pr-12 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   showPreferredDateCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-neutral-800/50"
@@ -2071,23 +2238,7 @@ export default function TestMobilePage() {
                   colorScheme: "dark",
                 }}
                 onClick={scrollToStep2}
-                onFocus={scrollToStep2}
-                onBlur={() => setPreferredDateBlurred(true)}
               />
-              {/* Placeholder text when no date is selected */}
-              {!preferredDate && (
-                <div
-                  className="absolute left-4 pointer-events-none flex items-center"
-                  style={{
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    height: "100%",
-                    fontFamily: "var(--font-poppins), sans-serif",
-                  }}
-                >
-                  <span className="text-xs text-neutral-300">Select date</span>
-                </div>
-              )}
               {/* Calendar icon indicator - shown when no date is selected */}
               {!preferredDate && !showPreferredDateCheck && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -2128,37 +2279,51 @@ export default function TestMobilePage() {
 
           {/* Preferred Time of Visit/Installation */}
           <div className="mb-6 relative">
+            {/* Floating Label */}
             <div
-              className="absolute left-3 pointer-events-none"
-              style={{ zIndex: 30, top: "-2px" }}
+              className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                timeFocused || showTimeDropdown || preferredTime
+                  ? "top-0 transform -translate-y-1/2"
+                  : "top-1/2 transform -translate-y-1/2"
+              }`}
+              style={{ zIndex: 30 }}
             >
-              {/* Transparent div to cut the border - positioned at the border line */}
-              <div
-                className="absolute left-0"
-                style={{
-                  top: "2px",
-                  background: "rgb(38, 38, 38)",
-                  height: "2px",
-                  width: "calc(100% + 4px)",
-                  marginLeft: "-4px",
-                  borderTopLeftRadius: "8px",
-                }}
-              />
+              {/* Border cut background */}
+              {(timeFocused || showTimeDropdown || preferredTime) && (
+                <div
+                  className="absolute left-0"
+                  style={{
+                    top: "50%",
+                    background: "rgb(38, 38, 38)",
+                    height: "2px",
+                    width: "calc(100% + 4px)",
+                    marginLeft: "-4px",
+                    borderTopLeftRadius: "8px",
+                  }}
+                />
+              )}
               {/* Label text */}
-              <div
-                className="px-1.5 relative"
-                style={{ top: "-50%", transform: "translateY(-50%)" }}
-              >
+              <div className="px-1.5 relative">
                 <span
-                  className={`text-xs font-medium text-white/90 ${poppins.variable}`}
+                  className={`text-xs font-medium transition-all duration-300 ${
+                    timeFocused || showTimeDropdown || preferredTime
+                      ? "text-white/90"
+                      : "text-neutral-400"
+                  } ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                    8
-                  </span>
-                  Preferred Time <span className="text-yellow-400">*</span>
+                  {timeFocused || showTimeDropdown || preferredTime ? (
+                    <>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                        8
+                      </span>
+                      Preferred Time <span className="text-yellow-400">*</span>
+                    </>
+                  ) : (
+                    "Enter your Preferred Time"
+                  )}
                 </span>
               </div>
             </div>
@@ -2168,13 +2333,18 @@ export default function TestMobilePage() {
                 type="button"
                 onClick={() => {
                   setShowTimeDropdown(!showTimeDropdown);
+                  setTimeFocused(true);
                   scrollToStep2();
                 }}
+                onFocus={() => setTimeFocused(true)}
                 onBlur={() => {
+                  setTimeFocused(false);
                   // Delay to allow option click
                   setTimeout(() => setPreferredTimeBlurred(true), 200);
                 }}
-                className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                className={`w-full px-3 py-3.5 ${
+                  timeFocused || showTimeDropdown || preferredTime ? "pt-5" : "pt-3.5"
+                } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   showPreferredTimeCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                     : "border-neutral-800/50"
@@ -2183,10 +2353,11 @@ export default function TestMobilePage() {
                 } ${!preferredTime ? "text-neutral-300" : ""}`}
                 style={{
                   fontFamily: "var(--font-poppins), sans-serif",
+                  minHeight: timeFocused || showTimeDropdown || preferredTime ? "56px" : "48px",
                 }}
               >
                 <span className="block truncate">
-                  {preferredTime || "Select preferred time"}
+                  {preferredTime || ""}
                 </span>
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                   {showPreferredTimeCheck ? (
