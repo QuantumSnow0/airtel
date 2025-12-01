@@ -1046,6 +1046,9 @@ export default function TestMobilePage() {
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                    1
+                  </span>
                   Full Name <span className="text-yellow-400">*</span>
                 </span>
               </div>
@@ -1120,6 +1123,9 @@ export default function TestMobilePage() {
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                    2
+                  </span>
                   Airtel Number <span className="text-yellow-400">*</span>
                 </span>
               </div>
@@ -1194,6 +1200,9 @@ export default function TestMobilePage() {
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                    3
+                  </span>
                   Alternative Number <span className="text-yellow-400">*</span>
                 </span>
               </div>
@@ -1265,6 +1274,9 @@ export default function TestMobilePage() {
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                    4
+                  </span>
                   Email Address <span className="text-yellow-400">*</span>
                 </span>
               </div>
@@ -1342,6 +1354,9 @@ export default function TestMobilePage() {
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                    5
+                  </span>
                   Installation Town <span className="text-yellow-400">*</span>
                 </span>
               </div>
@@ -1485,6 +1500,9 @@ export default function TestMobilePage() {
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                    6
+                  </span>
                   Delivery Location (Nearest Landmark){" "}
                   <span className="text-yellow-400">*</span>
                 </span>
@@ -1565,6 +1583,9 @@ export default function TestMobilePage() {
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                    7
+                  </span>
                   Preferred Date <span className="text-yellow-400">*</span>
                 </span>
               </div>
@@ -1677,6 +1698,9 @@ export default function TestMobilePage() {
                     fontFamily: "var(--font-poppins), sans-serif",
                   }}
                 >
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                    8
+                  </span>
                   Preferred Time <span className="text-yellow-400">*</span>
                 </span>
               </div>

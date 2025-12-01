@@ -84,7 +84,7 @@ export default function ProductCarousel() {
     <div
       className="relative w-full"
       style={{
-        height: "clamp(250px, 45vw, 45vh)",
+        height: "clamp(280px, 50vw, 50vh)",
         overflow: "hidden",
       }}
     >
@@ -209,7 +209,7 @@ export default function ProductCarousel() {
               handleTouchStart();
               swiper?.slidePrev();
             }}
-            className="absolute left-2 top-1/3 transform -translate-y-1/2 z-50 w-10 h-10 flex items-center justify-center transition-all duration-300"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-50 w-10 h-10 flex items-center justify-center transition-all duration-300"
             aria-label="Previous slide"
           >
             <svg
@@ -233,7 +233,7 @@ export default function ProductCarousel() {
               handleTouchStart();
               swiper?.slideNext();
             }}
-            className="absolute right-2 top-1/3 transform -translate-y-1/2 z-50 w-10 h-10 flex items-center justify-center transition-all duration-300"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-50 w-10 h-10 flex items-center justify-center transition-all duration-300"
             aria-label="Next slide"
           >
             <svg
@@ -311,11 +311,16 @@ export default function ProductCarousel() {
                   {/* Content */}
                   <div className="relative px-3 pb-6 pt-8">
                     <h3
-                      className={`text-xl text-white mb-2 drop-shadow-[0_2px_8px_rgba(255,0,0,0.8)] leading-snug ${poppins.variable}`}
+                      className={`text-xl mb-2 leading-snug ${poppins.variable}`}
                       style={{
                         fontFamily: "var(--font-poppins), sans-serif",
                         letterSpacing: "0.01em",
                         fontWeight: 600,
+                        background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                        textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
                       }}
                     >
                       {slide.title}
