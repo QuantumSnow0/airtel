@@ -988,122 +988,139 @@ export default function TestMobilePage() {
 
       <ProductCarousel />
 
-      {/* How to Order Section */}
-      <section className="px-3 py-4">
-        <div className="w-full">
-          <div className="text-center mb-4">
-            <h2
-              className={`text-lg font-semibold text-white mb-3 ${poppins.variable}`}
+      {/* How to Order Section - Below Carousel with border cut effect */}
+      <div className="relative px-3 pt-4 pb-2">
+        <div className="relative rounded-lg bg-slate-800/90 backdrop-blur-sm border-2 border-yellow-400/60 p-4">
+          {/* Title with border cut effect */}
+          <div
+            className="absolute left-3 pointer-events-none"
+            style={{ zIndex: 30, top: "-2px" }}
+          >
+            {/* Transparent div to cut the border - positioned at the border line */}
+            <div
+              className="absolute left-0"
               style={{
-                fontFamily: "var(--font-poppins), sans-serif",
-                background: "linear-gradient(135deg, #ffffff, #fbbf24)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
+                top: "0px",
+                background: "rgb(30, 41, 59)",
+                height: "2px",
+                width: "calc(100% + 8px)",
+                marginLeft: "-4px",
+                borderTopLeftRadius: "8px",
               }}
+            />
+            {/* Title text */}
+            <div
+              className="px-1.5 relative"
+              style={{ top: "-50%", transform: "translateY(-50%)" }}
             >
-              How to Order
-            </h2>
-            {/* Compact Slider */}
-            <div className="relative overflow-hidden rounded-lg bg-slate-800/60 backdrop-blur-sm border border-yellow-400/30 p-4">
-              <div
-                ref={howToOrderSliderRef}
-                className="flex gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              <h2
+                className={`text-sm font-semibold ${poppins.variable}`}
+                style={{
+                  fontFamily: "var(--font-poppins), sans-serif",
+                  background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
               >
-                {/* Step 1 */}
-                <div className="shrink-0 w-full snap-center">
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
-                      <span className="text-yellow-400 text-sm font-bold">
-                        1
-                      </span>
-                    </div>
-                    <div className="flex-1">
-                      <p
-                        className={`text-sm text-white/90 ${poppins.variable}`}
-                        style={{
-                          fontFamily: "var(--font-poppins), sans-serif",
-                        }}
-                      >
-                        Choose your preferred package below
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                How to Order
+              </h2>
+            </div>
+          </div>
 
-                {/* Step 2 */}
-                <div className="shrink-0 w-full snap-center">
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
-                      <span className="text-yellow-400 text-sm font-bold">
-                        2
-                      </span>
-                    </div>
-                    <div className="flex-1">
-                      <p
-                        className={`text-sm text-white/90 ${poppins.variable}`}
-                        style={{
-                          fontFamily: "var(--font-poppins), sans-serif",
-                        }}
-                      >
-                        Fill in your details and installation preferences
-                      </p>
-                    </div>
+          {/* Compact Slider */}
+          <div className="relative overflow-hidden mt-2">
+            <div
+              ref={howToOrderSliderRef}
+              className="flex gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {/* Step 1 */}
+              <div className="shrink-0 w-full snap-center">
+                <div className="flex items-start gap-3">
+                  <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
+                    <span className="text-yellow-400 text-sm font-bold">1</span>
                   </div>
-                </div>
-
-                {/* Step 3 */}
-                <div className="shrink-0 w-full snap-center">
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
-                      <span className="text-yellow-400 text-sm font-bold">
-                        3
-                      </span>
-                    </div>
-                    <div className="flex-1">
-                      <p
-                        className={`text-sm text-white/90 ${poppins.variable}`}
-                        style={{
-                          fontFamily: "var(--font-poppins), sans-serif",
-                        }}
-                      >
-                        Submit your request and our qualified technician will
-                        contact you
-                      </p>
-                    </div>
+                  <div className="flex-1">
+                    <p
+                      className={`text-sm text-white/90 ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      Choose your preferred package below
+                    </p>
                   </div>
                 </div>
               </div>
 
-              {/* Slider Indicators */}
-              <div className="flex justify-center gap-2 mt-4">
-                <div
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    howToOrderSlide === 0
-                      ? "bg-yellow-400 w-6"
-                      : "bg-yellow-400/30"
-                  }`}
-                ></div>
-                <div
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    howToOrderSlide === 1
-                      ? "bg-yellow-400 w-6"
-                      : "bg-yellow-400/30"
-                  }`}
-                ></div>
-                <div
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    howToOrderSlide === 2
-                      ? "bg-yellow-400 w-6"
-                      : "bg-yellow-400/30"
-                  }`}
-                ></div>
+              {/* Step 2 */}
+              <div className="shrink-0 w-full snap-center">
+                <div className="flex items-start gap-3">
+                  <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
+                    <span className="text-yellow-400 text-sm font-bold">2</span>
+                  </div>
+                  <div className="flex-1">
+                    <p
+                      className={`text-sm text-white/90 ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      Fill in your details and installation preferences
+                    </p>
+                  </div>
+                </div>
               </div>
+
+              {/* Step 3 */}
+              <div className="shrink-0 w-full snap-center">
+                <div className="flex items-start gap-3">
+                  <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
+                    <span className="text-yellow-400 text-sm font-bold">3</span>
+                  </div>
+                  <div className="flex-1">
+                    <p
+                      className={`text-sm text-white/90 ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      Submit your request and our qualified technician will
+                      contact you
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Slider Indicators */}
+            <div className="flex justify-center gap-2 mt-4">
+              <div
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  howToOrderSlide === 0
+                    ? "bg-yellow-400 w-6"
+                    : "bg-yellow-400/30"
+                }`}
+              ></div>
+              <div
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  howToOrderSlide === 1
+                    ? "bg-yellow-400 w-6"
+                    : "bg-yellow-400/30"
+                }`}
+              ></div>
+              <div
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  howToOrderSlide === 2
+                    ? "bg-yellow-400 w-6"
+                    : "bg-yellow-400/30"
+                }`}
+              ></div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Step 1: Choose Your Package */}
       <section className="px-3 py-2" style={{ marginTop: "0" }}>

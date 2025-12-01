@@ -90,7 +90,7 @@ export default function ProductCarousel() {
     >
       {/* Title Section - Overlay on top of carousel */}
       <div
-        className="absolute top-0 left-0 right-0 flex items-center justify-between px-4 py-2"
+        className="absolute top-0 left-0 right-0 flex items-center justify-between px-4 py-2 md:hidden"
         style={{
           zIndex: 100,
         }}
@@ -274,7 +274,7 @@ export default function ProductCarousel() {
                   <img
                     src={slide.image}
                     alt={slide.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover sm:object-stretch"
                     style={{
                       objectPosition:
                         index === 3

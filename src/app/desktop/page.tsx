@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import ProductCarousel from "../test-mobile/ProductCarousel";
+import ProductCarousel from "../mobile/ProductCarousel";
 import PricingCards from "../components/PricingCards";
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
@@ -143,7 +143,12 @@ export default function TestDesktopPage() {
       if (nameInputRef.current && customerName && isNameValid && !nameBlurred) {
         setNameBlurred(true);
       }
-      if (phoneInputRef.current && customerPhone && isPhoneValid && !phoneBlurred) {
+      if (
+        phoneInputRef.current &&
+        customerPhone &&
+        isPhoneValid &&
+        !phoneBlurred
+      ) {
         setPhoneBlurred(true);
       }
       if (
@@ -215,28 +220,287 @@ export default function TestDesktopPage() {
   const showTownCheck = townBlurred && isTownValid;
   const showDeliveryLocationCheck =
     deliveryLocationBlurred && isDeliveryLocationValid;
-  const showPreferredDateCheck =
-    preferredDateBlurred && isPreferredDateValid;
-  const showPreferredTimeCheck =
-    preferredTimeBlurred && isPreferredTimeValid;
+  const showPreferredDateCheck = preferredDateBlurred && isPreferredDateValid;
+  const showPreferredTimeCheck = preferredTimeBlurred && isPreferredTimeValid;
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      {/* Desktop Layout: Carousel Left, Form Right */}
-      <div className="grid grid-cols-2 gap-0">
-        {/* Left Side - Carousel (50% width) */}
-        <div className="col-span-1">
-          <ProductCarousel />
+    <div className="min-h-screen bg-slate-900 overflow-y-auto h-screen">
+      {/* Desktop Layout: Product Left, Form Right */}
+      <div className="grid grid-cols-2 gap-0  min-h-full">
+        {/* Left Side - Product Display */}
+        <div className="col-span-1 flex justify-center pt-1 px-8 pb-8 bg-slate-800/50">
+          <div className="w-full max-w-lg">
+            {/* Product Image */}
+            <div className="mb-6 rounded-lg overflow-hidden">
+              <img
+                src="/desktopimg.png"
+                alt="Airtel 5G Smart Connect - Outdoor Unit"
+                className="w-full h-auto object-contain rounded-lg"
+                style={{ maxHeight: "40vh" }}
+              />
+            </div>
+
+            {/* Product Title */}
+            <h2
+              className={`text-2xl font-bold mb-6 text-center ${poppins.variable}`}
+              style={{
+                fontFamily: "var(--font-poppins), sans-serif",
+                background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              5G Smart Connect - Outdoor Unit
+            </h2>
+
+            {/* Features List */}
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/60 border border-yellow-400/20">
+                <svg
+                  className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <div>
+                  <p
+                    className={`text-white font-semibold ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                  >
+                    Weather-Resistant Design
+                  </p>
+                  <p
+                    className={`text-sm text-slate-300 mt-1 ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                  >
+                    Built to perform reliably in all conditions.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/60 border border-yellow-400/20">
+                <svg
+                  className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <div>
+                  <p
+                    className={`text-white font-semibold ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                  >
+                    High-Gain Antenna
+                  </p>
+                  <p
+                    className={`text-sm text-slate-300 mt-1 ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                  >
+                    Offers strong and consistent indoor coverage.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/60 border border-yellow-400/20">
+                <svg
+                  className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <div>
+                  <p
+                    className={`text-white font-semibold ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                  >
+                    Signal Amplification
+                  </p>
+                  <p
+                    className={`text-sm text-slate-300 mt-1 ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                  >
+                    Enhances signal strength to ensure stable and uninterrupted
+                    connectivity.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/60 border border-yellow-400/20">
+                <svg
+                  className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <div>
+                  <p
+                    className={`text-white font-semibold ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                  >
+                    Flexible Mounting Options
+                  </p>
+                  <p
+                    className={`text-sm text-slate-300 mt-1 ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                  >
+                    Easily install on walls, poles, or rooftops to suit your
+                    setup and location.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Right Side - Form Sections (50% width) */}
-        <div className="col-span-1 overflow-y-auto h-screen">
+        {/* Right Side - Form Sections */}
+        <div className="col-span-1">
+          {/* Header - Desktop Only */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700/50">
+            {/* Title on the left */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <span
+                  className="text-base font-bold"
+                  style={{
+                    background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+                  }}
+                >
+                  Airt
+                </span>
+                <img
+                  src="/icon.png"
+                  alt="Airtel 5G Icon"
+                  className="w-5 h-5 object-contain block"
+                  style={{
+                    marginLeft: "-5px",
+                    marginRight: "-5px",
+                    filter: "drop-shadow(0 0 8px rgba(251, 191, 36, 0.5))",
+                  }}
+                />
+                <span
+                  className="text-base font-bold"
+                  style={{
+                    background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+                  }}
+                >
+                  l
+                </span>
+              </div>
+              <div className="h-4 w-px bg-slate-600 mx-1" />
+              <span
+                className="text-sm font-bold tracking-wide"
+                style={{
+                  background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  letterSpacing: "0.05em",
+                  textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+                }}
+              >
+                SmartConnect
+              </span>
+            </div>
+
+            {/* Phone number on the right */}
+            <a
+              href="tel:0700776994"
+              className="flex items-center gap-1.5 transition-colors"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                style={{
+                  filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))",
+                }}
+              >
+                <defs>
+                  <linearGradient
+                    id="phoneGradientDesktop"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="100%" stopColor="#fbbf24" />
+                  </linearGradient>
+                </defs>
+                <path
+                  stroke="url(#phoneGradientDesktop)"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                />
+              </svg>
+              <span
+                className="text-sm font-semibold"
+                style={{
+                  background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+                }}
+              >
+                0700776994
+              </span>
+            </a>
+          </div>
+
           {/* How to Order Section - One Line */}
-          <section className="px-6 py-6">
+          <section className="px-6 py-3">
             <div className="w-full">
-              <div className="text-center mb-4">
+              <div className="text-center mb-3">
                 <h2
-                  className={`text-lg font-semibold text-white mb-3 ${poppins.variable}`}
+                  className={`text-lg font-semibold text-white mb-2 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                     background: "linear-gradient(135deg, #ffffff, #fbbf24)",
@@ -312,11 +576,11 @@ export default function TestDesktopPage() {
           </section>
 
           {/* Step 1: Choose Your Package */}
-          <section className="px-6 py-4" style={{ marginTop: "0" }}>
+          <section className="px-6 py-3" style={{ marginTop: "0" }}>
             <div className="w-full">
-              <div className="text-center mb-6">
+              <div className="text-center mb-3">
                 <h2
-                  className={`text-lg font-semibold text-white mb-2 ${poppins.variable}`}
+                  className={`text-lg font-semibold text-white mb-1 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                     background: "linear-gradient(135deg, #ffffff, #fbbf24)",
@@ -333,11 +597,11 @@ export default function TestDesktopPage() {
           </section>
 
           {/* Step 2: Almost There */}
-          <section id="step-2" ref={step2Ref} className="px-6 py-4">
+          <section id="step-2" ref={step2Ref} className="px-6 py-3">
             <div className="w-full">
-              <div className="text-center mb-6">
+              <div className="text-center mb-3">
                 <h2
-                  className={`text-lg font-semibold text-white mb-2 ${poppins.variable}`}
+                  className={`text-lg font-semibold text-white mb-1 ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
                     background: "linear-gradient(135deg, #ffffff, #fbbf24)",
@@ -351,9 +615,9 @@ export default function TestDesktopPage() {
               </div>
 
               {/* Form Fields - Desktop: 2 columns */}
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-4">
                 {/* Full Name - Full Width */}
-                <div className="mb-6 relative col-span-2">
+                <div className="mb-4 relative col-span-2">
                   <div
                     className="absolute left-3 pointer-events-none"
                     style={{ zIndex: 30, top: "-2px" }}
@@ -426,7 +690,7 @@ export default function TestDesktopPage() {
                 </div>
 
                 {/* Airtel Number */}
-                <div className="mb-6 relative">
+                <div className="mb-4 relative">
                   <div
                     className="absolute left-3 pointer-events-none"
                     style={{ zIndex: 30, top: "-2px" }}
@@ -499,7 +763,7 @@ export default function TestDesktopPage() {
                 </div>
 
                 {/* Alternative Number */}
-                <div className="mb-6 relative">
+                <div className="mb-4 relative">
                   <div
                     className="absolute left-3 pointer-events-none"
                     style={{ zIndex: 30, top: "-2px" }}
@@ -574,7 +838,7 @@ export default function TestDesktopPage() {
                 </div>
 
                 {/* Email Address */}
-                <div className="mb-6 relative">
+                <div className="mb-4 relative">
                   <div
                     className="absolute left-3 pointer-events-none"
                     style={{ zIndex: 30, top: "-2px" }}
@@ -652,7 +916,7 @@ export default function TestDesktopPage() {
                 </div>
 
                 {/* Installation Town */}
-                <div className="mb-6 relative">
+                <div className="mb-4 relative">
                   <div
                     className="absolute left-3 pointer-events-none"
                     style={{ zIndex: 30, top: "-2px" }}
@@ -796,7 +1060,7 @@ export default function TestDesktopPage() {
                 </div>
 
                 {/* Delivery Location - Full Width */}
-                <div className="mb-6 relative col-span-2">
+                <div className="mb-4 relative col-span-2">
                   <div
                     className="absolute left-3 pointer-events-none"
                     style={{ zIndex: 30, top: "-2px" }}
@@ -875,7 +1139,7 @@ export default function TestDesktopPage() {
                 </div>
 
                 {/* Preferred Date */}
-                <div className="mb-6 relative">
+                <div className="mb-4 relative">
                   <div
                     className="absolute left-3 pointer-events-none"
                     style={{ zIndex: 30, top: "-2px" }}
@@ -904,7 +1168,8 @@ export default function TestDesktopPage() {
                         <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
                           7
                         </span>
-                        Preferred Date <span className="text-yellow-400">*</span>
+                        Preferred Date{" "}
+                        <span className="text-yellow-400">*</span>
                       </span>
                     </div>
                   </div>
@@ -930,6 +1195,15 @@ export default function TestDesktopPage() {
                           : "transparent",
                         caretColor: "#ffffff",
                         colorScheme: "dark",
+                        cursor: "pointer",
+                        position: "relative",
+                        zIndex: 1,
+                      }}
+                      onClick={(e) => {
+                        // Ensure the date picker opens
+                        if (e.currentTarget.showPicker) {
+                          e.currentTarget.showPicker();
+                        }
                       }}
                       onBlur={() => setPreferredDateBlurred(true)}
                     />
@@ -946,6 +1220,31 @@ export default function TestDesktopPage() {
                         <span className="text-xs text-slate-400">
                           Select date
                         </span>
+                      </div>
+                    )}
+                    {/* Calendar icon indicator - clickable to open date picker */}
+                    {!preferredDate && !showPreferredDateCheck && (
+                      <div
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                        onClick={() =>
+                          dateInputRef.current?.showPicker?.() ||
+                          dateInputRef.current?.click()
+                        }
+                        style={{ zIndex: 20 }}
+                      >
+                        <svg
+                          className="w-5 h-5 text-yellow-400/70"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
                       </div>
                     )}
                     {showPreferredDateCheck && (
@@ -969,7 +1268,7 @@ export default function TestDesktopPage() {
                 </div>
 
                 {/* Preferred Time */}
-                <div className="mb-6 relative">
+                <div className="mb-4 relative">
                   <div
                     className="absolute left-3 pointer-events-none"
                     style={{ zIndex: 30, top: "-2px" }}
@@ -998,7 +1297,8 @@ export default function TestDesktopPage() {
                         <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
                           8
                         </span>
-                        Preferred Time <span className="text-yellow-400">*</span>
+                        Preferred Time{" "}
+                        <span className="text-yellow-400">*</span>
                       </span>
                     </div>
                   </div>
@@ -1214,10 +1514,14 @@ export default function TestDesktopPage() {
                         typeof window !== "undefined" &&
                         (window as any).gtag
                       ) {
-                        (window as any).gtag("event", "ads_conversion_Contact_1", {
-                          event_category: "conversion",
-                          event_label: "Form Submission",
-                        });
+                        (window as any).gtag(
+                          "event",
+                          "ads_conversion_Contact_1",
+                          {
+                            event_category: "conversion",
+                            event_label: "Form Submission",
+                          }
+                        );
                       }
 
                       // Reset form after successful submission
@@ -1326,4 +1630,3 @@ export default function TestDesktopPage() {
     </div>
   );
 }
-

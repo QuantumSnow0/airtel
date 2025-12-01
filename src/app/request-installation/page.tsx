@@ -1,6 +1,6 @@
 "use client";
 
-import TestMobilePage from "../test-mobile/page";
+import TestMobilePage from "../mobile/page";
 
 export default function RequestInstallation() {
   return <TestMobilePage />;

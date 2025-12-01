@@ -50,8 +50,8 @@ export default function PricingCards() {
       `,
         }}
       />
-      {/* Mobile Pricing Cards */}
-      <div className={`md:hidden ${poppins.variable}`}>
+      {/* Pricing Cards - Mobile Style for All Screens */}
+      <div className={`${poppins.variable}`}>
         <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-2">
           {/* Package 1 - Standard */}
           <div
@@ -356,115 +356,6 @@ export default function PricingCards() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Desktop Pricing Cards */}
-      <div className="hidden md:block mb-8">
-        <div className="mb-6">
-          <h2 className="text-3xl font-extrabold text-slate-900 mb-2">
-            Choose Your Package
-          </h2>
-          <p className="text-slate-600">
-            Select the perfect plan for your needs
-          </p>
-        </div>
-        <div className="grid grid-cols-2 gap-5">
-          {/* Package 1 */}
-          <label
-            className="group relative rounded-2xl border-2 border-slate-200 bg-white p-6 hover:border-rose-300 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
-            onClick={() => handleCardClick("standard")}
-          >
-            <div className="absolute top-4 left-4 z-10">
-              <input
-                type="radio"
-                name="package-desktop"
-                value="standard"
-                checked={selectedPackage === "standard"}
-                onChange={() => setSelectedPackage("standard")}
-                className="w-5 h-5 border-2 border-slate-300 rounded-full focus:outline-none focus:ring-0 cursor-pointer"
-              />
-            </div>
-            <div className="text-center">
-              <div className="mb-4">
-                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 group-hover:bg-rose-100 transition-colors mb-3 overflow-hidden">
-                  <img
-                    src="/icon.png"
-                    alt="5G Icon"
-                    className="w-full h-full object-contain p-2"
-                  />
-                </div>
-              </div>
-              <div className="text-4xl font-extrabold text-slate-900 mb-1">
-                Ksh. 1,999
-              </div>
-              <div className="text-sm font-medium text-rose-600 mb-4">
-                per month
-              </div>
-              <div className="text-xl font-bold text-slate-900 mb-2">
-                15 Mbps
-              </div>
-              <div className="text-sm text-slate-500 mb-4">High-speed 5G</div>
-              <div className="pt-4 border-t border-slate-100 space-y-2">
-                <div className="text-sm text-slate-600">30 days validity</div>
-                <div className="text-xs text-slate-500">
-                  Installation:{" "}
-                  <span className="font-semibold text-slate-700">
-                    Ksh. 1,000
-                  </span>
-                </div>
-              </div>
-            </div>
-          </label>
-
-          {/* Package 2 - Popular */}
-          <label
-            className="group relative rounded-2xl border-3 border-rose-500 bg-gradient-to-br from-rose-50 via-white to-rose-50/30 p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 shine-effect cursor-pointer"
-            onClick={() => handleCardClick("premium")}
-          >
-            <div className="absolute top-4 left-4 z-10">
-              <input
-                type="radio"
-                name="package-desktop"
-                value="premium"
-                checked={selectedPackage === "premium"}
-                onChange={() => setSelectedPackage("premium")}
-                className="w-5 h-5 border-2 border-rose-400 rounded-full focus:outline-none focus:ring-0 cursor-pointer"
-              />
-            </div>
-            <div className="text-center pt-3">
-              <div className="mb-4">
-                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-rose-500 to-red-600 shadow-lg mb-3 overflow-hidden">
-                  <img
-                    src="/icon.png"
-                    alt="5G Icon"
-                    className="w-full h-full object-contain p-2 brightness-0 invert"
-                  />
-                </div>
-              </div>
-              <div className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-red-600 mb-1">
-                Ksh. 2,999
-              </div>
-              <div className="text-sm font-medium text-rose-600 mb-4">
-                per month
-              </div>
-              <div className="text-xl font-bold text-slate-900 mb-2">
-                30 Mbps
-              </div>
-              <div className="text-sm text-slate-500 mb-4">Ultra-fast 5G</div>
-              <div className="pt-4 border-t border-rose-200 space-y-2">
-                <div className="text-sm font-semibold text-rose-600">
-                  30 days validity
-                </div>
-                <div className="text-xs text-slate-600">
-                  Installation:{" "}
-                  <span className="font-semibold text-slate-700">
-                    Ksh. 1,000
-                  </span>
-                </div>
-              </div>
-            </div>
-          </label>
         </div>
       </div>
     </>
