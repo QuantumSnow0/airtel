@@ -268,6 +268,25 @@ export async function POST(request: NextRequest) {
     const fullPackageName =
       packageMap[preferredPackage.toLowerCase()] || preferredPackage;
 
+    // Convert time from 12-hour format (e.g., "10:00 AM") to 24-hour format (e.g., "10:00")
+    const convertTo24Hour = (time12h: string): string => {
+      const timeMatch = time12h.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+      if (!timeMatch) return time12h; // Return as-is if format doesn't match
+
+      let hours = parseInt(timeMatch[1], 10);
+      const minutes = timeMatch[2];
+      const period = timeMatch[3].toUpperCase();
+
+      if (period === "PM" && hours !== 12) {
+        hours += 12;
+      } else if (period === "AM" && hours === 12) {
+        hours = 0;
+      }
+
+      return `${hours.toString().padStart(2, "0")}:${minutes}`;
+    };
+    const time24Hour = convertTo24Hour(visitTime);
+
     // Build answers array in the exact order as Microsoft Forms expects
     const answers = [
       {
@@ -324,7 +343,7 @@ export async function POST(request: NextRequest) {
       },
       {
         questionId: QUESTION_IDS.visitTime,
-        answer1: visitTime,
+        answer1: time24Hour,
       },
       {
         questionId: QUESTION_IDS.deliveryLandmark,
