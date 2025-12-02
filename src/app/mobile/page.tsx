@@ -6,13 +6,6 @@ import ProductCarousel from "./ProductCarousel";
 import PricingCards from "../components/PricingCards";
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
-import dynamic from "next/dynamic";
-
-const DotLottieReact = dynamic(
-  () =>
-    import("@lottiefiles/dotlottie-react").then((mod) => mod.DotLottieReact),
-  { ssr: false }
-);
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -93,15 +86,14 @@ export default function TestMobilePage() {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const hasUserInteractedRef = useRef(false);
   const speechTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isTypingRef = useRef(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [robotAnimationState, setRobotAnimationState] = useState<
     "idle" | "speaking" | "waving" | "blinking"
   >("idle");
-  const lottieRef = useRef<any>(null);
   const hasWavedRef = useRef(false);
-  const [isMounted, setIsMounted] = useState(false);
   const [previousPackage, setPreviousPackage] = useState<string | null>(null);
   const [robotBottom, setRobotBottom] = useState("1rem");
   const [robotTop, setRobotTop] = useState<string | null>(null);
@@ -174,20 +166,30 @@ export default function TestMobilePage() {
   // Track user interaction for audio autoplay
   useEffect(() => {
     const handleUserInteraction = () => {
+      hasUserInteractedRef.current = true;
       setHasUserInteracted(true);
     };
 
-    // Listen for any user interaction
+    // Listen for any user interaction (click, touch, keyboard, scroll)
     document.addEventListener("click", handleUserInteraction, { once: true });
     document.addEventListener("touchstart", handleUserInteraction, {
       once: true,
     });
     document.addEventListener("keydown", handleUserInteraction, { once: true });
+    // Add scroll events to detect user interaction
+    document.addEventListener("wheel", handleUserInteraction, { once: true });
+    document.addEventListener("touchmove", handleUserInteraction, {
+      once: true,
+    });
+    window.addEventListener("scroll", handleUserInteraction, { once: true });
 
     return () => {
       document.removeEventListener("click", handleUserInteraction);
       document.removeEventListener("touchstart", handleUserInteraction);
       document.removeEventListener("keydown", handleUserInteraction);
+      document.removeEventListener("wheel", handleUserInteraction);
+      document.removeEventListener("touchmove", handleUserInteraction);
+      window.removeEventListener("scroll", handleUserInteraction);
     };
   }, []);
 
@@ -222,9 +224,6 @@ export default function TestMobilePage() {
       // Wait for user interaction before playing audio
       return;
     }
-
-    // Trigger speaking animation
-    setRobotAnimationState("speaking");
 
     try {
       // Check if audio is currently playing
@@ -299,6 +298,7 @@ export default function TestMobilePage() {
           error: error,
         });
         // Only use Google Cloud TTS - no fallback
+        setRobotAnimationState("idle");
         return;
       }
 
@@ -312,6 +312,7 @@ export default function TestMobilePage() {
 
       if (!data.audio) {
         console.error("❌ Frontend: No audio data in response");
+        setRobotAnimationState("idle");
         return;
       }
 
@@ -324,11 +325,20 @@ export default function TestMobilePage() {
         setRobotAnimationState("idle");
       });
 
+      // Return to idle if audio is paused and at the beginning
+      audio.addEventListener("pause", () => {
+        if (audio.currentTime === 0) {
+          setRobotAnimationState("idle");
+        }
+      });
+
       console.log("🔊 Frontend: Attempting to play audio...");
       audio
         .play()
         .then(() => {
           console.log("✅ Frontend: Audio playing successfully");
+          // Set to speaking when audio successfully starts
+          setRobotAnimationState("speaking");
         })
         .catch((error) => {
           console.error("❌ Frontend: Audio play error:", error);
@@ -339,6 +349,7 @@ export default function TestMobilePage() {
     } catch (error) {
       console.error("❌ Frontend: TTS Error:", error);
       // Only use Google Cloud TTS - no fallback
+      setRobotAnimationState("idle");
     }
   };
 
@@ -487,11 +498,6 @@ export default function TestMobilePage() {
     "6:00 PM",
   ];
 
-  // Set mounted state for client-side only rendering
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
@@ -514,10 +520,44 @@ export default function TestMobilePage() {
     }
   }, [robotVisible]);
 
+  // Sync animation state with actual audio playback - only reset "speaking" to "idle" if audio isn't playing
+  useEffect(() => {
+    const checkAudioState = () => {
+      // Only check if we're in "speaking" state
+      if (robotAnimationState === "speaking") {
+        if (audioRef.current) {
+          const isPlaying =
+            !audioRef.current.paused &&
+            !audioRef.current.ended &&
+            audioRef.current.currentTime > 0;
+
+          // If we're in speaking state but audio isn't playing, reset to idle
+          if (!isPlaying) {
+            setRobotAnimationState("idle");
+          }
+        } else {
+          // No audio ref but state is speaking - reset to idle
+          setRobotAnimationState("idle");
+        }
+      }
+    };
+
+    // Check periodically to sync state
+    const interval = setInterval(checkAudioState, 500);
+
+    return () => clearInterval(interval);
+  }, [robotAnimationState]);
+
   // Detect scroll to show robot
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY || window.pageYOffset;
+
+      // Mark user interaction on any scroll (for TTS autoplay)
+      if (!hasUserInteractedRef.current && scrollY > 0) {
+        hasUserInteractedRef.current = true;
+        setHasUserInteracted(true);
+      }
 
       if (scrollY > 100 && !hasScrolled) {
         setHasScrolled(true);
@@ -1256,38 +1296,40 @@ export default function TestMobilePage() {
                 minHeight: "86px",
               }}
             >
-              {isMounted ? (
-                <div
-                  style={{
-                    width: "96px",
-                    height: "96px",
-                    position: "relative",
-                  }}
-                >
-                  <DotLottieReact
-                    src="/Robot TFU.lottie"
-                    loop
-                    autoplay
-                    width={106}
-                    height={106}
-                    style={{
-                      width: "106px",
-                      height: "106px",
-                      display: "block",
-                      filter: "drop-shadow(0 0 10px rgba(251, 191, 36, 0.3))",
-                    }}
-                  />
-                </div>
-              ) : (
-                <img
-                  src="/robot.png"
-                  alt="Guide Robot"
-                  className="w-full h-full object-contain"
-                  style={{
-                    filter: "drop-shadow(0 0 10px rgba(251, 191, 36, 0.3))",
-                  }}
-                />
-              )}
+              <img
+                src={
+                  robotAnimationState === "speaking"
+                    ? "/robot-speaking.png"
+                    : robotAnimationState === "waving"
+                    ? "/robot-waving.png"
+                    : "/robot-idle.png"
+                }
+                alt="Guide Robot"
+                className="w-full h-full object-contain"
+                style={{
+                  width: "106px",
+                  height: "106px",
+                  display: "block",
+                  filter:
+                    robotAnimationState === "speaking"
+                      ? "drop-shadow(0 0 20px rgba(251, 191, 36, 0.8)) drop-shadow(0 0 10px rgba(251, 191, 36, 0.5))"
+                      : "drop-shadow(0 0 10px rgba(251, 191, 36, 0.3))",
+                  transform:
+                    robotAnimationState === "speaking"
+                      ? "scale(1.05)"
+                      : "scale(1)",
+                  opacity: robotAnimationState === "speaking" ? 1 : 0.85,
+                  transition:
+                    "transform 0.6s ease, filter 0.6s ease, opacity 0.6s ease",
+                }}
+                onError={(e) => {
+                  // Fallback to default robot image if specific state image doesn't exist
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== "/robot.png") {
+                    target.src = "/robot.png";
+                  }
+                }}
+              />
 
               {/* Mute/Unmute Toggle Button */}
               <button

@@ -67,18 +67,22 @@ export async function POST(request: NextRequest) {
     console.log("🎙️ TTS API: Synthesizing speech...");
 
     // Request TTS synthesis
+    // Voice options (uncomment the one you prefer):
+    // Neural2 (current - good quality): "en-US-Neural2-F"
+    // WaveNet (premium - very smooth): "en-US-Wavenet-F" or "en-US-Wavenet-D" (male)
+    // Studio (highest quality - most natural): "en-US-Studio-M" or "en-US-Studio-O" (optimized)
     const [response] = await ttsClient.synthesizeSpeech({
       input: { text },
       voice: {
         languageCode: "en-US",
-        name: "en-US-Neural2-F", // Friendly female voice
+        name: "en-US-Wavenet-F", // WaveNet female voice - smoother and more natural
         ssmlGender: "FEMALE" as const,
       },
       audioConfig: {
         audioEncoding: "MP3" as const,
-        speakingRate: 0.95, // Slightly slower for clarity
-        pitch: 2.0, // Slightly higher pitch for friendly tone
-        volumeGainDb: 2.0, // Slightly louder
+        speakingRate: 1.0, // Normal speed (adjust 0.8-1.2 for slower/faster)
+        pitch: 0.0, // Neutral pitch (adjust -20 to +20 semitones)
+        volumeGainDb: 0.0, // Normal volume (adjust -96 to +16 dB)
       },
     });
 
