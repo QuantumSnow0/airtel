@@ -6,6 +6,13 @@ import ProductCarousel from "./ProductCarousel";
 import PricingCards from "../components/PricingCards";
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
+import dynamic from "next/dynamic";
+
+const DotLottieReact = dynamic(
+  () =>
+    import("@lottiefiles/dotlottie-react").then((mod) => mod.DotLottieReact),
+  { ssr: false }
+);
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -89,6 +96,12 @@ export default function TestMobilePage() {
   const speechTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isTypingRef = useRef(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [robotAnimationState, setRobotAnimationState] = useState<
+    "idle" | "speaking" | "waving" | "blinking"
+  >("idle");
+  const lottieRef = useRef<any>(null);
+  const hasWavedRef = useRef(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [previousPackage, setPreviousPackage] = useState<string | null>(null);
   const [robotBottom, setRobotBottom] = useState("1rem");
   const [robotTop, setRobotTop] = useState<string | null>(null);
@@ -210,6 +223,9 @@ export default function TestMobilePage() {
       return;
     }
 
+    // Trigger speaking animation
+    setRobotAnimationState("speaking");
+
     try {
       // Check if audio is currently playing
       const isAudioPlaying =
@@ -247,14 +263,19 @@ export default function TestMobilePage() {
     } catch (error) {
       console.error("TTS Error:", error);
       // Only use Google Cloud TTS - no fallback
+      // Return to idle if error
+      setRobotAnimationState("idle");
     }
   };
 
   // Helper function to play new audio
   const playNewAudio = async (cleanText: string) => {
     try {
-      console.log("🎙️ Frontend: Calling TTS API for text:", cleanText.substring(0, 50) + "...");
-      
+      console.log(
+        "🎙️ Frontend: Calling TTS API for text:",
+        cleanText.substring(0, 50) + "..."
+      );
+
       // Call TTS API
       const response = await fetch("/api/tts", {
         method: "POST",
@@ -264,7 +285,11 @@ export default function TestMobilePage() {
         body: JSON.stringify({ text: cleanText }),
       });
 
-      console.log("📡 Frontend: TTS API response status:", response.status, response.statusText);
+      console.log(
+        "📡 Frontend: TTS API response status:",
+        response.status,
+        response.statusText
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -278,7 +303,12 @@ export default function TestMobilePage() {
       }
 
       const data = await response.json();
-      console.log("✅ Frontend: TTS API success, audio format:", data.format, "size:", data.audio?.length || 0);
+      console.log(
+        "✅ Frontend: TTS API success, audio format:",
+        data.format,
+        "size:",
+        data.audio?.length || 0
+      );
 
       if (!data.audio) {
         console.error("❌ Frontend: No audio data in response");
@@ -289,13 +319,23 @@ export default function TestMobilePage() {
       const audio = new Audio(`data:audio/${data.format};base64,${data.audio}`);
       audioRef.current = audio;
 
-      console.log("🔊 Frontend: Attempting to play audio...");
-      audio.play().then(() => {
-        console.log("✅ Frontend: Audio playing successfully");
-      }).catch((error) => {
-        console.error("❌ Frontend: Audio play error:", error);
-        // Only use Google Cloud TTS - no fallback
+      // Return to idle when audio ends
+      audio.addEventListener("ended", () => {
+        setRobotAnimationState("idle");
       });
+
+      console.log("🔊 Frontend: Attempting to play audio...");
+      audio
+        .play()
+        .then(() => {
+          console.log("✅ Frontend: Audio playing successfully");
+        })
+        .catch((error) => {
+          console.error("❌ Frontend: Audio play error:", error);
+          // Return to idle on error
+          setRobotAnimationState("idle");
+          // Only use Google Cloud TTS - no fallback
+        });
     } catch (error) {
       console.error("❌ Frontend: TTS Error:", error);
       // Only use Google Cloud TTS - no fallback
@@ -447,6 +487,11 @@ export default function TestMobilePage() {
     "6:00 PM",
   ];
 
+  // Set mounted state for client-side only rendering
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
@@ -455,6 +500,19 @@ export default function TestMobilePage() {
       }
     };
   }, []);
+
+  // Trigger waving animation when robot first appears (only once)
+  useEffect(() => {
+    if (robotVisible && !hasWavedRef.current) {
+      // Trigger waving animation when robot first appears
+      hasWavedRef.current = true;
+      setRobotAnimationState("waving");
+      // Return to idle after waving
+      setTimeout(() => {
+        setRobotAnimationState("idle");
+      }, 2000); // Wave for 2 seconds
+    }
+  }, [robotVisible]);
 
   // Detect scroll to show robot
   useEffect(() => {
@@ -1125,7 +1183,7 @@ export default function TestMobilePage() {
             {/* Speech bubble - positioned to the left of robot */}
             {robotMessage && (
               <div
-                className={`absolute right-full mr-2 bg-neutral-900/95 backdrop-blur-sm border-2 border-yellow-400/60 rounded-lg px-3 animate-fade-in shadow-lg ${poppins.variable}`}
+                className={`absolute right-full bg-neutral-900/95 backdrop-blur-sm border-2 border-yellow-400/60 rounded-lg px-3 animate-fade-in shadow-lg ${poppins.variable}`}
                 style={{
                   fontFamily: "var(--font-poppins), sans-serif",
                   boxShadow:
@@ -1133,7 +1191,7 @@ export default function TestMobilePage() {
                   maxWidth: "min(calc(100vw - 10px), 440px)",
                   minWidth: "240px",
                   zIndex: 2147483647,
-                  marginRight: "8px",
+                  marginRight: "4px",
                   top: "50%",
                   transform: "translateY(-50%)",
                   paddingTop: "12px",
@@ -1188,97 +1246,111 @@ export default function TestMobilePage() {
                 ></div>
               </div>
             )}
-            {/* Robot Image with multiple animations */}
-            <div className="relative animate-robot-combo">
-              <img
-                src="/robot.png"
-                alt="Guide Robot"
-                className="w-16 h-16 object-contain drop-shadow-lg"
-                style={{
-                  filter: "drop-shadow(0 0 10px rgba(251, 191, 36, 0.3))",
-                }}
-              />
-              {/* Blinking eyes overlay - adjust positions based on your robot image */}
-              <div
-                className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                style={{
-                  top: "33%",
-                  left: "63%",
-                  transform: "translate(-50%, -50%)",
-                }}
-              >
-                <div
-                  className="w-2 h-2 bg-white rounded-full animate-blink absolute"
-                  style={{ left: "-8px" }}
-                ></div>
-                <div
-                  className="w-2 h-2 bg-white rounded-full animate-blink absolute"
-                  style={{ left: "8px" }}
-                ></div>
-              </div>
-            </div>
-
-            {/* Mute/Unmute Toggle Button */}
-            <button
-              onClick={() => {
-                setIsMuted(!isMuted);
-                // Stop audio if muting
-                if (!isMuted && audioRef.current) {
-                  audioRef.current.pause();
-                  audioRef.current.currentTime = 0;
-                }
-                // Also cancel browser TTS if it's being used as fallback
-                if (
-                  !isMuted &&
-                  typeof window !== "undefined" &&
-                  "speechSynthesis" in window
-                ) {
-                  window.speechSynthesis.cancel();
-                }
-              }}
-              className="absolute -bottom-2 -left-2 w-8 h-8 rounded-full bg-neutral-900/90 border-2 border-yellow-400/60 flex items-center justify-center hover:bg-neutral-800/90 transition-colors pointer-events-auto z-50"
+            {/* Robot Lottie Animation */}
+            <div
+              className="relative"
               style={{
-                boxShadow:
-                  "0 2px 10px rgba(0, 0, 0, 0.3), 0 0 8px rgba(251, 191, 36, 0.2)",
+                width: "86px",
+                height: "86px",
+                minWidth: "86px",
+                minHeight: "86px",
               }}
-              aria-label={isMuted ? "Unmute robot" : "Mute robot"}
             >
-              {isMuted ? (
-                <svg
-                  className="w-4 h-4 text-yellow-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+              {isMounted ? (
+                <div
+                  style={{
+                    width: "96px",
+                    height: "96px",
+                    position: "relative",
+                  }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                  <DotLottieReact
+                    src="/Robot TFU.lottie"
+                    loop
+                    autoplay
+                    width={106}
+                    height={106}
+                    style={{
+                      width: "106px",
+                      height: "106px",
+                      display: "block",
+                      filter: "drop-shadow(0 0 10px rgba(251, 191, 36, 0.3))",
+                    }}
                   />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"
-                  />
-                </svg>
+                </div>
               ) : (
-                <svg
-                  className="w-4 h-4 text-yellow-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
-                  />
-                </svg>
+                <img
+                  src="/robot.png"
+                  alt="Guide Robot"
+                  className="w-full h-full object-contain"
+                  style={{
+                    filter: "drop-shadow(0 0 10px rgba(251, 191, 36, 0.3))",
+                  }}
+                />
               )}
-            </button>
+
+              {/* Mute/Unmute Toggle Button */}
+              <button
+                onClick={() => {
+                  setIsMuted(!isMuted);
+                  // Stop audio if muting
+                  if (!isMuted && audioRef.current) {
+                    audioRef.current.pause();
+                    audioRef.current.currentTime = 0;
+                  }
+                  // Also cancel browser TTS if it's being used as fallback
+                  if (
+                    !isMuted &&
+                    typeof window !== "undefined" &&
+                    "speechSynthesis" in window
+                  ) {
+                    window.speechSynthesis.cancel();
+                  }
+                }}
+                className="absolute bottom-0 left-0 w-8 h-8 rounded-full bg-neutral-900/90 border-2 border-yellow-400/60 flex items-center justify-center hover:bg-neutral-800/90 transition-colors pointer-events-auto z-50"
+                style={{
+                  boxShadow:
+                    "0 2px 10px rgba(0, 0, 0, 0.3), 0 0 8px rgba(251, 191, 36, 0.2)",
+                }}
+                aria-label={isMuted ? "Unmute robot" : "Mute robot"}
+              >
+                {isMuted ? (
+                  <svg
+                    className="w-4 h-4 text-yellow-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-4 h-4 text-yellow-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
         </motion.div>
       )}
@@ -1722,7 +1794,8 @@ export default function TestMobilePage() {
                       <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
                         3
                       </span>
-                      Alternative Number <span className="text-yellow-400">*</span>
+                      Alternative Number{" "}
+                      <span className="text-yellow-400">*</span>
                     </>
                   ) : (
                     "Enter your Alternative Number"
@@ -1746,7 +1819,9 @@ export default function TestMobilePage() {
                   setAlternativeBlurred(true);
                 }}
                 className={`w-full px-3 py-3.5 ${
-                  alternativeFocused || customerAlternativeNumber ? "pt-5" : "pt-3.5"
+                  alternativeFocused || customerAlternativeNumber
+                    ? "pt-5"
+                    : "pt-3.5"
                 } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   showAlternativeCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
@@ -1925,7 +2000,8 @@ export default function TestMobilePage() {
                       <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
                         5
                       </span>
-                      Installation Town <span className="text-yellow-400">*</span>
+                      Installation Town{" "}
+                      <span className="text-yellow-400">*</span>
                     </>
                   ) : (
                     "Enter your Installation Town"
@@ -1948,7 +2024,9 @@ export default function TestMobilePage() {
                   setTimeout(() => setTownBlurred(true), 200);
                 }}
                 className={`w-full px-3 py-3.5 ${
-                  townFocused || showTownDropdown || installationTown ? "pt-5" : "pt-3.5"
+                  townFocused || showTownDropdown || installationTown
+                    ? "pt-5"
+                    : "pt-3.5"
                 } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   townBlurred && isTownValid
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
@@ -1958,12 +2036,13 @@ export default function TestMobilePage() {
                 } ${!installationTown ? "text-neutral-300" : ""}`}
                 style={{
                   fontFamily: "var(--font-poppins), sans-serif",
-                  minHeight: townFocused || showTownDropdown || installationTown ? "56px" : "48px",
+                  minHeight:
+                    townFocused || showTownDropdown || installationTown
+                      ? "56px"
+                      : "48px",
                 }}
               >
-                <span className="block truncate">
-                  {installationTown || ""}
-                </span>
+                <span className="block truncate">{installationTown || ""}</span>
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                   {townBlurred && isTownValid ? (
                     <svg
@@ -2116,7 +2195,9 @@ export default function TestMobilePage() {
                   setDeliveryLocationBlurred(true);
                 }}
                 className={`w-full px-3 py-3.5 ${
-                  deliveryLocationFocused || deliveryLocation ? "pt-5" : "pt-3.5"
+                  deliveryLocationFocused || deliveryLocation
+                    ? "pt-5"
+                    : "pt-3.5"
                 } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   showDeliveryLocationCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
@@ -2343,7 +2424,9 @@ export default function TestMobilePage() {
                   setTimeout(() => setPreferredTimeBlurred(true), 200);
                 }}
                 className={`w-full px-3 py-3.5 ${
-                  timeFocused || showTimeDropdown || preferredTime ? "pt-5" : "pt-3.5"
+                  timeFocused || showTimeDropdown || preferredTime
+                    ? "pt-5"
+                    : "pt-3.5"
                 } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                   showPreferredTimeCheck
                     ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
@@ -2353,12 +2436,13 @@ export default function TestMobilePage() {
                 } ${!preferredTime ? "text-neutral-300" : ""}`}
                 style={{
                   fontFamily: "var(--font-poppins), sans-serif",
-                  minHeight: timeFocused || showTimeDropdown || preferredTime ? "56px" : "48px",
+                  minHeight:
+                    timeFocused || showTimeDropdown || preferredTime
+                      ? "56px"
+                      : "48px",
                 }}
               >
-                <span className="block truncate">
-                  {preferredTime || ""}
-                </span>
+                <span className="block truncate">{preferredTime || ""}</span>
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                   {showPreferredTimeCheck ? (
                     <svg
