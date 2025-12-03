@@ -63,12 +63,18 @@ export async function POST(request: NextRequest) {
       preferredPackage,
       installationTown,
       deliveryLandmark,
+      installationLocation: installationLocationLandmark, // This is just the landmark part (e.g., "Kangemi")
       visitDate,
       visitTime,
     } = body;
 
-    // Build installation location (town - landmark format)
-    const installationLocation = `${installationTown} - ${deliveryLandmark}`;
+    // Build installation location (town - landmark format) for MS Forms
+    // installationLocationLandmark is just the landmark (e.g., "Kangemi")
+    // We combine it with town to send "NAIROBI - Kangemi" to MS Forms
+    const installationLocation =
+      installationLocationLandmark && installationTown
+        ? `${installationTown} - ${installationLocationLandmark}`
+        : installationLocationLandmark || "";
 
     // Format phone numbers (convert from 7XXXXXXXX to 2547XXXXXXXX)
     const formatPhone = (phone: string): string => {
