@@ -1460,8 +1460,15 @@ export default function TestMobilePage() {
               {/* Step 1 */}
               <div className="shrink-0 w-full snap-center">
                 <div className="flex items-start gap-3">
-                  <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
-                    <span className="text-yellow-400 text-sm font-bold">1</span>
+                  <div className="shrink-0 relative">
+                    <span className="absolute top-0 left-0 w-5 h-5 bg-neutral-900 rounded-full flex items-center justify-center text-yellow-400 text-xs font-bold z-20 border border-yellow-400/50">
+                      1
+                    </span>
+                    <img
+                      src="/package.png"
+                      alt="Package"
+                      className="w-12 h-12 object-contain relative z-10"
+                    />
                   </div>
                   <div className="flex-1">
                     <p
@@ -1479,8 +1486,15 @@ export default function TestMobilePage() {
               {/* Step 2 */}
               <div className="shrink-0 w-full snap-center">
                 <div className="flex items-start gap-3">
-                  <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
-                    <span className="text-yellow-400 text-sm font-bold">2</span>
+                  <div className="shrink-0 relative">
+                    <span className="absolute top-0 left-0 w-5 h-5 bg-neutral-900 rounded-full flex items-center justify-center text-yellow-400 text-xs font-bold z-20 border border-yellow-400/50">
+                      2
+                    </span>
+                    <img
+                      src="/form.png"
+                      alt="Form"
+                      className="w-12 h-12 object-contain relative z-10"
+                    />
                   </div>
                   <div className="flex-1">
                     <p
@@ -1498,8 +1512,15 @@ export default function TestMobilePage() {
               {/* Step 3 */}
               <div className="shrink-0 w-full snap-center">
                 <div className="flex items-start gap-3">
-                  <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-400/20 flex items-center justify-center">
-                    <span className="text-yellow-400 text-sm font-bold">3</span>
+                  <div className="shrink-0 relative">
+                    <span className="absolute top-0 left-0 w-5 h-5 bg-neutral-900 rounded-full flex items-center justify-center text-yellow-400 text-xs font-bold z-20 border border-yellow-400/50">
+                      3
+                    </span>
+                    <img
+                      src="/submit.png"
+                      alt="Submit"
+                      className="w-12 h-12 object-contain relative z-10"
+                    />
                   </div>
                   <div className="flex-1">
                     <p
