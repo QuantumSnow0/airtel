@@ -102,6 +102,7 @@ export default function TestMobilePage() {
   const townButtonRef = useRef<HTMLButtonElement>(null);
   const installationLocationDropdownRef = useRef<HTMLDivElement>(null);
   const installationLocationButtonRef = useRef<HTMLButtonElement>(null);
+  const installationLocationCustomInputRef = useRef<HTMLInputElement>(null);
   const timeDropdownRef = useRef<HTMLDivElement>(null);
   const timeButtonRef = useRef<HTMLButtonElement>(null);
   const [robotMessage, setRobotMessage] = useState("");
@@ -139,7 +140,9 @@ export default function TestMobilePage() {
   const isTownValid = installationTown.trim().length > 0;
   const isDeliveryLocationValid = deliveryLocation.trim().length >= 5;
   const isInstallationLocationValid =
-    installationLocation.trim().length > 0 && installationLocation !== "Other";
+    (installationLocation.trim().length > 0 &&
+      installationLocation !== "Other") ||
+    (isInstallationLocationOther && installationLocation.trim().length > 0);
   const isPreferredDateValid = preferredDate.trim().length > 0;
   const isPreferredTimeValid = preferredTime.trim().length > 0;
 
@@ -594,12 +597,11 @@ export default function TestMobilePage() {
     "Busia",
     "Homa Bay",
     "Kisii",
-    "Other",
   ];
 
   // Helper function to get installation location options based on selected town
   const getInstallationLocationOptions = (): string[] => {
-    if (!installationTown || installationTown === "Other") {
+    if (!installationTown) {
       return [];
     }
     // Normalize town name to match locationsData keys
@@ -1310,12 +1312,33 @@ export default function TestMobilePage() {
       } else {
         setRobotMessage("Perfect! That looks right! ✅");
       }
+    } else if (
+      isInstallationLocationOther &&
+      installationLocation.trim().length > 0 &&
+      !installationLocationBlurred
+    ) {
+      if (!isInstallationLocationValid) {
+        const installationLocationTypingMessages = [
+          "Keep typing! Tell us your location! 📍",
+          "Almost there! Add more details about your location! 🗺️",
+          "Great! Keep going with your location! 🏠",
+        ];
+        const randomMessage =
+          installationLocationTypingMessages[
+            Math.floor(
+              Math.random() * installationLocationTypingMessages.length
+            )
+          ];
+        setRobotMessage(randomMessage);
+      } else {
+        setRobotMessage("Perfect! Your location is clear! ✅");
+      }
     } else if (deliveryLocation.trim().length > 0 && !deliveryLocationBlurred) {
       if (!isDeliveryLocationValid) {
         const locationTypingMessages = [
           "Tell me about a nearby landmark! 🗺️",
-          "Keep typing! Describe the location! 📍",
-          "Almost there! Add more details about the location! 🏠",
+          "Keep typing! Describe the landmark! 📍",
+          "Almost there! Add more details about the landmark! 🏠",
         ];
         const randomMessage =
           locationTypingMessages[
@@ -1323,7 +1346,7 @@ export default function TestMobilePage() {
           ];
         setRobotMessage(randomMessage);
       } else {
-        setRobotMessage("Perfect! That location sounds clear! ✅");
+        setRobotMessage("Perfect! That landmark sounds clear! ✅");
       }
     } else if (preferredDate.trim().length > 0 && !preferredDateBlurred) {
       setRobotMessage("Great! Pick a date that works for you! 📅");
@@ -1334,6 +1357,10 @@ export default function TestMobilePage() {
     customerName,
     customerPhone,
     customerAlternativeNumber,
+    installationLocation,
+    isInstallationLocationOther,
+    installationLocationBlurred,
+    isInstallationLocationValid,
     deliveryLocation,
     preferredDate,
     preferredTime,
@@ -1433,6 +1460,8 @@ export default function TestMobilePage() {
     townBlurred,
     isDeliveryLocationValid,
     deliveryLocationBlurred,
+    isInstallationLocationValid,
+    installationLocationBlurred,
     isPreferredDateValid,
     preferredDateBlurred,
     customerName,
@@ -1504,13 +1533,43 @@ export default function TestMobilePage() {
       setRobotMessage(randomMessage);
     } else if (deliveryLocationBlurred && !isDeliveryLocationValid) {
       const locationErrors = [
-        "Please provide a more detailed location (at least 5 characters)! 🗺️",
-        "We need a clearer location description. Add more details! 📍",
-        "The location seems too short. Please add more information! 🏠",
+        "Please provide a more detailed landmark (at least 5 characters)! 🗺️",
+        "We need a clearer landmark description. Add more details! 📍",
+        "The landmark seems too short. Please add more information! 🏠",
       ];
       const randomMessage =
         locationErrors[Math.floor(Math.random() * locationErrors.length)];
       setRobotMessage(randomMessage);
+    } else if (installationLocationBlurred && !isInstallationLocationValid) {
+      // If "Other" is selected and custom input is focused, don't show error (user is typing)
+      if (isInstallationLocationOther && installationLocationFocused) {
+        return; // Don't show error while user is typing in custom input
+      }
+
+      // If "Other" is selected, show a different message
+      if (isInstallationLocationOther) {
+        const otherLocationErrors = [
+          "Please tell us where you are from! 📍",
+          "We need your location. Please enter it! 🗺️",
+          "Please provide your installation location! 🏠",
+        ];
+        const randomMessage =
+          otherLocationErrors[
+            Math.floor(Math.random() * otherLocationErrors.length)
+          ];
+        setRobotMessage(randomMessage);
+      } else {
+        const installationLocationErrors = [
+          "Please select an installation location! 🏠",
+          "We need to know where to install. Please choose a location! 📍",
+          "Please select a location from the dropdown! 🗺️",
+        ];
+        const randomMessage =
+          installationLocationErrors[
+            Math.floor(Math.random() * installationLocationErrors.length)
+          ];
+        setRobotMessage(randomMessage);
+      }
     } else if (alternativeBlurred && !isAlternativeValid) {
       // Alternative number error - most recent field
       const alternativeErrors = [
@@ -1613,6 +1672,10 @@ export default function TestMobilePage() {
     isTownValid,
     deliveryLocationBlurred,
     isDeliveryLocationValid,
+    installationLocationBlurred,
+    isInstallationLocationValid,
+    isInstallationLocationOther,
+    installationLocationFocused,
     preferredDateBlurred,
     isPreferredDateValid,
     preferredTimeBlurred,
@@ -2700,7 +2763,7 @@ export default function TestMobilePage() {
             </div>
 
             {/* Installation Location - Only show after town is selected */}
-            {installationTown && installationTown !== "Other" && (
+            {installationTown && (
               <div className="mb-6 relative">
                 {/* Connecting line from Installation Town */}
                 <div
@@ -2890,12 +2953,22 @@ export default function TestMobilePage() {
                                   setInstallationLocation("");
                                   setIsInstallationLocationOther(true);
                                   setInstallationLocationBlurred(false);
+                                  setShowInstallationLocationDropdown(false);
+                                  // Set robot message
+                                  setRobotMessage(
+                                    "We apologise, your location was not listed. Please tell us where you are from. 📍"
+                                  );
+                                  // Auto-focus the custom input after a delay to open keyboard
+                                  // Delay ensures the input is rendered and robot message is set
+                                  setTimeout(() => {
+                                    installationLocationCustomInputRef.current?.focus();
+                                  }, 300);
                                 } else {
                                   setInstallationLocation(option);
                                   setIsInstallationLocationOther(false);
                                   setInstallationLocationBlurred(true);
+                                  setShowInstallationLocationDropdown(false);
                                 }
-                                setShowInstallationLocationDropdown(false);
                               }}
                               className={`w-full px-4 py-3 text-left text-white transition-colors ${
                                 poppins.variable
@@ -3015,6 +3088,7 @@ export default function TestMobilePage() {
                   </div>
                 </div>
                 <input
+                  ref={installationLocationCustomInputRef}
                   type="text"
                   placeholder=""
                   value={installationLocation}

@@ -94,6 +94,7 @@ export default function TestDesktopPage() {
   const townButtonRef = useRef<HTMLButtonElement>(null);
   const installationLocationDropdownRef = useRef<HTMLDivElement>(null);
   const installationLocationButtonRef = useRef<HTMLButtonElement>(null);
+  const installationLocationCustomInputRef = useRef<HTMLInputElement>(null);
   const timeDropdownRef = useRef<HTMLDivElement>(null);
   const timeButtonRef = useRef<HTMLButtonElement>(null);
   const [robotMessage, setRobotMessage] = useState("");
@@ -560,7 +561,7 @@ export default function TestDesktopPage() {
 
   // Helper function to get installation location options based on selected town
   const getInstallationLocationOptions = (): string[] => {
-    if (!installationTown || installationTown === "Other") {
+    if (!installationTown) {
       return [];
     }
     // Normalize town name to match locationsData keys
@@ -597,7 +598,6 @@ export default function TestDesktopPage() {
     "Busia",
     "Homa Bay",
     "Kisii",
-    "Other",
   ];
 
   // Time options (1 hour apart)
@@ -1778,7 +1778,7 @@ export default function TestDesktopPage() {
                   </div>
 
                   {/* Installation Location - Only show after town is selected */}
-                  {installationTown && installationTown !== "Other" && (
+                  {installationTown && (
                     <div className="mb-4 relative col-span-2">
                       {/* Connecting line from Installation Town */}
                       <div
@@ -1928,14 +1928,24 @@ export default function TestDesktopPage() {
                                       key={index}
                                       type="button"
                                       onClick={() => {
-                                        setInstallationLocation(option);
-                                        setShowInstallationLocationDropdown(
-                                          false
-                                        );
-                                        if (option !== "Other") {
-                                          setInstallationLocationBlurred(true);
-                                        } else {
+                                        if (option === "Other") {
+                                          setInstallationLocation("");
+                                          setIsInstallationLocationOther(true);
                                           setInstallationLocationBlurred(false);
+                                          setShowInstallationLocationDropdown(
+                                            false
+                                          );
+                                          // Auto-focus the custom input after a short delay
+                                          setTimeout(() => {
+                                            installationLocationCustomInputRef.current?.focus();
+                                          }, 100);
+                                        } else {
+                                          setInstallationLocation(option);
+                                          setIsInstallationLocationOther(false);
+                                          setInstallationLocationBlurred(true);
+                                          setShowInstallationLocationDropdown(
+                                            false
+                                          );
                                         }
                                       }}
                                       className={`w-full px-4 py-3 text-left text-white transition-colors ${
@@ -2042,6 +2052,7 @@ export default function TestDesktopPage() {
                         </div>
                       </div>
                       <input
+                        ref={installationLocationCustomInputRef}
                         type="text"
                         placeholder=""
                         value={installationLocation}
