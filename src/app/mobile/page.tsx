@@ -68,6 +68,8 @@ export default function TestMobilePage() {
   const [installationTown, setInstallationTown] = useState("");
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [installationLocation, setInstallationLocation] = useState("");
+  const [isInstallationLocationOther, setIsInstallationLocationOther] =
+    useState(false);
   const [preferredDate, setPreferredDate] = useState("");
   const [preferredTime, setPreferredTime] = useState("");
   const [nameBlurred, setNameBlurred] = useState(false);
@@ -136,7 +138,8 @@ export default function TestMobilePage() {
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim());
   const isTownValid = installationTown.trim().length > 0;
   const isDeliveryLocationValid = deliveryLocation.trim().length >= 5;
-  const isInstallationLocationValid = installationLocation.trim().length > 0;
+  const isInstallationLocationValid =
+    installationLocation.trim().length > 0 && installationLocation !== "Other";
   const isPreferredDateValid = preferredDate.trim().length > 0;
   const isPreferredTimeValid = preferredTime.trim().length > 0;
 
@@ -2656,6 +2659,7 @@ export default function TestMobilePage() {
                         onClick={() => {
                           setInstallationTown(option);
                           setInstallationLocation(""); // Reset installation location when town changes
+                          setIsInstallationLocationOther(false);
                           setShowTownDropdown(false);
                           setTownBlurred(true);
                         }}
@@ -2698,6 +2702,15 @@ export default function TestMobilePage() {
             {/* Installation Location - Only show after town is selected */}
             {installationTown && installationTown !== "Other" && (
               <div className="mb-6 relative">
+                {/* Connecting line from Installation Town */}
+                <div
+                  className="absolute left-3 top-0 w-0.5 bg-yellow-400/60"
+                  style={{
+                    height: "20px",
+                    transform: "translateY(-20px)",
+                    zIndex: 0,
+                  }}
+                />
                 {/* Floating Label */}
                 <div
                   className={`absolute left-3 pointer-events-none transition-all duration-300 ${
@@ -2873,13 +2886,16 @@ export default function TestMobilePage() {
                               key={index}
                               type="button"
                               onClick={() => {
-                                setInstallationLocation(option);
-                                setShowInstallationLocationDropdown(false);
-                                if (option !== "Other") {
-                                  setInstallationLocationBlurred(true);
-                                } else {
+                                if (option === "Other") {
+                                  setInstallationLocation("");
+                                  setIsInstallationLocationOther(true);
                                   setInstallationLocationBlurred(false);
+                                } else {
+                                  setInstallationLocation(option);
+                                  setIsInstallationLocationOther(false);
+                                  setInstallationLocationBlurred(true);
                                 }
+                                setShowInstallationLocationDropdown(false);
                               }}
                               className={`w-full px-4 py-3 text-left text-white transition-colors ${
                                 poppins.variable
@@ -2938,22 +2954,28 @@ export default function TestMobilePage() {
             )}
 
             {/* Installation Location Custom Input - Show when "Other" is selected */}
-            {installationLocation === "Other" && (
+            {isInstallationLocationOther && (
               <div className="mb-6 relative">
+                {/* Connecting line from Installation Location dropdown */}
+                <div
+                  className="absolute left-3 top-0 w-0.5 bg-yellow-400/60"
+                  style={{
+                    height: "20px",
+                    transform: "translateY(-20px)",
+                    zIndex: 0,
+                  }}
+                />
                 {/* Floating Label */}
                 <div
                   className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                    installationLocationFocused ||
-                    (installationLocation && installationLocation !== "Other")
+                    installationLocationFocused || installationLocation
                       ? "top-0 transform -translate-y-1/2"
                       : "top-1/2 transform -translate-y-1/2"
                   }`}
                   style={{ zIndex: 30 }}
                 >
                   {/* Border cut background */}
-                  {(installationLocationFocused ||
-                    (installationLocation &&
-                      installationLocation !== "Other")) && (
+                  {(installationLocationFocused || installationLocation) && (
                     <div
                       className="absolute left-0"
                       style={{
@@ -2995,9 +3017,7 @@ export default function TestMobilePage() {
                 <input
                   type="text"
                   placeholder=""
-                  value={
-                    installationLocation === "Other" ? "" : installationLocation
-                  }
+                  value={installationLocation}
                   onChange={(e) => {
                     setInstallationLocation(e.target.value);
                   }}
@@ -3548,6 +3568,7 @@ export default function TestMobilePage() {
                         setInstallationTown("");
                         setDeliveryLocation("");
                         setInstallationLocation("");
+                        setIsInstallationLocationOther(false);
                         setPreferredDate("");
                         setPreferredTime("");
                         setNameBlurred(false);

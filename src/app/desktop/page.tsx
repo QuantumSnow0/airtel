@@ -68,6 +68,8 @@ export default function TestDesktopPage() {
   const [installationTown, setInstallationTown] = useState("");
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [installationLocation, setInstallationLocation] = useState("");
+  const [isInstallationLocationOther, setIsInstallationLocationOther] =
+    useState(false);
   const [preferredDate, setPreferredDate] = useState("");
   const [preferredTime, setPreferredTime] = useState("");
   const [nameBlurred, setNameBlurred] = useState(false);
@@ -121,7 +123,8 @@ export default function TestDesktopPage() {
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim());
   const isTownValid = installationTown.trim().length > 0;
   const isDeliveryLocationValid = deliveryLocation.trim().length >= 5;
-  const isInstallationLocationValid = installationLocation.trim().length > 0;
+  const isInstallationLocationValid =
+    installationLocation.trim().length > 0 && installationLocation !== "Other";
   const isPreferredDateValid = preferredDate.trim().length > 0;
   const isPreferredTimeValid = preferredTime.trim().length > 0;
 
@@ -1777,6 +1780,15 @@ export default function TestDesktopPage() {
                   {/* Installation Location - Only show after town is selected */}
                   {installationTown && installationTown !== "Other" && (
                     <div className="mb-4 relative col-span-2">
+                      {/* Connecting line from Installation Town */}
+                      <div
+                        className="absolute left-3 top-0 w-0.5 bg-yellow-400/60"
+                        style={{
+                          height: "20px",
+                          transform: "translateY(-20px)",
+                          zIndex: 0,
+                        }}
+                      />
                       <div
                         className="absolute left-3 pointer-events-none"
                         style={{ zIndex: 30, top: "-2px" }}
@@ -1985,8 +1997,17 @@ export default function TestDesktopPage() {
                   )}
 
                   {/* Installation Location Custom Input - Show when "Other" is selected */}
-                  {installationLocation === "Other" && (
+                  {isInstallationLocationOther && (
                     <div className="mb-4 relative col-span-2">
+                      {/* Connecting line from Installation Location dropdown */}
+                      <div
+                        className="absolute left-3 top-0 w-0.5 bg-yellow-400/60"
+                        style={{
+                          height: "20px",
+                          transform: "translateY(-20px)",
+                          zIndex: 0,
+                        }}
+                      />
                       <div
                         className="absolute left-3 pointer-events-none"
                         style={{ zIndex: 30, top: "-2px" }}
@@ -2023,19 +2044,9 @@ export default function TestDesktopPage() {
                       <input
                         type="text"
                         placeholder=""
-                        value={
-                          installationLocation === "Other"
-                            ? ""
-                            : installationLocation
-                        }
+                        value={installationLocation}
                         onChange={(e) => {
-                          const newValue = e.target.value;
-                          if (newValue.trim() === "") {
-                            // Keep "Other" if user clears everything
-                            setInstallationLocation("Other");
-                          } else {
-                            setInstallationLocation(newValue);
-                          }
+                          setInstallationLocation(e.target.value);
                         }}
                         className={`w-full px-3 py-2.5 pt-4 pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
                           showInstallationLocationCheck
@@ -2512,6 +2523,7 @@ export default function TestDesktopPage() {
                             setInstallationTown("");
                             setDeliveryLocation("");
                             setInstallationLocation("");
+                            setIsInstallationLocationOther(false);
                             setPreferredDate("");
                             setPreferredTime("");
                             setNameBlurred(false);
