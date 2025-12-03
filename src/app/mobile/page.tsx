@@ -106,6 +106,24 @@ export default function TestMobilePage() {
     state: "idle" | "success" | "error";
     message: string;
   }>({ state: "idle", message: "" });
+  // Track all completed lines (permanent connections)
+  const [completedLines, setCompletedLines] = useState<
+    Array<{
+      fromField: string;
+      toField: string;
+      fromPosition: { x: number; y: number };
+      toPosition: { x: number; y: number };
+    }>
+  >([]);
+
+  // Track current active animation (border effect)
+  const [flowAnimation, setFlowAnimation] = useState<{
+    active: boolean;
+    toFieldRect: DOMRect | null;
+  }>({
+    active: false,
+    toFieldRect: null,
+  });
 
   const isNameValid = customerName.trim().length >= 2;
   const isPhoneValid = /^[0-9]{10,12}$/.test(customerPhone.replace(/\s/g, ""));
@@ -117,6 +135,183 @@ export default function TestMobilePage() {
   const isDeliveryLocationValid = deliveryLocation.trim().length >= 5;
   const isPreferredDateValid = preferredDate.trim().length > 0;
   const isPreferredTimeValid = preferredTime.trim().length > 0;
+
+  // Function to get field ref by name
+  const getFieldRef = (fieldName: string): HTMLElement | null => {
+    switch (fieldName) {
+      case "name":
+        return nameInputRef.current;
+      case "phone":
+        return phoneInputRef.current;
+      case "alternative":
+        return alternativeInputRef.current;
+      case "email":
+        return emailInputRef.current;
+      case "town":
+        return townButtonRef.current;
+      case "deliveryLocation":
+        return deliveryLocationInputRef.current;
+      case "date":
+        return dateInputRef.current;
+      case "time":
+        return timeButtonRef.current;
+      default:
+        return null;
+    }
+  };
+
+  // Function to recalculate all line positions (for scroll/resize)
+  const recalculateLinePositions = () => {
+    setCompletedLines((prevLines) => {
+      return prevLines.map((line) => {
+        const fromElement = getFieldRef(line.fromField);
+        const toElement = getFieldRef(line.toField);
+
+        if (fromElement && toElement) {
+          const fromRect = fromElement.getBoundingClientRect();
+          const toRect = toElement.getBoundingClientRect();
+
+          return {
+            ...line,
+            fromPosition: {
+              x: fromRect.left + fromRect.width / 2,
+              y: fromRect.bottom,
+            },
+            toPosition: {
+              x: toRect.left + toRect.width / 2,
+              y: toRect.top,
+            },
+          };
+        }
+        return line;
+      });
+    });
+  };
+
+  // Update line positions on scroll and resize
+  useEffect(() => {
+    if (completedLines.length === 0) return;
+
+    const handleScroll = () => {
+      recalculateLinePositions();
+    };
+
+    const handleResize = () => {
+      recalculateLinePositions();
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [completedLines.length]); // Re-run when lines are added
+
+  // Function to trigger flow animation from previous field to current field
+  const triggerFlowAnimation = (currentField: string) => {
+    const fieldOrder = [
+      "name",
+      "phone",
+      "alternative",
+      "email",
+      "town",
+      "deliveryLocation",
+      "date",
+      "time",
+    ];
+    const currentIndex = fieldOrder.indexOf(currentField);
+
+    if (currentIndex > 0) {
+      const previousField = fieldOrder[currentIndex - 1];
+      let previousValid = false;
+
+      switch (previousField) {
+        case "name":
+          previousValid = isNameValid && nameBlurred;
+          break;
+        case "phone":
+          previousValid = isPhoneValid && phoneBlurred;
+          break;
+        case "alternative":
+          previousValid = isAlternativeValid && alternativeBlurred;
+          break;
+        case "email":
+          previousValid = isEmailValid && emailBlurred;
+          break;
+        case "town":
+          previousValid = isTownValid && townBlurred;
+          break;
+        case "deliveryLocation":
+          previousValid = isDeliveryLocationValid && deliveryLocationBlurred;
+          break;
+        case "date":
+          previousValid = isPreferredDateValid && preferredDateBlurred;
+          break;
+      }
+
+      if (previousValid) {
+        const fromElement = getFieldRef(previousField);
+        const toElement = getFieldRef(currentField);
+
+        if (fromElement && toElement) {
+          const fromRect = fromElement.getBoundingClientRect();
+          const toRect = toElement.getBoundingClientRect();
+
+          // Calculate positions: bottom center of previous, top center of next
+          const fromPosition = {
+            x: fromRect.left + fromRect.width / 2,
+            y: fromRect.bottom,
+          };
+          const toPosition = {
+            x: toRect.left + toRect.width / 2,
+            y: toRect.top,
+          };
+
+          console.log("Flow animation triggered:", {
+            from: previousField,
+            to: currentField,
+            fromPosition,
+            toPosition,
+          });
+
+          // Check if this line already exists
+          const lineExists = completedLines.some(
+            (line) =>
+              line.fromField === previousField && line.toField === currentField
+          );
+
+          // Add line to completed lines if it doesn't exist
+          if (!lineExists) {
+            setCompletedLines((prev) => [
+              ...prev,
+              {
+                fromField: previousField,
+                toField: currentField,
+                fromPosition,
+                toPosition,
+              },
+            ]);
+          }
+
+          // Trigger border animation
+          setFlowAnimation({
+            active: true,
+            toFieldRect: toRect,
+          });
+
+          // Reset border animation after it completes
+          setTimeout(() => {
+            setFlowAnimation({
+              active: false,
+              toFieldRect: null,
+            });
+          }, 2000);
+        }
+      }
+    }
+  };
 
   // Town options for dropdown (Kenyan towns)
   const townOptions = [
@@ -1617,6 +1812,135 @@ export default function TestMobilePage() {
             </h2>
           </div>
 
+          {/* Flow Animation - Golden water flowing effect */}
+          {/* Show all completed lines */}
+          {completedLines.length > 0 && (
+            <svg
+              className="fixed pointer-events-none"
+              style={{
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                zIndex: 9999,
+              }}
+            >
+              <defs>
+                <linearGradient
+                  id="goldenGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="0%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stopColor="rgba(251, 191, 36, 0)" />
+                  <stop offset="50%" stopColor="rgba(251, 191, 36, 1)" />
+                  <stop offset="100%" stopColor="rgba(251, 191, 36, 0)" />
+                </linearGradient>
+              </defs>
+              {completedLines.map((line, index) => {
+                const isNewest = index === completedLines.length - 1;
+                return (
+                  <line
+                    key={`${line.fromField}-${line.toField}-${index}`}
+                    x1={line.fromPosition.x}
+                    y1={line.fromPosition.y}
+                    x2={line.toPosition.x}
+                    y2={line.toPosition.y}
+                    stroke="#fbbf24"
+                    strokeWidth="4"
+                    className={isNewest ? "flow-line" : "completed-line"}
+                    style={{
+                      filter: "drop-shadow(0 0 12px rgba(251, 191, 36, 1))",
+                      opacity: 0.9,
+                    }}
+                  />
+                );
+              })}
+            </svg>
+          )}
+
+          {/* Border animation around target field - only when active */}
+          {flowAnimation.active && flowAnimation.toFieldRect && (
+            <div
+              className="fixed pointer-events-none flow-border"
+              style={{
+                left: flowAnimation.toFieldRect.left - 2,
+                top: flowAnimation.toFieldRect.top - 2,
+                width: flowAnimation.toFieldRect.width + 4,
+                height: flowAnimation.toFieldRect.height + 4,
+                border: "3px solid transparent",
+                borderRadius: "8px",
+                boxSizing: "border-box",
+                zIndex: 9998,
+              }}
+            />
+          )}
+
+          {/* Animation styles */}
+          <style jsx global>{`
+            @keyframes flowLine {
+              0% {
+                stroke-dasharray: 0, 2000;
+                opacity: 0;
+              }
+              5% {
+                opacity: 1;
+              }
+              70% {
+                stroke-dasharray: 2000, 0;
+                opacity: 1;
+              }
+              100% {
+                stroke-dasharray: 2000, 0;
+                opacity: 1;
+              }
+            }
+            @keyframes flowBorder {
+              0% {
+                border-color: transparent;
+                opacity: 0;
+              }
+              50% {
+                border-color: transparent;
+                opacity: 0;
+              }
+              55% {
+                border-top-color: #fbbf24;
+                opacity: 1;
+                box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+              }
+              70% {
+                border-top-color: #fbbf24;
+                border-right-color: #fbbf24;
+              }
+              85% {
+                border-top-color: #fbbf24;
+                border-right-color: #fbbf24;
+                border-bottom-color: #fbbf24;
+              }
+              95% {
+                border-color: #fbbf24;
+                box-shadow: 0 0 15px rgba(251, 191, 36, 0.8);
+              }
+              100% {
+                border-color: transparent;
+                opacity: 0;
+              }
+            }
+            .flow-line {
+              animation: flowLine 2s ease-in-out forwards;
+              stroke-dasharray: 0, 2000;
+            }
+            .completed-line {
+              stroke-dasharray: 2000, 0;
+              opacity: 0.9;
+            }
+            .flow-border {
+              animation: flowBorder 2s ease-in-out;
+            }
+          `}</style>
+
           {/* Sample Form Field - Customer Name */}
           <div className="mb-6 relative">
             {/* Floating Label */}
@@ -1676,6 +2000,7 @@ export default function TestMobilePage() {
                 onChange={(e) => setCustomerName(e.target.value)}
                 onFocus={() => {
                   setNameFocused(true);
+                  triggerFlowAnimation("name");
                   scrollToStep2();
                 }}
                 onBlur={() => {
@@ -1775,6 +2100,7 @@ export default function TestMobilePage() {
                 onChange={(e) => setCustomerPhone(e.target.value)}
                 onFocus={() => {
                   setPhoneFocused(true);
+                  triggerFlowAnimation("phone");
                   scrollToStep2();
                 }}
                 onBlur={() => {
@@ -1875,6 +2201,7 @@ export default function TestMobilePage() {
                 onChange={(e) => setCustomerAlternativeNumber(e.target.value)}
                 onFocus={() => {
                   setAlternativeFocused(true);
+                  triggerFlowAnimation("alternative");
                   scrollToStep2();
                 }}
                 onBlur={() => {
@@ -1976,6 +2303,7 @@ export default function TestMobilePage() {
                 onChange={(e) => setCustomerEmail(e.target.value)}
                 onFocus={() => {
                   setEmailFocused(true);
+                  triggerFlowAnimation("email");
                   scrollToStep2();
                 }}
                 onBlur={() => {
@@ -2081,7 +2409,10 @@ export default function TestMobilePage() {
                   setTownFocused(true);
                   scrollToStep2();
                 }}
-                onFocus={() => setTownFocused(true)}
+                onFocus={() => {
+                  setTownFocused(true);
+                  triggerFlowAnimation("town");
+                }}
                 onBlur={() => {
                   setTownFocused(false);
                   setTimeout(() => setTownBlurred(true), 200);
@@ -2251,6 +2582,7 @@ export default function TestMobilePage() {
                 onChange={(e) => setDeliveryLocation(e.target.value)}
                 onFocus={() => {
                   setDeliveryLocationFocused(true);
+                  triggerFlowAnimation("deliveryLocation");
                   scrollToStep2();
                 }}
                 onBlur={() => {
@@ -2357,6 +2689,7 @@ export default function TestMobilePage() {
                 min={new Date().toISOString().split("T")[0]}
                 onFocus={() => {
                   setDateFocused(true);
+                  triggerFlowAnimation("date");
                   scrollToStep2();
                 }}
                 onBlur={() => {
@@ -2480,7 +2813,10 @@ export default function TestMobilePage() {
                   setTimeFocused(true);
                   scrollToStep2();
                 }}
-                onFocus={() => setTimeFocused(true)}
+                onFocus={() => {
+                  setTimeFocused(true);
+                  triggerFlowAnimation("time");
+                }}
                 onBlur={() => {
                   setTimeFocused(false);
                   // Delay to allow option click
