@@ -1,15 +1,16 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import {
   OrbitControls,
   PerspectiveCamera,
   Environment,
-  Center,
+  useProgress,
 } from "@react-three/drei";
 
 import Model3D from "./Model3D";
+import Model3DLoader from "./Model3DLoader";
 
 interface Model3DViewerProps {
   modelPath?: string;
@@ -20,6 +21,24 @@ interface Model3DViewerProps {
   backgroundColor?: string;
   modelPosition?: [number, number, number];
   modelScale?: number;
+  onLoadingChange?: (isLoading: boolean) => void;
+}
+
+// Component to track loading progress inside Canvas
+function LoadingProgress({ onLoaded }: { onLoaded: () => void }) {
+  const { progress, active } = useProgress();
+
+  useEffect(() => {
+    if (!active && progress === 100) {
+      // Add a small delay to ensure everything is rendered
+      const timer = setTimeout(() => {
+        onLoaded();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [active, progress, onLoaded]);
+
+  return null;
 }
 
 export default function Model3DViewer({
@@ -31,7 +50,15 @@ export default function Model3DViewer({
   backgroundColor = "#0a0a0a",
   modelPosition = [0, -0.5, 0],
   modelScale = 1.5,
+  onLoadingChange,
 }: Model3DViewerProps) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Notify parent component of loading state changes
+  useEffect(() => {
+    onLoadingChange?.(isLoading);
+  }, [isLoading, onLoadingChange]);
+
   return (
     <div
       className={className}
@@ -41,12 +68,19 @@ export default function Model3DViewer({
         backgroundColor: backgroundColor,
         borderRadius: "8px",
         overflow: "hidden",
+        position: "relative",
       }}
     >
+      {/* Loading overlay */}
+      {isLoading && <Model3DLoader />}
+
       <Canvas
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]} // Device pixel ratio for better quality on retina displays
       >
+        {/* Track loading progress */}
+        <LoadingProgress onLoaded={() => setIsLoading(false)} />
+
         {/* Lighting using drei Environment */}
         <Environment preset="sunset" />
 

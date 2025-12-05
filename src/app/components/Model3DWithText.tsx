@@ -32,6 +32,7 @@ const featureTexts = [
 
 export default function Model3DWithText() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isModelLoading, setIsModelLoading] = useState(true);
 
   // Auto-rotate through feature texts
   useEffect(() => {
@@ -163,79 +164,82 @@ export default function Model3DWithText() {
           backgroundColor="#0a0a0a"
           modelPosition={[0, 0, 0]}
           modelScale={1.8}
+          onLoadingChange={setIsModelLoading}
         />
       </div>
 
-      {/* Feature Text Overlay at Bottom */}
-      <div
-        className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ zIndex: 3 }}
-      >
-        {/* Gradient Fade at Bottom */}
+      {/* Feature Text Overlay at Bottom - Hidden while loading */}
+      {!isModelLoading && (
         <div
           className="absolute bottom-0 left-0 right-0 pointer-events-none"
-          style={{
-            height: "120px",
-            background:
-              "linear-gradient(to bottom, transparent, rgb(10, 10, 10))",
-            zIndex: 1,
-          }}
-        />
-        {/* Content */}
-        <div className="relative px-3 pb-6 pt-8" style={{ zIndex: 2 }}>
-          <h3
-            className={`text-xl mb-2 leading-snug ${poppins.variable}`}
+          style={{ zIndex: 3 }}
+        >
+          {/* Gradient Fade at Bottom */}
+          <div
+            className="absolute bottom-0 left-0 right-0 pointer-events-none"
             style={{
-              fontFamily: "var(--font-poppins), sans-serif",
-              letterSpacing: "0.01em",
-              fontWeight: 600,
-              background: "linear-gradient(135deg, #ffffff, #fbbf24)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
-              transition: "opacity 0.5s ease-in-out",
+              height: "120px",
+              background:
+                "linear-gradient(to bottom, transparent, rgb(10, 10, 10))",
+              zIndex: 1,
             }}
-          >
-            {currentFeature.title}
-          </h3>
-          <p
-            className={`text-sm text-white/95 leading-normal drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] ${poppins.variable}`}
-            style={{
-              fontFamily: "var(--font-poppins), sans-serif",
-              letterSpacing: "0.01em",
-              fontWeight: 300,
-              lineHeight: "1.5",
-              wordWrap: "break-word",
-              hyphens: "auto",
-              transition: "opacity 0.5s ease-in-out",
-            }}
-          >
-            {currentFeature.description}
-          </p>
+          />
+          {/* Content */}
+          <div className="relative px-3 pb-6 pt-8" style={{ zIndex: 2 }}>
+            <h3
+              className={`text-xl mb-2 leading-snug ${poppins.variable}`}
+              style={{
+                fontFamily: "var(--font-poppins), sans-serif",
+                letterSpacing: "0.01em",
+                fontWeight: 600,
+                background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+                transition: "opacity 0.5s ease-in-out",
+              }}
+            >
+              {currentFeature.title}
+            </h3>
+            <p
+              className={`text-sm text-white/95 leading-normal drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] ${poppins.variable}`}
+              style={{
+                fontFamily: "var(--font-poppins), sans-serif",
+                letterSpacing: "0.01em",
+                fontWeight: 300,
+                lineHeight: "1.5",
+                wordWrap: "break-word",
+                hyphens: "auto",
+                transition: "opacity 0.5s ease-in-out",
+              }}
+            >
+              {currentFeature.description}
+            </p>
 
-          {/* Dots Indicator */}
-          <div className="flex gap-2 mt-4 justify-center">
-            {featureTexts.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                className="pointer-events-auto"
-                aria-label={`Go to feature ${index + 1}`}
-              >
-                <div
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === activeIndex ? "bg-yellow-400" : "bg-white/40"
-                  }`}
-                  style={{
-                    width: index === activeIndex ? "24px" : "8px",
-                  }}
-                />
-              </button>
-            ))}
+            {/* Dots Indicator */}
+            <div className="flex gap-2 mt-4 justify-center">
+              {featureTexts.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveIndex(index)}
+                  className="pointer-events-auto"
+                  aria-label={`Go to feature ${index + 1}`}
+                >
+                  <div
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      index === activeIndex ? "bg-yellow-400" : "bg-white/40"
+                    }`}
+                    style={{
+                      width: index === activeIndex ? "24px" : "8px",
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
