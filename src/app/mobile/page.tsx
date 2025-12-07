@@ -126,6 +126,8 @@ export default function TestMobilePage() {
   const [howToOrderSlide, setHowToOrderSlide] = useState(0);
   const howToOrderSliderRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
+  const [duplicateMatch, setDuplicateMatch] = useState<any>(null);
   const [submitStatus, setSubmitStatus] = useState<{
     state: "idle" | "success" | "error";
     message: string;
@@ -1727,6 +1729,17 @@ export default function TestMobilePage() {
     installationLocationBlurred && isInstallationLocationValid;
   const showPreferredDateCheck = preferredDateBlurred && isPreferredDateValid;
   const showPreferredTimeCheck = preferredTimeBlurred && isPreferredTimeValid;
+
+  // Function to mask phone numbers
+  const maskPhoneNumber = (phone: string): string => {
+    if (!phone) return "";
+    const digits = phone.replace(/\D/g, "");
+    if (digits.length <= 4) return "****";
+    // Show first 2 and last 2 digits, mask the middle
+    const start = digits.slice(0, 2);
+    const end = digits.slice(-2);
+    return `${start}****${end}`;
+  };
 
   return (
     <>
@@ -3600,6 +3613,53 @@ export default function TestMobilePage() {
                   setSubmitStatus({ state: "idle", message: "" });
 
                   try {
+                    // First, check for duplicates
+                    const duplicateCheck = await fetch("/api/check-duplicate", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        customerName: customerName.trim(),
+                        airtelNumber: customerPhone,
+                        alternateNumber: customerAlternativeNumber,
+                        email: customerEmail.trim(),
+                        preferredPackage: selectedPackage,
+                        installationTown: installationTown,
+                        deliveryLandmark: deliveryLocation.trim(),
+                      }),
+                    });
+
+                    const duplicateResult = await duplicateCheck.json();
+
+                    // Handle RED (absolute duplicate - redirect)
+                    if (duplicateResult.status === "RED") {
+                      setIsSubmitting(false);
+                      // Save duplicate data for the duplicate page
+                      if (typeof window !== "undefined") {
+                        localStorage.setItem(
+                          "duplicateSubmissionData",
+                          JSON.stringify(duplicateResult.match)
+                        );
+                      }
+                      // Redirect immediately - robot will speak on the duplicate page
+                      window.location.href = "/duplicate-submission";
+                      return;
+                    }
+
+                    // Handle ORANGE (potential duplicate - show warning)
+                    if (duplicateResult.status === "ORANGE") {
+                      setIsSubmitting(false);
+                      setDuplicateMatch(duplicateResult.match);
+                      setShowDuplicateWarning(true);
+                      // Set robot message for warning
+                      setRobotMessage(
+                        "⚠️ I noticed this looks similar to a previous submission. Please review the details and decide if you want to continue or edit your information."
+                      );
+                      return;
+                    }
+
+                    // NONE - proceed with submission
                     const response = await fetch("/api/submit", {
                       method: "POST",
                       headers: {
@@ -3682,6 +3742,17 @@ export default function TestMobilePage() {
                         }
                       );
                     }
+
+                    // Save customer name for thank-you page
+                    if (typeof window !== "undefined") {
+                      const nameToSave = customerName.trim() || "there";
+                      localStorage.setItem("customerName", nameToSave);
+                    }
+
+                    // Redirect to thank-you page
+                    setTimeout(() => {
+                      window.location.href = "/thank-you";
+                    }, 1000);
 
                     // Reset form after successful submission
                     setCustomerName("");
@@ -3793,6 +3864,210 @@ export default function TestMobilePage() {
         {/* Spacer to ensure enough content for scrolling */}
         <div style={{ minHeight: "10vh" }}></div>
       </motion.div>
+
+      {/* Duplicate Warning Modal (ORANGE) */}
+      {showDuplicateWarning && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          style={{ pointerEvents: "auto" }}
+          onClick={(e) => {
+            // Close modal if clicking on backdrop
+            if (e.target === e.currentTarget) {
+              setShowDuplicateWarning(false);
+              setDuplicateMatch(null);
+            }
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-neutral-800 rounded-2xl p-6 md:p-8 max-w-md w-full border border-orange-400/30 shadow-[0_0_40px_rgba(251,146,60,0.3)] relative z-[10000]"
+            style={{ pointerEvents: "auto" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-orange-400/20 flex items-center justify-center flex-shrink-0">
+                <svg
+                  className="w-6 h-6 text-orange-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl md:text-2xl font-bold text-orange-400">
+                Potential Duplicate Submission
+              </h3>
+            </div>
+
+            <p className="text-neutral-300 mb-4 leading-relaxed">
+              We found a previous submission with similar information. This
+              might be a duplicate. Would you like to:
+            </p>
+
+            {duplicateMatch && (
+              <div className="bg-neutral-900/50 rounded-lg p-4 mb-4 border border-orange-400/20">
+                <p className="text-sm text-orange-400 font-medium mb-2">
+                  Previous Submission:
+                </p>
+                <div className="text-sm text-neutral-400 space-y-1">
+                  {duplicateMatch.customer_name && (
+                    <div>
+                      <span className="text-neutral-500">Name:</span>{" "}
+                      {duplicateMatch.customer_name}
+                    </div>
+                  )}
+                  {duplicateMatch.airtel_number && (
+                    <div>
+                      <span className="text-neutral-500">Airtel Number:</span>{" "}
+                      {maskPhoneNumber(duplicateMatch.airtel_number)}
+                    </div>
+                  )}
+                  {duplicateMatch.alternate_number && (
+                    <div>
+                      <span className="text-neutral-500">
+                        Alternate Number:
+                      </span>{" "}
+                      {maskPhoneNumber(duplicateMatch.alternate_number)}
+                    </div>
+                  )}
+                  {duplicateMatch.email && (
+                    <div>
+                      <span className="text-neutral-500">Email:</span>{" "}
+                      {duplicateMatch.email}
+                    </div>
+                  )}
+                  {duplicateMatch.created_at && (
+                    <div>
+                      <span className="text-neutral-500">Date:</span>{" "}
+                      {new Date(duplicateMatch.created_at).toLocaleDateString()}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-col gap-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={async () => {
+                  // User wants to proceed anyway
+                  setShowDuplicateWarning(false);
+                  setIsSubmitting(true);
+
+                  try {
+                    const response = await fetch("/api/submit", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        customerName: customerName.trim(),
+                        airtelNumber: customerPhone,
+                        alternateNumber: customerAlternativeNumber,
+                        email: customerEmail.trim(),
+                        preferredPackage: selectedPackage,
+                        installationTown: installationTown,
+                        deliveryLandmark: deliveryLocation.trim(),
+                        installationLocation: installationLocation,
+                        visitDate: preferredDate,
+                        visitTime: preferredTime,
+                      }),
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                      if (data.savedToDatabase) {
+                        const errorMsg = `Your information was saved, but there was an issue submitting to our system. Our team will process it manually. Reference: ${
+                          data.leadId || "saved"
+                        }`;
+                        setSubmitStatus({
+                          state: "error",
+                          message: errorMsg,
+                        });
+                        setRobotMessage(
+                          "✅ Your info was saved! Our team will process it manually."
+                        );
+                        setIsSubmitting(false);
+                        return;
+                      }
+                      throw new Error(
+                        data.error || data.details || "Failed to submit form"
+                      );
+                    }
+
+                    setSubmitStatus({
+                      state: "success",
+                      message:
+                        "Form submitted successfully! We'll contact you soon.",
+                    });
+                    setRobotMessage(
+                      "🎉 Success! Your request has been submitted! We'll contact you soon!"
+                    );
+
+                    if (typeof window !== "undefined" && (window as any).gtag) {
+                      (window as any).gtag(
+                        "event",
+                        "ads_conversion_Contact_1",
+                        {
+                          event_category: "conversion",
+                          event_label: "Form Submission",
+                        }
+                      );
+                    }
+
+                    if (typeof window !== "undefined") {
+                      const nameToSave = customerName.trim() || "there";
+                      localStorage.setItem("customerName", nameToSave);
+                    }
+
+                    setTimeout(() => {
+                      window.location.href = "/thank-you";
+                    }, 1000);
+                  } catch (error: any) {
+                    console.error("Submission error:", error);
+                    setSubmitStatus({
+                      state: "error",
+                      message:
+                        error.message ||
+                        "Failed to submit form. Please try again.",
+                    });
+                    setRobotMessage(
+                      "❌ There was an error submitting your form. Please try again."
+                    );
+                    setIsSubmitting(false);
+                  }
+                }}
+                className="w-full py-3 px-6 bg-gradient-to-r from-orange-400 to-orange-600 text-neutral-900 font-semibold rounded-lg hover:from-orange-500 hover:to-orange-700 transition-all"
+              >
+                Continue Anyway
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  setShowDuplicateWarning(false);
+                  setDuplicateMatch(null);
+                  // Allow user to edit the form
+                }}
+                className="w-full py-3 px-6 bg-neutral-700 text-neutral-300 font-semibold rounded-lg hover:bg-neutral-600 transition-all border border-neutral-600"
+              >
+                Edit Form
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </>
   );
 }
