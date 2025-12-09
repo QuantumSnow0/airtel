@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { PackageProvider } from "./contexts/PackageContext";
+import Footer from "./components/Footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -137,7 +138,7 @@ export default function RootLayout({
     provider: {
       "@type": "Organization",
       name: "Airtel Kenya",
-      url: "https://www.airtel.co.ke",
+      url: "https://www.airtelkenya.com",
       logo: "https://www.airtel5grouter.co.ke/airtel.png",
     },
     aggregateRating: {
@@ -151,7 +152,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Airtel Kenya",
-    url: "https://www.airtel.co.ke",
+    url: "https://www.airtelkenya.com",
     logo: "https://www.airtel5grouter.co.ke/airtel.png",
     contactPoint: {
       "@type": "ContactPoint",
@@ -159,7 +160,7 @@ export default function RootLayout({
       areaServed: "KE",
       availableLanguage: "en",
     },
-    sameAs: ["https://www.airtel.co.ke"],
+    sameAs: ["https://www.airtelkenya.com"],
   };
 
   const productStructuredData = {
@@ -243,7 +244,12 @@ export default function RootLayout({
             gtag('config', 'G-C897PVBGSR');
           `}
         </Script>
-        <PackageProvider>{children}</PackageProvider>
+        <PackageProvider>
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </div>
+        </PackageProvider>
       </body>
     </html>
   );

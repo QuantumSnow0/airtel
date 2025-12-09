@@ -31,10 +31,16 @@ export default function PrivacyPolicyPage() {
               1. Introduction
             </h2>
             <p className="text-neutral-300 leading-relaxed mb-4">
-              Airtel Kenya ("we," "our," or "us") is committed to protecting
-              your privacy. This Privacy Policy explains how we collect, use,
-              disclose, and safeguard your information when you use our lead
-              capture form and services.
+              This website is operated by an authorized Airtel Kenya agent ("we," "our," or "us"). 
+              We are committed to protecting your privacy. This Privacy Policy explains how we 
+              collect, use, disclose, and safeguard your information when you use our lead capture 
+              form and services.
+            </p>
+            <p className="text-neutral-300 leading-relaxed mb-4">
+              <strong className="text-yellow-400">Important:</strong> Your information is collected 
+              by us as an authorized agent and forwarded to Airtel Networks Kenya Limited for 
+              service processing. Airtel Networks Kenya Limited has its own privacy practices 
+              which apply to the services they provide.
             </p>
           </section>
 
@@ -79,11 +85,17 @@ export default function PrivacyPolicyPage() {
               4. Information Sharing and Disclosure
             </h2>
             <p className="text-neutral-300 leading-relaxed mb-4">
-              We do not sell, trade, or rent your personal information to third
-              parties. We may share your information only in the following
-              circumstances:
+              As an authorized Airtel agent, we share your information with Airtel Networks 
+              Kenya Limited to facilitate service requests and installations. We do not sell, 
+              trade, or rent your personal information to third parties. We may share your 
+              information only in the following circumstances:
             </p>
             <ul className="list-disc list-inside text-neutral-300 space-y-2 mb-4 ml-4">
+              <li>
+                <strong className="text-yellow-400">With Airtel Networks Kenya Limited:</strong> 
+                Your information is shared with Airtel to process your service request, 
+                schedule installation, and provide customer support
+              </li>
               <li>
                 With service providers who assist us in operating our business
                 and serving you
@@ -194,21 +206,32 @@ export default function PrivacyPolicyPage() {
             </h2>
             <p className="text-neutral-300 leading-relaxed mb-4">
               If you have any questions about this Privacy Policy or our data
-              practices, please contact us:
+              practices, please contact us (the authorized agent):
             </p>
             <div className="bg-neutral-800/50 rounded-lg p-6 mb-4">
               <p className="text-neutral-300 mb-2">
-                <strong className="text-yellow-400">Airtel Kenya</strong>
+                <strong className="text-yellow-400">Authorized Airtel Agent</strong>
               </p>
               <p className="text-neutral-300 mb-2">
-                Email: privacy@airtel.co.ke
+                Phone: <a href="tel:+254789457580" className="text-yellow-400 hover:text-yellow-300">0789 457 580</a>
+              </p>
+              <p className="text-neutral-300 mb-4">
+                Enterprise CP: WAM APPLICATIONS
+              </p>
+              <p className="text-xs text-neutral-500 mt-4 pt-4 border-t border-neutral-700">
+                For privacy inquiries related to Airtel services, please contact Airtel directly:
+              </p>
+              <p className="text-neutral-300 mb-2 mt-2">
+                <strong className="text-yellow-400">Airtel Networks Kenya Limited</strong>
               </p>
               <p className="text-neutral-300 mb-2">
-                Phone: 100 (Customer Care)
+                Email: <a href="mailto:privacy@airtelkenya.com" className="text-yellow-400 hover:text-yellow-300">privacy@airtelkenya.com</a>
+              </p>
+              <p className="text-neutral-300 mb-2">
+                Phone: <a href="tel:100" className="text-yellow-400 hover:text-yellow-300">100</a> (Customer Care)
               </p>
               <p className="text-neutral-300">
-                Address: Airtel Networks Kenya Limited, Airtel Centre, Waiyaki
-                Way, Westlands, Nairobi, Kenya
+                Address: Airtel Centre, Waiyaki Way, Westlands, Nairobi, Kenya
               </p>
             </div>
           </section>
