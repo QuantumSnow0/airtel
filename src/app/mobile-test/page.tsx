@@ -3671,18 +3671,6 @@ export default function TestMobilePage() {
                       "🎉 Success! Your request has been submitted! We'll contact you soon!"
                     );
 
-                    // Track Google Ads conversion
-                    if (typeof window !== "undefined" && (window as any).gtag) {
-                      (window as any).gtag(
-                        "event",
-                        "ads_conversion_Contact_1",
-                        {
-                          event_category: "conversion",
-                          event_label: "Form Submission",
-                        }
-                      );
-                    }
-
                     // Reset form after successful submission
                     setCustomerName("");
                     setCustomerPhone("");

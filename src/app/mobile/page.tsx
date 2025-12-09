@@ -3731,18 +3731,6 @@ export default function TestMobilePage() {
                       "🎉 Success! Your request has been submitted! We'll contact you soon!"
                     );
 
-                    // Track Google Ads conversion
-                    if (typeof window !== "undefined" && (window as any).gtag) {
-                      (window as any).gtag(
-                        "event",
-                        "ads_conversion_Contact_1",
-                        {
-                          event_category: "conversion",
-                          event_label: "Form Submission",
-                        }
-                      );
-                    }
-
                     // Save customer name for thank-you page
                     if (typeof window !== "undefined") {
                       const nameToSave = customerName.trim() || "there";
@@ -4013,17 +4001,6 @@ export default function TestMobilePage() {
                     setRobotMessage(
                       "🎉 Success! Your request has been submitted! We'll contact you soon!"
                     );
-
-                    if (typeof window !== "undefined" && (window as any).gtag) {
-                      (window as any).gtag(
-                        "event",
-                        "ads_conversion_Contact_1",
-                        {
-                          event_category: "conversion",
-                          event_label: "Form Submission",
-                        }
-                      );
-                    }
 
                     if (typeof window !== "undefined") {
                       const nameToSave = customerName.trim() || "there";
