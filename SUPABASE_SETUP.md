@@ -70,9 +70,15 @@ CREATE TABLE IF NOT EXISTS leads (
   submission_status TEXT DEFAULT 'pending' CHECK (submission_status IN ('pending', 'submitted', 'failed'))
 );
 
--- Create index for faster queries
+-- Create indexes for faster queries
 CREATE INDEX IF NOT EXISTS idx_leads_created_at ON leads(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_leads_submission_status ON leads(submission_status);
+
+-- Create indexes for efficient duplicate checking
+-- These are critical for performance as the database grows
+CREATE INDEX IF NOT EXISTS idx_leads_airtel_number ON leads(airtel_number);
+CREATE INDEX IF NOT EXISTS idx_leads_alternate_number ON leads(alternate_number);
+CREATE INDEX IF NOT EXISTS idx_leads_email ON leads(email);
 
 -- Enable Row Level Security (optional - adjust policies as needed)
 ALTER TABLE leads ENABLE ROW LEVEL SECURITY;

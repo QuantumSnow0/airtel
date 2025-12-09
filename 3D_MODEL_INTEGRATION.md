@@ -194,3 +194,4 @@ The component is already optimized for mobile:
 
 Ready to add it to your page? Just import and use! 🚀
 
+

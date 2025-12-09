@@ -96,32 +96,32 @@ export default function ProductCarousel() {
         }}
       >
         {/* Title on the left */}
-        <div className="flex items-center gap-1">
-          <img
-            src="/icon.png"
+          <div className="flex items-center gap-1">
+            <img
+              src="/icon.png"
             alt="Airtel"
             className="h-8 w-8 object-contain"
-            style={{
+              style={{
               filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))",
               margin: 0,
               padding: 0,
               display: "block",
               flexShrink: 0,
               lineHeight: 0,
-            }}
-          />
-          <span
-            className="text-base font-bold"
-            style={{
-              background: "linear-gradient(135deg, #ffffff, #fbbf24)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
-            }}
-          >
+              }}
+            />
+            <span
+              className="text-base font-bold"
+              style={{
+                background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+              }}
+            >
             Airtel
-          </span>
+            </span>
           <div className="h-4 w-px bg-white/30 mx-1" />
           <span
             className="text-sm font-bold tracking-wide"

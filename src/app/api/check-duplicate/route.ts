@@ -45,31 +45,47 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Normalize phone numbers
+    // Normalize phone numbers once (reused throughout)
     const normalizedAirtel = normalizePhone(airtelNumber);
     const normalizedAlternate = normalizePhone(alternateNumber);
+    
+    // Pre-compute normalized values for comparison
+    const newEmail = (email || "").trim().toLowerCase();
+    const newName = (customerName || "").trim().toLowerCase();
 
-    // Query database for potential matches (by phone numbers or email)
-    // Check all time (no date filter)
-    // Build OR conditions properly
+    // Build query conditions - deduplicate if both phone numbers are the same
     const conditions: string[] = [];
+    const uniquePhones = new Set<string>();
     
     if (normalizedAirtel) {
-      conditions.push(`airtel_number.eq.${normalizedAirtel}`);
-      conditions.push(`alternate_number.eq.${normalizedAirtel}`);
+      uniquePhones.add(normalizedAirtel);
     }
-    if (normalizedAlternate) {
-      conditions.push(`airtel_number.eq.${normalizedAlternate}`);
-      conditions.push(`alternate_number.eq.${normalizedAlternate}`);
+    if (normalizedAlternate && normalizedAlternate !== normalizedAirtel) {
+      uniquePhones.add(normalizedAlternate);
     }
+    
+    // Add conditions for each unique phone number
+    for (const phone of uniquePhones) {
+      conditions.push(`airtel_number.eq.${phone}`);
+      conditions.push(`alternate_number.eq.${phone}`);
+    }
+    
     if (email) {
       conditions.push(`email.eq.${email}`);
     }
 
+    // Early return if no conditions to check
+    if (conditions.length === 0) {
+      return NextResponse.json({ status: "NONE", match: null });
+    }
+
+    // Query with limit to prevent fetching too many rows
+    // Limit of 50 should be sufficient for duplicate checking
     const { data: existingLeads, error } = await supabaseAdmin
       .from("leads")
       .select("*")
-      .or(conditions.join(","));
+      .or(conditions.join(","))
+      .limit(50);
 
     if (error) {
       console.error("Database query error:", error);
@@ -83,36 +99,42 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ status: "NONE", match: null });
     }
 
-    // Run checks in order, stop at first match
-    for (const existingLead of existingLeads) {
-      const existingAirtel = normalizePhone(existingLead.airtel_number || "");
-      const existingAlternate = normalizePhone(
-        existingLead.alternate_number || ""
-      );
-      const existingEmail = (existingLead.email || "").trim().toLowerCase();
-      const existingName = (existingLead.customer_name || "").trim();
-      const existingPackage = existingLead.preferred_package || "";
-      const existingTown = existingLead.installation_town || "";
-      const existingLandmark = existingLead.delivery_landmark || "";
+    // Pre-compute normalized values for all existing leads once
+    const processedLeads = existingLeads.map((lead) => ({
+      originalLead: lead,
+      normalizedAirtel: normalizePhone(lead.airtel_number || ""),
+      normalizedAlternate: normalizePhone(lead.alternate_number || ""),
+      normalizedEmail: (lead.email || "").trim().toLowerCase(),
+      normalizedName: (lead.customer_name || "").trim().toLowerCase(),
+      package: lead.preferred_package || "",
+      town: lead.installation_town || "",
+      landmark: lead.delivery_landmark || "",
+    }));
 
-      const newEmail = (email || "").trim().toLowerCase();
-      const newName = (customerName || "").trim();
+    // Run checks in optimized order (simpler checks first, complex last)
+    // Stop at first match for efficiency
+    for (const existing of processedLeads) {
+      const {
+        originalLead,
+        normalizedAirtel: existingAirtel,
+        normalizedAlternate: existingAlternate,
+        normalizedEmail: existingEmail,
+        normalizedName: existingName,
+        package: existingPackage,
+        town: existingTown,
+        landmark: existingLandmark,
+      } = existing;
 
-      // Check 1: All details match (excluding agent fields and timestamps)
-      const allDetailsMatch =
-        existingName.toLowerCase() === newName.toLowerCase() &&
+      // Check 1: Same name + same Airtel number (simple, common case)
+      if (
+        existingName === newName &&
         existingAirtel === normalizedAirtel &&
-        existingAlternate === normalizedAlternate &&
-        existingEmail === newEmail &&
-        existingPackage === preferredPackage &&
-        existingTown === installationTown &&
-        existingLandmark === deliveryLandmark;
-
-      if (allDetailsMatch) {
+        existingAirtel !== ""
+      ) {
         return NextResponse.json({
           status: "RED",
-          match: existingLead,
-          reason: "All details match",
+          match: originalLead,
+          reason: "Same name and Airtel number match",
         });
       }
 
@@ -125,21 +147,29 @@ export async function POST(request: NextRequest) {
       ) {
         return NextResponse.json({
           status: "RED",
-          match: existingLead,
+          match: originalLead,
           reason: "Both phone numbers and email match",
         });
       }
 
-      // Check 3: Different name but both phone numbers match
-      if (
-        existingName.toLowerCase() !== newName.toLowerCase() &&
+      // Check 3: Only one phone number matches (simple check)
+      const onlyAirtelMatches =
         existingAirtel === normalizedAirtel &&
-        existingAlternate === normalizedAlternate
-      ) {
+        existingAirtel !== "" &&
+        existingAlternate !== normalizedAlternate;
+      const onlyAlternateMatches =
+        existingAlternate === normalizedAlternate &&
+        existingAlternate !== "" &&
+        existingAirtel !== normalizedAirtel;
+      const crossMatches =
+        (existingAirtel === normalizedAlternate && normalizedAlternate !== "") ||
+        (existingAlternate === normalizedAirtel && normalizedAirtel !== "");
+
+      if (onlyAirtelMatches || onlyAlternateMatches || crossMatches) {
         return NextResponse.json({
           status: "ORANGE",
-          match: existingLead,
-          reason: "Different name but both phone numbers match",
+          match: originalLead,
+          reason: "Only one phone number matches",
         });
       }
 
@@ -149,25 +179,25 @@ export async function POST(request: NextRequest) {
         existingEmail !== "" &&
         (existingAirtel !== normalizedAirtel ||
           existingAlternate !== normalizedAlternate ||
-          existingName.toLowerCase() !== newName.toLowerCase())
+          existingName !== newName)
       ) {
         return NextResponse.json({
           status: "ORANGE",
-          match: existingLead,
+          match: originalLead,
           reason: "Only email matches",
         });
       }
 
-      // Check 5: Same name + same Airtel number
+      // Check 5: Different name but both phone numbers match
       if (
-        existingName.toLowerCase() === newName.toLowerCase() &&
+        existingName !== newName &&
         existingAirtel === normalizedAirtel &&
-        existingAirtel !== ""
+        existingAlternate === normalizedAlternate
       ) {
         return NextResponse.json({
-          status: "RED",
-          match: existingLead,
-          reason: "Same name and Airtel number match",
+          status: "ORANGE",
+          match: originalLead,
+          reason: "Different name but both phone numbers match",
         });
       }
 
@@ -188,29 +218,25 @@ export async function POST(request: NextRequest) {
       if (namesSimilar && onePhoneMatches && anotherFieldMatches) {
         return NextResponse.json({
           status: "RED",
-          match: existingLead,
+          match: originalLead,
           reason: "Similar name and phone match with another field",
         });
       }
 
-      // Check 7: Only one phone number matches
-      const onlyAirtelMatches =
+      // Check 7: All details match (most expensive check - done last)
+      if (
+        existingName === newName &&
         existingAirtel === normalizedAirtel &&
-        existingAirtel !== "" &&
-        existingAlternate !== normalizedAlternate;
-      const onlyAlternateMatches =
         existingAlternate === normalizedAlternate &&
-        existingAlternate !== "" &&
-        existingAirtel !== normalizedAirtel;
-      const crossMatches =
-        (existingAirtel === normalizedAlternate && normalizedAlternate !== "") ||
-        (existingAlternate === normalizedAirtel && normalizedAirtel !== "");
-
-      if (onlyAirtelMatches || onlyAlternateMatches || crossMatches) {
+        existingEmail === newEmail &&
+        existingPackage === preferredPackage &&
+        existingTown === installationTown &&
+        existingLandmark === deliveryLandmark
+      ) {
         return NextResponse.json({
-          status: "ORANGE",
-          match: existingLead,
-          reason: "Only one phone number matches",
+          status: "RED",
+          match: originalLead,
+          reason: "All details match",
         });
       }
     }
