@@ -53,32 +53,12 @@ export default function TermsOfServicePage() {
               eligibility, pricing, and terms are determined by Airtel Networks Kenya Limited.
             </p>
             <div className="bg-yellow-400/10 border border-yellow-400/30 rounded-lg p-4 mt-4">
-              <p className="text-neutral-300 text-sm leading-relaxed mb-2">
+              <p className="text-neutral-300 text-sm leading-relaxed">
                 <strong className="text-yellow-400">Agent Authorization:</strong> This agent is 
                 authorized by Airtel Networks Kenya Limited to facilitate lead generation and 
-                customer inquiries.
+                customer inquiries. Authorization documentation is available upon request for 
+                verification purposes.
               </p>
-              <a
-                href="/agent.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-yellow-400 hover:text-yellow-300 text-sm font-medium transition-colors"
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                  />
-                </svg>
-                View Agent Authorization Document (PDF)
-              </a>
             </div>
           </section>
 

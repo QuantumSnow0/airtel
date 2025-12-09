@@ -32,30 +32,6 @@ export default function Footer() {
                   0789 457 580
                 </a>
               </p>
-              <p className="text-neutral-400">
-                <span className="font-medium text-white">Agent Authorization:</span>{" "}
-                <a
-                  href="/agent.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-yellow-400 hover:text-yellow-300 transition-colors inline-flex items-center gap-1"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                    />
-                  </svg>
-                  View Authorization Document
-                </a>
-              </p>
             </div>
             <div className="space-y-2 text-sm border-t border-neutral-800 pt-4 mt-4">
               <p className="text-xs text-neutral-500 mb-2">Official Airtel Support:</p>
@@ -139,29 +115,6 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="/agent.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-neutral-400 hover:text-yellow-400 transition-colors inline-flex items-center gap-1"
-                >
-                  <svg
-                    className="w-3 h-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                    />
-                  </svg>
-                  Agent Authorization
-                </a>
-              </li>
-              <li>
-                <a
                   href="https://www.airtelkenya.com"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -208,33 +161,10 @@ export default function Footer() {
               </a>
             </div>
           </div>
-          <div className="mt-4 flex flex-col items-center gap-2">
-            <p className="text-xs text-neutral-500 text-center">
-              This website is operated by an authorized Airtel Kenya agent. 
-              Services are provided by Airtel Networks Kenya Limited.
-            </p>
-            <a
-              href="/agent.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-400/10 border border-yellow-400/30 rounded-lg text-xs text-yellow-400 hover:bg-yellow-400/20 hover:border-yellow-400/50 transition-all"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              View Agent Authorization Document
-            </a>
-          </div>
+          <p className="mt-4 text-xs text-neutral-500 text-center">
+            This website is operated by an authorized Airtel Kenya agent. 
+            Services are provided by Airtel Networks Kenya Limited.
+          </p>
         </div>
       </div>
     </footer>
