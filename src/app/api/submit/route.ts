@@ -68,12 +68,22 @@ export async function POST(request: NextRequest) {
       visitTime,
     } = body;
 
+    // Normalize town name for MS Forms (remove spaces, convert to uppercase)
+    // MS Forms expects format like "HOMABAY" not "Homa Bay"
+    const normalizeTownForMSForms = (town: string): string => {
+      if (!town) return town;
+      // Remove spaces and convert to uppercase to match MS Forms dropdown format
+      return town.replace(/\s+/g, "").toUpperCase();
+    };
+
+    const normalizedTown = normalizeTownForMSForms(installationTown);
+
     // Build installation location (town - landmark format) for MS Forms
     // installationLocationLandmark is just the landmark (e.g., "Kangemi")
-    // We combine it with town to send "NAIROBI - Kangemi" to MS Forms
+    // We combine it with normalized town to send "HOMABAY - Kangemi" to MS Forms
     const installationLocation =
-      installationLocationLandmark && installationTown
-        ? `${installationTown} - ${installationLocationLandmark}`
+      installationLocationLandmark && normalizedTown
+        ? `${normalizedTown} - ${installationLocationLandmark}`
         : installationLocationLandmark || "";
 
     // Format phone numbers (convert from 7XXXXXXXX to 2547XXXXXXXX)
@@ -357,7 +367,7 @@ export async function POST(request: NextRequest) {
       },
       {
         questionId: QUESTION_IDS.installationTown,
-        answer1: installationTown,
+        answer1: normalizedTown, // Use normalized town (e.g., "HOMABAY" instead of "Homa Bay")
       },
       {
         questionId: QUESTION_IDS.installationLocation,

@@ -565,7 +565,8 @@ export default function TestDesktopPage() {
       return [];
     }
     // Normalize town name to match locationsData keys
-    const normalizedTown = installationTown.toUpperCase();
+    // Remove spaces and convert to uppercase (e.g., "Homa Bay" -> "HOMABAY")
+    const normalizedTown = installationTown.replace(/\s+/g, "").toUpperCase();
     const townKey = Object.keys(locationsData).find(
       (key) => key.toUpperCase() === normalizedTown
     );
