@@ -139,3 +139,5 @@ gltf-pipeline -i 3DModel.gltf -o 3DModel.glb --draco.compressionLevel 10
 **Once converted, let me know and I'll help you integrate it into your mobile-test page!** 🚀
 
 
+
+
