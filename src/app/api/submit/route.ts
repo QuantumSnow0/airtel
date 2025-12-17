@@ -122,9 +122,9 @@ export async function POST(request: NextRequest) {
       submission_status: "pending",
     };
 
-    // Step 1: Save to Supabase first (saving to leads_paused to pause admin dashboard visibility)
+    // Step 1: Save to Supabase first
     const { data: supabaseData, error: supabaseError } = await supabaseAdmin
-      .from("leads_paused")
+      .from("leads")
       .insert([leadData])
       .select()
       .single();
@@ -241,7 +241,7 @@ export async function POST(request: NextRequest) {
       );
       // Update Supabase with pending status (will be submitted when form reopens)
       await supabaseAdmin
-        .from("leads_paused")
+        .from("leads")
         .update({
           submission_status: "pending",
           error_details:
@@ -497,7 +497,7 @@ export async function POST(request: NextRequest) {
 
       // Step 5: Update Supabase with success
       await supabaseAdmin
-        .from("leads_paused")
+        .from("leads")
         .update({
           submission_status: "submitted",
           ms_forms_response_id: responseId,
@@ -532,7 +532,7 @@ export async function POST(request: NextRequest) {
 
       // Update Supabase with pending status (will be submitted when form reopens)
       await supabaseAdmin
-        .from("leads_paused")
+        .from("leads")
         .update({
           submission_status: "pending",
           error_details:
