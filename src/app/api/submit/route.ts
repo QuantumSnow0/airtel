@@ -101,6 +101,17 @@ export async function POST(request: NextRequest) {
       return digits;
     };
 
+    // Check pause status to determine which table to use
+    const { data: settingsData, error: settingsError } = await supabaseAdmin
+      .from("app_settings")
+      .select("is_paused")
+      .eq("id", 1)
+      .single();
+
+    // Default to false if settings don't exist or error (fail-safe: always save to leads)
+    const isPaused = settingsData?.is_paused ?? false;
+    const tableName = isPaused ? "leads_paused" : "leads";
+
     // Prepare data for Supabase
     const leadData: LeadSubmission = {
       customer_name: customerName,
@@ -122,9 +133,9 @@ export async function POST(request: NextRequest) {
       submission_status: "pending",
     };
 
-    // Step 1: Save to Supabase first
+    // Step 1: Save to Supabase first (using table based on pause status)
     const { data: supabaseData, error: supabaseError } = await supabaseAdmin
-      .from("leads")
+      .from(tableName)
       .insert([leadData])
       .select()
       .single();
@@ -241,7 +252,7 @@ export async function POST(request: NextRequest) {
       );
       // Update Supabase with pending status (will be submitted when form reopens)
       await supabaseAdmin
-        .from("leads")
+        .from(tableName)
         .update({
           submission_status: "pending",
           error_details:
@@ -497,7 +508,7 @@ export async function POST(request: NextRequest) {
 
       // Step 5: Update Supabase with success
       await supabaseAdmin
-        .from("leads")
+        .from(tableName)
         .update({
           submission_status: "submitted",
           ms_forms_response_id: responseId,
@@ -532,7 +543,7 @@ export async function POST(request: NextRequest) {
 
       // Update Supabase with pending status (will be submitted when form reopens)
       await supabaseAdmin
-        .from("leads")
+        .from(tableName)
         .update({
           submission_status: "pending",
           error_details:
