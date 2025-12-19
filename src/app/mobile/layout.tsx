@@ -22,10 +22,3 @@ export default function MobileLayout({
   return <>{children}</>;
 }
 
-
-
-
-
-
-
-

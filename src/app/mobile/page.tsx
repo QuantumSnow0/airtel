@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import ProductCarousel from "./ProductCarousel";
 import PricingCards from "../components/PricingCards";
+import LocationMapPicker from "../components/LocationMapPicker";
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
 
@@ -107,6 +108,7 @@ export default function TestMobilePage() {
   const timeButtonRef = useRef<HTMLButtonElement>(null);
   const [robotMessage, setRobotMessage] = useState("");
   const [robotVisible, setRobotVisible] = useState(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
@@ -132,6 +134,7 @@ export default function TestMobilePage() {
     state: "idle" | "success" | "error";
     message: string;
   }>({ state: "idle", message: "" });
+  const [useManualLocationEntry, setUseManualLocationEntry] = useState(false);
 
   const isNameValid = customerName.trim().length >= 2;
   const isPhoneValid = /^[0-9]{10,12}$/.test(customerPhone.replace(/\s/g, ""));
@@ -1675,8 +1678,8 @@ export default function TestMobilePage() {
       const firstName = customerName.trim().split(" ")[0] || "there";
       const locationSuccess = [
         `Perfect ${firstName}! We've got your location! 📍`,
-        `Excellent ${firstName}! Location saved! 🗺️`,
-        `Great ${firstName}! We know where to find you! 🏠`,
+        `Excellent ${firstName}! We know where to find you! 🏠`,
+        `Great ${firstName}! Your location is set! 🗺️`,
       ];
       const randomMessage =
         locationSuccess[Math.floor(Math.random() * locationSuccess.length)];
@@ -1762,6 +1765,57 @@ export default function TestMobilePage() {
     deliveryLocationBlurred && isDeliveryLocationValid;
   const showInstallationLocationCheck =
     installationLocationBlurred && isInstallationLocationValid;
+
+  // Handle location selection from map picker
+  const handleMapLocationSelect = (data: {
+    town: string;
+    landmark: string;
+    installationLocation: string;
+    isValid: boolean;
+    error?: string;
+  }) => {
+    console.log("📥 Mobile page received location data:", {
+      town: data.town,
+      landmark: data.landmark,
+      installationLocation: data.installationLocation,
+      isValid: data.isValid,
+      error: data.error,
+    });
+
+    if (data.isValid) {
+      setInstallationTown(data.town);
+      setDeliveryLocation(data.landmark || "");
+      setInstallationLocation(data.installationLocation || "");
+      setIsInstallationLocationOther(false);
+      // Don't auto-blur for map selections - wait for user to confirm with "Done"
+      // This prevents the robot from speaking too early
+      // setTownBlurred(true);
+      // setDeliveryLocationBlurred(true);
+      // setInstallationLocationBlurred(true);
+      
+      console.log("✅ Location data set in form:", {
+        installationTown: data.town,
+        deliveryLocation: data.landmark || "",
+        installationLocation: data.installationLocation || "",
+        note: "These values will be sent to Microsoft Forms API",
+      });
+      
+      // Don't set robot message here - wait for user to click "Done"
+    } else {
+      console.warn("❌ Invalid location data received:", data.error);
+      // Invalid location - town not in service area
+      setInstallationTown("");
+      setDeliveryLocation("");
+      setInstallationLocation("");
+      setTownBlurred(false);
+      setDeliveryLocationBlurred(false);
+      setInstallationLocationBlurred(false);
+      
+      if (data.error) {
+        setRobotMessage(data.error);
+      }
+    }
+  };
   const showPreferredDateCheck = preferredDateBlurred && isPreferredDateValid;
   const showPreferredTimeCheck = preferredTimeBlurred && isPreferredTimeValid;
 
@@ -1809,7 +1863,7 @@ export default function TestMobilePage() {
         transition={{ duration: 0.5 }}
       >
         {/* Floating Robot Guide - Appears on scroll */}
-        {robotVisible && (
+        {robotVisible && !isBottomSheetOpen && (
           <motion.div
             className="fixed right-4 pointer-events-none"
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -2634,8 +2688,53 @@ export default function TestMobilePage() {
               </div>
             </div>
 
-            {/* Customer Installation Town */}
-            <div className="mb-6 relative">
+            {/* Location Selection - Map Picker or Manual Entry */}
+            {!useManualLocationEntry ? (
+              <div className="mb-6">
+                <div className="mb-4">
+                </div>
+                <LocationMapPicker
+                  onLocationSelect={handleMapLocationSelect}
+                  onError={(message) => setRobotMessage(message)}
+                  townOptions={townOptions}
+                  onUseManualEntry={() => setUseManualLocationEntry(true)}
+                  value={installationTown && deliveryLocation ? `${installationTown} - ${deliveryLocation}` : installationTown || ""}
+                  onBottomSheetChange={(isOpen) => setIsBottomSheetOpen(isOpen)}
+                  onLocationConfirmed={(data) => {
+                    // Mark fields as blurred only after user confirms
+                    setTownBlurred(true);
+                    setDeliveryLocationBlurred(true);
+                    setInstallationLocationBlurred(true);
+                    
+                    // Robot speaks only after user confirms by clicking "Done"
+                    const firstName = customerName.trim().split(" ")[0] || "there";
+                    const locationSuccess = [
+                      `Perfect ${firstName}! We've got your location! 📍`,
+                      `Excellent ${firstName}! We know where to find you! 🏠`,
+                      `Great ${firstName}! Your location is set! 🗺️`,
+                    ];
+                    const randomMessage =
+                      locationSuccess[Math.floor(Math.random() * locationSuccess.length)];
+                    setRobotMessage(randomMessage);
+                  }}
+                />
+              </div>
+            ) : (
+              <>
+                {/* Manual Entry Option - Installation Town */}
+                <div className="mb-6 relative">
+                  <div className="mb-2">
+                    <button
+                      onClick={() => setUseManualLocationEntry(false)}
+                      className={`text-xs text-yellow-400 hover:text-yellow-300 underline ${poppins.variable}`}
+                      style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+                    >
+                      ← Use Map Instead
+                    </button>
+                  </div>
+                </div>
+                {/* Customer Installation Town */}
+                <div className="mb-6 relative">
               {/* Floating Label */}
               <div
                 className={`absolute left-3 pointer-events-none transition-all duration-300 ${
@@ -3202,112 +3301,114 @@ export default function TestMobilePage() {
               </div>
             )}
 
-            {/* Specific Delivery Location (Nearest Landmark) */}
-            <div className="mb-6 relative">
-              {/* Floating Label */}
-              <div
-                className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                  deliveryLocationFocused || deliveryLocation
-                    ? "top-0 transform -translate-y-1/2"
-                    : "top-1/2 transform -translate-y-1/2"
-                }`}
-                style={{ zIndex: 30 }}
-              >
-                {/* Border cut background */}
-                {(deliveryLocationFocused || deliveryLocation) && (
+                {/* Specific Delivery Location (Nearest Landmark) */}
+                <div className="mb-6 relative">
+                  {/* Floating Label */}
                   <div
-                    className="absolute left-0"
-                    style={{
-                      top: "50%",
-                      background: "rgb(38, 38, 38)",
-                      height: "2px",
-                      width: "calc(100% + 4px)",
-                      marginLeft: "-4px",
-                      borderTopLeftRadius: "8px",
-                    }}
-                  />
-                )}
-                {/* Label text */}
-                <div className="px-1.5 relative">
-                  <span
-                    className={`text-xs font-medium transition-all duration-300 ${
+                    className={`absolute left-3 pointer-events-none transition-all duration-300 ${
                       deliveryLocationFocused || deliveryLocation
-                        ? "text-white/90"
-                        : "text-neutral-400"
-                    } ${poppins.variable}`}
-                    style={{
-                      fontFamily: "var(--font-poppins), sans-serif",
-                    }}
+                        ? "top-0 transform -translate-y-1/2"
+                        : "top-1/2 transform -translate-y-1/2"
+                    }`}
+                    style={{ zIndex: 30 }}
                   >
-                    {deliveryLocationFocused || deliveryLocation ? (
-                      <>
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                          7
-                        </span>
-                        Delivery Location (Nearest Landmark){" "}
-                        <span className="text-yellow-400">*</span>
-                      </>
-                    ) : (
-                      "Enter your Nearest landmark"
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="relative">
-                <input
-                  ref={deliveryLocationInputRef}
-                  type="text"
-                  placeholder=""
-                  value={deliveryLocation}
-                  onChange={(e) => setDeliveryLocation(e.target.value)}
-                  onFocus={() => {
-                    setDeliveryLocationFocused(true);
-                    scrollToStep2();
-                  }}
-                  onBlur={() => {
-                    setDeliveryLocationFocused(false);
-                    setDeliveryLocationBlurred(true);
-                  }}
-                  className={`w-full px-3 py-3.5 ${
-                    deliveryLocationFocused || deliveryLocation
-                      ? "pt-5"
-                      : "pt-3.5"
-                  } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                    showDeliveryLocationCheck
-                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                      : "border-neutral-800/50"
-                  } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                    poppins.variable
-                  }`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                    WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
-                    WebkitTextFillColor: "#ffffff",
-                    caretColor: "#ffffff",
-                  }}
-                  onClick={scrollToStep2}
-                  spellCheck={false}
-                  autoComplete="off"
-                />
-                {showDeliveryLocationCheck && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-yellow-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
+                    {/* Border cut background */}
+                    {(deliveryLocationFocused || deliveryLocation) && (
+                      <div
+                        className="absolute left-0"
+                        style={{
+                          top: "50%",
+                          background: "rgb(38, 38, 38)",
+                          height: "2px",
+                          width: "calc(100% + 4px)",
+                          marginLeft: "-4px",
+                          borderTopLeftRadius: "8px",
+                        }}
                       />
-                    </svg>
+                    )}
+                    {/* Label text */}
+                    <div className="px-1.5 relative">
+                      <span
+                        className={`text-xs font-medium transition-all duration-300 ${
+                          deliveryLocationFocused || deliveryLocation
+                            ? "text-white/90"
+                            : "text-neutral-400"
+                        } ${poppins.variable}`}
+                        style={{
+                          fontFamily: "var(--font-poppins), sans-serif",
+                        }}
+                      >
+                        {deliveryLocationFocused || deliveryLocation ? (
+                          <>
+                            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                              7
+                            </span>
+                            Delivery Location (Nearest Landmark){" "}
+                            <span className="text-yellow-400">*</span>
+                          </>
+                        ) : (
+                          "Enter your Nearest landmark"
+                        )}
+                      </span>
+                    </div>
                   </div>
-                )}
-              </div>
-            </div>
+                  <div className="relative">
+                    <input
+                      ref={deliveryLocationInputRef}
+                      type="text"
+                      placeholder=""
+                      value={deliveryLocation}
+                      onChange={(e) => setDeliveryLocation(e.target.value)}
+                      onFocus={() => {
+                        setDeliveryLocationFocused(true);
+                        scrollToStep2();
+                      }}
+                      onBlur={() => {
+                        setDeliveryLocationFocused(false);
+                        setDeliveryLocationBlurred(true);
+                      }}
+                      className={`w-full px-3 py-3.5 ${
+                        deliveryLocationFocused || deliveryLocation
+                          ? "pt-5"
+                          : "pt-3.5"
+                      } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                        showDeliveryLocationCheck
+                          ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                          : "border-neutral-800/50"
+                      } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                        poppins.variable
+                      }`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                        WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
+                        WebkitTextFillColor: "#ffffff",
+                        caretColor: "#ffffff",
+                      }}
+                      onClick={scrollToStep2}
+                      spellCheck={false}
+                      autoComplete="off"
+                    />
+                    {showDeliveryLocationCheck && (
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                        <svg
+                          className="w-5 h-5 text-yellow-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* Preferred Date of Visit/Installation */}
             <div className="mb-6 relative">

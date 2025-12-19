@@ -86,6 +86,25 @@ export async function POST(request: NextRequest) {
         ? `${normalizedTown} - ${installationLocationLandmark}`
         : installationLocationLandmark || "";
 
+    // 🗺️ LOG LOCATION DATA FOR MS FORMS
+    console.log("=".repeat(60));
+    console.log("🗺️ LOCATION DATA BEING SENT TO MICROSOFT FORMS");
+    console.log("=".repeat(60));
+    console.log("📍 Raw Location Data Received:");
+    console.log("   - installationTown (raw):", installationTown);
+    console.log("   - deliveryLandmark:", deliveryLandmark);
+    console.log("   - installationLocation (landmark only):", installationLocationLandmark);
+    console.log("");
+    console.log("🔄 After Processing:");
+    console.log("   - normalizedTown (for MS Forms):", normalizedTown);
+    console.log("   - final installationLocation (town - landmark):", installationLocation);
+    console.log("");
+    console.log("📤 What will be sent to MS Forms:");
+    console.log("   - Installation Town field:", normalizedTown);
+    console.log("   - Delivery Landmark field:", deliveryLandmark);
+    console.log("   - Installation Location field:", installationLocation);
+    console.log("=".repeat(60));
+
     // Format phone numbers (convert from 7XXXXXXXX to 2547XXXXXXXX)
     const formatPhone = (phone: string): string => {
       const digits = phone.replace(/\D/g, "");
@@ -395,6 +414,25 @@ export async function POST(request: NextRequest) {
       submitDate: submitDate,
       answers: JSON.stringify(answers),
     };
+
+    // 🗺️ LOG FINAL LOCATION VALUES IN MS FORMS PAYLOAD
+    const locationAnswers = answers.filter((a: any) => 
+      a.questionId === QUESTION_IDS.installationTown || 
+      a.questionId === QUESTION_IDS.deliveryLandmark || 
+      a.questionId === QUESTION_IDS.installationLocation
+    );
+    console.log("=".repeat(60));
+    console.log("📋 FINAL LOCATION VALUES IN MS FORMS PAYLOAD:");
+    console.log("=".repeat(60));
+    locationAnswers.forEach((answer: any) => {
+      const fieldName = 
+        answer.questionId === QUESTION_IDS.installationTown ? "Installation Town" :
+        answer.questionId === QUESTION_IDS.deliveryLandmark ? "Delivery Landmark" :
+        answer.questionId === QUESTION_IDS.installationLocation ? "Installation Location" :
+        "Unknown";
+      console.log(`   ${fieldName}: "${answer.answer1}"`);
+    });
+    console.log("=".repeat(60));
 
     // Step 4: Submit to Microsoft Forms
     // URL encode the form ID for the API endpoint

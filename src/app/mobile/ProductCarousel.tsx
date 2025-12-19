@@ -15,7 +15,7 @@ const poppins = Poppins({
 
 const carouselSlides = [
   {
-    image: "/airtelcarousel1.jpg",
+    image: "/airtelcarousel1.jpeg ",
     title: "Signal Amplification",
     description:
       "Enhances signal strength for stable, uninterrupted connectivity.",
@@ -277,7 +277,7 @@ export default function ProductCarousel() {
                   <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      background: "rgba(0, 0, 0, 0.4)",
+                      background: "rgba(0, 0, 0, 0.1)",
                       zIndex: 1,
                     }}
                   />

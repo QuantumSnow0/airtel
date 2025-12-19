@@ -22,10 +22,3 @@ export default function DesktopLayout({
   return <>{children}</>;
 }
 
-
-
-
-
-
-
-
