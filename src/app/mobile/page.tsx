@@ -135,6 +135,7 @@ export default function TestMobilePage() {
     message: string;
   }>({ state: "idle", message: "" });
   const [useManualLocationEntry, setUseManualLocationEntry] = useState(false);
+  const [locationMode, setLocationMode] = useState<"current" | "different">("current");
 
   const isNameValid = customerName.trim().length >= 2;
   const isPhoneValid = /^[0-9]{10,12}$/.test(customerPhone.replace(/\s/g, ""));
@@ -2688,51 +2689,80 @@ export default function TestMobilePage() {
               </div>
             </div>
 
-            {/* Location Selection - Map Picker or Manual Entry */}
-            {!useManualLocationEntry ? (
-              <div className="mb-6">
-                <div className="mb-4">
+            {/* Location Selection - Toggle */}
+            <div className="mb-6">
+              <div className="mb-4">
+                <label className={`block text-sm font-medium text-neutral-300 mb-3 ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
+                  Location Type
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setLocationMode("current")}
+                    className={`px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
+                      locationMode === "current"
+                        ? "bg-neutral-800/50 border-yellow-400/60 text-yellow-400 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                        : "bg-neutral-900/90 border-neutral-800/50 text-neutral-400 hover:border-neutral-700/50"
+                    } ${poppins.variable}`}
+                    style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span className="text-sm font-medium">Current Location</span>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => setLocationMode("different")}
+                    className={`px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
+                      locationMode === "different"
+                        ? "bg-neutral-800/50 border-yellow-400/60 text-yellow-400 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                        : "bg-neutral-900/90 border-neutral-800/50 text-neutral-400 hover:border-neutral-700/50"
+                    } ${poppins.variable}`}
+                    style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                      </svg>
+                      <span className="text-sm font-medium">Different Address</span>
+                    </div>
+                  </button>
                 </div>
-                <LocationMapPicker
-                  onLocationSelect={handleMapLocationSelect}
-                  onError={(message) => setRobotMessage(message)}
-                  townOptions={townOptions}
-                  onUseManualEntry={() => setUseManualLocationEntry(true)}
-                  value={installationTown && deliveryLocation ? `${installationTown} - ${deliveryLocation}` : installationTown || ""}
-                  onBottomSheetChange={(isOpen) => setIsBottomSheetOpen(isOpen)}
-                  onLocationConfirmed={(data) => {
-                    // Mark fields as blurred only after user confirms
-                    setTownBlurred(true);
-                    setDeliveryLocationBlurred(true);
-                    setInstallationLocationBlurred(true);
-                    
-                    // Robot speaks only after user confirms by clicking "Done"
-                    const firstName = customerName.trim().split(" ")[0] || "there";
-                    const locationSuccess = [
-                      `Perfect ${firstName}! We've got your location! 📍`,
-                      `Excellent ${firstName}! We know where to find you! 🏠`,
-                      `Great ${firstName}! Your location is set! 🗺️`,
-                    ];
-                    const randomMessage =
-                      locationSuccess[Math.floor(Math.random() * locationSuccess.length)];
-                    setRobotMessage(randomMessage);
-                  }}
-                />
               </div>
-            ) : (
-              <>
-                {/* Manual Entry Option - Installation Town */}
-                <div className="mb-6 relative">
-                  <div className="mb-2">
-                    <button
-                      onClick={() => setUseManualLocationEntry(false)}
-                      className={`text-xs text-yellow-400 hover:text-yellow-300 underline ${poppins.variable}`}
-                      style={{ fontFamily: "var(--font-poppins), sans-serif" }}
-                    >
-                      ← Use Map Instead
-                    </button>
-                  </div>
-                </div>
+
+              {/* Location Selection - Map Picker or Manual Entry */}
+              {locationMode === "current" ? (
+                  <LocationMapPicker
+                    locationMode={locationMode}
+                    onLocationSelect={handleMapLocationSelect}
+                    onError={(message) => setRobotMessage(message)}
+                    townOptions={townOptions}
+                    onUseManualEntry={() => setLocationMode("different")}
+                    value={installationTown && deliveryLocation ? `${installationTown} - ${deliveryLocation}` : installationTown || ""}
+                    onBottomSheetChange={(isOpen) => setIsBottomSheetOpen(isOpen)}
+                    onLocationConfirmed={(data) => {
+                      // Mark fields as blurred only after user confirms
+                      setTownBlurred(true);
+                      setDeliveryLocationBlurred(true);
+                      setInstallationLocationBlurred(true);
+                      
+                      // Robot speaks only after user confirms by clicking "Done"
+                      const firstName = customerName.trim().split(" ")[0] || "there";
+                      const locationSuccess = [
+                        `Perfect ${firstName}! We've got your location! 📍`,
+                        `Excellent ${firstName}! We know where to find you! 🏠`,
+                        `Great ${firstName}! Your location is set! 🗺️`,
+                      ];
+                      const randomMessage =
+                        locationSuccess[Math.floor(Math.random() * locationSuccess.length)];
+                      setRobotMessage(randomMessage);
+                    }}
+                  />
+              ) : (
+                <>
+                  {/* Manual Entry Fields */}
                 {/* Customer Installation Town */}
                 <div className="mb-6 relative">
               {/* Floating Label */}
@@ -3409,6 +3439,7 @@ export default function TestMobilePage() {
                 </div>
               </>
             )}
+            </div>
 
             {/* Preferred Date of Visit/Installation */}
             <div className="mb-6 relative">
