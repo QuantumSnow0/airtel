@@ -1,0 +1,261 @@
+Subject: Product Information Request - Airtel SmartConnect 5G Router
+
+Dear Airtel Team,
+
+Hello! I'm Bonface, a software engineer and blogger creating a product overview page for the Airtel SmartConnect 5G Router. 
+
+To build an informative and attractive page, I need detailed product information. I've organized my questions below by category. If you don't have an answer for a specific question, please note "Not available" - we can work with partial information.
+
+Thank you for your assistance!
+
+Best regards,
+Bonface
+
+---
+
+PRODUCT INFORMATION QUESTIONS
+
+===========================================
+1. PRODUCT IDENTITY & BASIC INFORMATION
+===========================================
+
+• What is the exact official product name? (e.g., "Airtel SmartConnect 5G Router")
+• Is there a model number or product code?
+• What is the product category? (Router, Signal Booster, Antenna System, Hybrid Device, etc.)
+• Is this primarily a router, signal amplifier, antenna, or a combination device?
+• Does it work with existing routers or is it a standalone router?
+
+
+===========================================
+2. WHAT IT DOES & PURPOSE
+===========================================
+
+• What specific internet connectivity problems does this product solve?
+• Who typically experiences these problems? (Rural users, users with weak signals, etc.)
+• Who is the ideal customer? (Home users, small businesses, rural/remote locations, etc.)
+• What are the top 3-5 benefits users will experience after installing this?
+• How does it improve their daily internet experience?
+• What can users do with it that they couldn't do before?
+
+
+===========================================
+3. TECHNICAL SPECIFICATIONS
+===========================================
+
+SPEED & PERFORMANCE:
+• Maximum download speeds? (Mbps)
+• Maximum upload speeds? (Mbps)
+• Typical/realistic speeds users can expect?
+• Does speed vary by location or signal strength?
+
+COVERAGE & RANGE:
+• Coverage area/range? (indoor/outdoor)
+• How many square meters/feet can it cover?
+• Does it work better indoors or outdoors?
+• What affects the coverage range?
+
+DEVICE CAPACITY:
+• How many devices can connect simultaneously?
+• Recommended maximum number of devices?
+• Does performance degrade with more connected devices?
+
+POWER REQUIREMENTS:
+• What power source does it use? (AC adapter, PoE, battery, etc.)
+• Power consumption? (watts)
+• Does it require special electrical setup?
+
+PHYSICAL SPECIFICATIONS:
+• Dimensions? (length x width x height in cm/inches)
+• Weight? (kg/lbs)
+• Materials it's made from?
+• Colors/finish options available?
+
+NETWORK & CONNECTIVITY:
+• What network bands does it support? (4G, 5G, specific frequencies)
+• Does it support WiFi? If yes, what WiFi standards? (WiFi 5, WiFi 6, etc.)
+• What ports/connections does it have? (Ethernet, USB, etc.)
+• Does it require a SIM card? What type?
+
+SIGNAL TECHNOLOGY:
+• How does the signal amplification work? (Brief technical explanation)
+• What is the gain/amplification level? (dB)
+• Does it have directional or omnidirectional antenna?
+
+
+===========================================
+4. KEY FEATURES & BENEFITS
+===========================================
+
+• Please list the top 7-10 key features with brief descriptions
+• What makes this product different from competitors?
+• What features are unique to Airtel SmartConnect?
+• Why should customers choose this over other solutions?
+
+WEATHER RESISTANCE:
+• What IP rating does it have? (IP65, IP67, etc.)
+• What weather conditions can it withstand?
+• Is it suitable for outdoor installation?
+• Temperature range it can operate in?
+
+MOUNTING & INSTALLATION:
+• What mounting options are available? (Wall, pole, roof, etc.)
+• How easy is installation? (DIY or professional required?)
+• What tools are needed for installation?
+• Are mounting brackets/hardware included?
+
+
+===========================================
+5. HOW IT WORKS
+===========================================
+
+INSTALLATION PROCESS:
+• Step-by-step installation process (brief overview - 3-5 main steps)
+• How long does installation take?
+• Does Airtel provide installation service?
+• Is professional installation required or can users DIY?
+
+SETUP & CONFIGURATION:
+• How do users set it up after installation?
+• Is there a mobile app or web interface?
+• How technical does the setup process require users to be?
+• Are there setup instructions/manual provided?
+
+OPERATION:
+• How does it work once installed? (Simple explanation for non-technical users)
+• Does it require ongoing maintenance?
+• Does it work automatically or need user intervention?
+
+
+===========================================
+6. IMAGES & VISUAL CONTENT
+===========================================
+
+• Do you have high-quality product photos? (Front, back, side views)
+• Are there images showing the product in use/installed?
+• Do you have close-up detail shots?
+• Are there images showing different mounting options?
+• Where are the images stored? (Can you provide them or point to location?)
+• What file formats are available? (JPG, PNG, etc.)
+• Do you have diagrams or infographics explaining how it works?
+• Are there comparison images (before/after signal strength)?
+• Do you have installation step-by-step images?
+
+
+===========================================
+7. USE CASES & APPLICATIONS
+===========================================
+
+• What are the top 3-5 scenarios where this product is most beneficial?
+• Home use: What specific home scenarios?
+• Business use: What business types benefit most?
+• Rural/Remote: How does it help in these areas?
+• Urban: Any specific urban use cases?
+• Do you have any customer testimonials?
+• Any case studies or success stories?
+• What results have customers seen? (Speed improvements, coverage improvements, etc.)
+
+
+===========================================
+8. PRICING & AVAILABILITY
+===========================================
+
+PRICING INFORMATION:
+• What is the product price? (One-time purchase, monthly fee, etc.)
+• Are there different pricing tiers or packages?
+• Is there a deposit or upfront cost?
+• Are there any ongoing fees or subscriptions?
+
+AVAILABILITY:
+• Where is the product available? (Specific regions, cities, areas in Kenya)
+• Is it available nationwide or limited areas?
+• How can customers purchase it? (Online, Airtel stores, agents, etc.)
+• Is there a waiting period or immediate availability?
+
+PACKAGES/BUNDLES:
+• Are there different packages available?
+• What's included in each package?
+• Are there bundle deals with Airtel services?
+
+
+===========================================
+9. WARRANTY & SUPPORT
+===========================================
+
+WARRANTY:
+• What is the warranty period? (1 year, 2 years, etc.)
+• What does the warranty cover?
+• What is the warranty process if issues arise?
+
+SUPPORT:
+• What support is available? (Phone, email, in-person, etc.)
+• Are there support hours?
+• Is technical support included?
+• What if customers need help with installation or troubleshooting?
+
+MAINTENANCE:
+• Does the product require regular maintenance?
+• Are there maintenance costs?
+• How long is the expected product lifespan?
+
+
+===========================================
+10. COMPATIBILITY & REQUIREMENTS
+===========================================
+
+NETWORK REQUIREMENTS:
+• Does it work with all Airtel plans or specific ones?
+• What Airtel service/plan is required?
+• Does it work with other network providers or Airtel only?
+
+LOCATION REQUIREMENTS:
+• What are the location requirements? (Signal strength needed, etc.)
+• Does it work everywhere or need minimum signal?
+• Are there areas where it won't work?
+
+EQUIPMENT REQUIREMENTS:
+• What equipment is needed besides the product itself?
+• Are cables, adapters, etc. included?
+• Do users need to purchase anything additional?
+
+
+===========================================
+11. COMPARISON & COMPETITIVE ADVANTAGES
+===========================================
+
+• How does it compare to standard home routers?
+• What advantages does it have over standard routers?
+• How does it compare to other signal amplification solutions?
+• What makes Airtel SmartConnect better than competitors?
+• How does it compare to using mobile phone hotspots?
+• What are the advantages over mobile hotspots?
+
+
+===========================================
+12. ADDITIONAL INFORMATION
+===========================================
+
+• What are the most common questions customers ask?
+• What concerns do customers typically have?
+• Are there any important warnings or limitations?
+• Any safety considerations?
+• Any restrictions or terms customers should know?
+• Are there firmware updates available?
+• Will the product receive updates?
+• Is there a newer version coming?
+• Are there any current promotions or special offers?
+• Any discounts available?
+• Any referral programs or incentives?
+
+
+===========================================
+THANK YOU
+===========================================
+
+I appreciate your time and assistance in providing this information. Please feel free to contact me if you need any clarification on these questions.
+
+Looking forward to your response.
+
+Best regards,
+Bonface
+Software Engineer & Blogger
+
