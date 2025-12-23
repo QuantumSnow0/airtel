@@ -415,12 +415,15 @@ export default function LocationMapPicker({
     );
   }, [isMobile, onError]);
 
-  // Auto-trigger location when "current" mode is selected and bottom sheet opens
+  // Auto-open bottom sheet and trigger location when component mounts in current mode
   useEffect(() => {
-    if (showBottomSheet && locationMode === "current" && !position && !isLoading) {
-      getCurrentLocation(true);
+    if (locationMode === "current") {
+      setShowBottomSheet(true);
+      if (!position && !isLoading) {
+        getCurrentLocation(true);
+      }
     }
-  }, [showBottomSheet, locationMode, position, isLoading, getCurrentLocation]);
+  }, [locationMode, position, isLoading, getCurrentLocation]);
 
   // Don't auto-request location - let user click a button to trigger it
   // This ensures browser permission dialog can appear properly
@@ -792,33 +795,6 @@ export default function LocationMapPicker({
 
   return (
     <div className="w-full relative">
-      {/* Location Input Field */}
-      <div
-        onClick={() => {
-          setShowBottomSheet(true);
-          setSheetY(0); // Reset position when opening
-          setInitialSheetY(0);
-        }}
-        className="relative w-full"
-      >
-        <div className="relative">
-          <input
-            type="text"
-            readOnly
-            value={displayValue}
-            placeholder="Tap to select location on map"
-            className={`w-full px-4 py-3 pr-12 rounded-xl bg-neutral-800/50 border-2 border-neutral-700/50 text-white placeholder:text-neutral-500 focus:border-yellow-400/50 focus:outline-none transition-colors cursor-pointer ${poppins.variable}`}
-            style={{ fontFamily: "var(--font-poppins), sans-serif" }}
-          />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <svg className="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </div>
-        </div>
-      </div>
-
       {/* Bottom Sheet */}
       {showBottomSheet && (
         <>
@@ -939,60 +915,6 @@ export default function LocationMapPicker({
                 </div>
               )}
 
-              {/* Success State */}
-              {geocodedData && !townValidationError && !isLoading && !error && (
-                <div className="mb-4 bg-gradient-to-br from-emerald-900/40 via-emerald-800/30 to-emerald-900/40 border border-emerald-500/40 rounded-xl p-3.5 shadow-lg backdrop-blur-sm">
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <div className="w-7 h-7 rounded-full bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center shrink-0">
-                      <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <p className={`text-xs font-bold text-emerald-50 ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
-                      Location Confirmed
-                    </p>
-                  </div>
-                  <div className="space-y-2 pl-1 mb-4">
-                    <div className="flex items-center gap-2.5">
-                      <span className={`text-xs text-emerald-300/80 font-medium min-w-[40px] ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
-                        Town:
-                      </span>
-                      <span className={`text-xs text-emerald-50 font-semibold ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
-                        {geocodedData.town}
-                      </span>
-                    </div>
-                    {geocodedData.landmark && (
-                      <div className="flex items-center gap-2.5">
-                        <span className={`text-xs text-emerald-300/80 font-medium min-w-[40px] ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
-                          Area:
-                        </span>
-                        <span className={`text-xs text-emerald-50 font-semibold ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
-                          {geocodedData.landmark}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    onClick={() => {
-                      // Call confirmation callback before closing
-                      if (onLocationConfirmed && geocodedData) {
-                        onLocationConfirmed({
-                          town: geocodedData.town,
-                          landmark: geocodedData.landmark,
-                          installationLocation: geocodedData.landmark,
-                        });
-                      }
-                      setShowBottomSheet(false);
-                      setSheetY(0);
-                      setInitialSheetY(0);
-                    }}
-                    className={`w-full px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-semibold shadow-lg active:scale-[0.97] transition-all duration-200 ${poppins.variable}`}
-                    style={{ fontFamily: "var(--font-poppins), sans-serif" }}
-                  >
-                    Done
-                  </button>
-                </div>
-              )}
 
               {/* Map */}
               {!isLoading && (

@@ -244,7 +244,7 @@ export default function RootLayout({
         </Script>
         <PackageProvider>
           <div className="flex flex-col min-h-screen">
-            <main className="flex-grow">{children}</main>
+            <main className="flex-grow relative">{children}</main>
             <Footer />
           </div>
         </PackageProvider>

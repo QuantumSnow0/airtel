@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect, useLayoutEffect } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import { motion } from "framer-motion";
 import ProductCarousel from "./ProductCarousel";
 import PricingCards from "../components/PricingCards";
@@ -108,10 +115,11 @@ export default function TestMobilePage() {
   const timeButtonRef = useRef<HTMLButtonElement>(null);
   const [robotMessage, setRobotMessage] = useState("");
   const [robotVisible, setRobotVisible] = useState(false);
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [showMapPicker, setShowMapPicker] = useState(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const hasUserInteractedRef = useRef(false);
   const speechTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isTypingRef = useRef(false);
@@ -134,513 +142,573 @@ export default function TestMobilePage() {
     state: "idle" | "success" | "error";
     message: string;
   }>({ state: "idle", message: "" });
-  const [useManualLocationEntry, setUseManualLocationEntry] = useState(false);
-  const [locationMode, setLocationMode] = useState<"current" | "different">("current");
 
-  const isNameValid = customerName.trim().length >= 2;
-  const isPhoneValid = /^[0-9]{10,12}$/.test(customerPhone.replace(/\s/g, ""));
-  const isAlternativeValid = /^[0-9]{10,12}$/.test(
-    customerAlternativeNumber.replace(/\s/g, "")
+  // Memoize validation logic to prevent recalculation on every render
+  const validation = useMemo(() => {
+    const isNameValid = customerName.trim().length >= 2;
+    const isPhoneValid = /^[0-9]{10,12}$/.test(
+      customerPhone.replace(/\s/g, "")
+    );
+    const isAlternativeValid = /^[0-9]{10,12}$/.test(
+      customerAlternativeNumber.replace(/\s/g, "")
+    );
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      customerEmail.trim()
+    );
+    const isTownValid = installationTown.trim().length > 0;
+    const isDeliveryLocationValid = deliveryLocation.trim().length >= 5;
+    const isInstallationLocationValid =
+      (installationLocation.trim().length > 0 &&
+        installationLocation !== "Other") ||
+      (isInstallationLocationOther && installationLocation.trim().length > 0);
+    const isPreferredDateValid = preferredDate.trim().length > 0;
+    const isPreferredTimeValid = preferredTime.trim().length > 0;
+
+    return {
+      isNameValid,
+      isPhoneValid,
+      isAlternativeValid,
+      isEmailValid,
+      isTownValid,
+      isDeliveryLocationValid,
+      isInstallationLocationValid,
+      isPreferredDateValid,
+      isPreferredTimeValid,
+    };
+  }, [
+    customerName,
+    customerPhone,
+    customerAlternativeNumber,
+    customerEmail,
+    installationTown,
+    deliveryLocation,
+    installationLocation,
+    isInstallationLocationOther,
+    preferredDate,
+    preferredTime,
+  ]);
+
+  const {
+    isNameValid,
+    isPhoneValid,
+    isAlternativeValid,
+    isEmailValid,
+    isTownValid,
+    isDeliveryLocationValid,
+    isInstallationLocationValid,
+    isPreferredDateValid,
+    isPreferredTimeValid,
+  } = validation;
+
+  // Memoize locations data structure to prevent recreation on every render
+  const locationsData: Record<string, string[]> = useMemo(
+    () => ({
+      BOMET: [
+        "CBD",
+        "Longisa",
+        "Ndanai",
+        "Silibwet",
+        "Siongiroi",
+        "Sotik",
+        "University",
+      ],
+      BUSIA: [
+        "Alupe",
+        "Bumala",
+        "BurumbaAngoromMayenje",
+        "Butula",
+        "CBD",
+        "Nambale",
+      ],
+      BUNGOMA: ["CBD", "Chwele", "Kamukuywa", "Kanduyi", "Kimilili", "Sirisia"],
+      CHUKA: ["CBD", "Chuka University", "Igambang'ombe", "Maara"],
+      Eldoret: [
+        "Annex",
+        "Bahati",
+        "Munyaka",
+        "Pioneer",
+        "Sisibo",
+        "Upper Eldoville",
+        "Hillside",
+        "Kapsoya",
+      ],
+      EMBU: [
+        "Blue Valley",
+        "Itabua",
+        "Kamiu",
+        "Kangaru",
+        "Majengo",
+        "Matakari",
+        "Njukiri",
+      ],
+      GARISSA: ["CBD", "Galbet", "Iftin", "Township", "Waberi"],
+      HOMABAY: [
+        "CBD",
+        "Kendu Bay",
+        "Mbita",
+        "Ndhiwa",
+        "Gwasi",
+        "Kaspul",
+        "Rangwe",
+        "Karachuonyo",
+      ],
+      ISIOLO: ["CBD", "Merti", "Oldonyiro"],
+      ITEN: [
+        "Arror",
+        "Chebiemit",
+        "Chepkorio",
+        "Chesoi",
+        "Flax",
+        "Iten CBD",
+        "Kapsowar",
+        "Kaptarakwa",
+        "Kapyego",
+        "Nyaru",
+        "Tambach",
+        "Tot",
+      ],
+      KABARNET: ["CBD", "Eldama ravine", "Marigat", "Mogotio"],
+      KAKAMEGA: [
+        "CBD",
+        "Butere",
+        "Ikolomani",
+        "Khwisero",
+        "Lugari",
+        "Lukuyani",
+        "Malava",
+        "Matungu",
+        "Mumias",
+        "Navakholo",
+        "Shinyalu",
+      ],
+      KAPENGURIA: ["CBD", "Chepkram", "Kitalakape", "Kongelai", "Kanyarkwat"],
+      KAPSABET: ["CBD", "Mosoriot", "Kabiyet", "Nandi Hills", "Kaiboi"],
+      KERICHO: ["CBD", "Kapsaos", "Kipkelion", "Ainamoi"],
+      KERUGOYA: ["CBD", "Sagana", "Wanguru", "Kagumo", "Kagio"],
+      KILIFI: [
+        "CBD",
+        "Kaloleni",
+        "Magarini",
+        "Malindi",
+        "Mariakani",
+        "Mazeras",
+        "Mtwapa",
+        "Rabai",
+        "Watamu",
+      ],
+      KISII: [
+        "CBD",
+        "Kenyeya",
+        "Keroka",
+        "Marani",
+        "Masimba",
+        "Nyacheki",
+        "Nyamache",
+        "Nyamarambe",
+        "Ogembo",
+        "Suneka",
+        "Nyamataro",
+        "Nyanchwa",
+        "Jogoo",
+        "Mwembe",
+        "Nyakoe",
+        "Mosocho",
+        "Nyatieko",
+        "Bigege",
+        "Keumbu",
+        "Omogonchoro",
+        "Manga",
+      ],
+      KISUMU: [
+        "Kondele",
+        "Lolwe Estate",
+        "Manyatta",
+        "Milimani Estate",
+        "Mountain View Estate",
+        "Nyalenda",
+        "Okore Estate",
+        "Polyview Estate",
+        "Tom Mboya Estate",
+        "Translakes Estate (Kibos Road)",
+      ],
+      KITALE: [
+        "Kitale CBD",
+        "Milimani",
+        "Kiminini",
+        "Saboti",
+        "Kongelai",
+        "Kwanza",
+        "Endebess",
+        "Section 6",
+      ],
+      KITENGELA: [
+        "CBD",
+        "Kitengela Plains",
+        "Boston",
+        "Chuna",
+        "Muigai Prestige",
+        "Milimani",
+        "Kitengela Breeze",
+        "The Riverine",
+      ],
+      KITUI: [
+        "Township",
+        "Kwa Ngendu Estate",
+        "Kalawa Road Estate",
+        "Kyangwithya East & West",
+        "Kwa Vonza/Yatta",
+        "Kauwi",
+        "Mutomo",
+        "Kyuso",
+        "Zombe",
+        "Itoleka",
+        "Tulia",
+        "Kyanika",
+      ],
+      LODWAR: [
+        "Lodwar CBD",
+        "Loima",
+        "Lokichar",
+        "Kalokol",
+        "Kakuma",
+        "Lokichogio",
+      ],
+      LUANDA: [
+        "Vihiga Municipality",
+        "Chavagali",
+        "Mbale CBD",
+        "Serem",
+        "Kaimosi",
+        "Hamisi",
+        "Sabatia",
+        "Majengo-Vihiga",
+      ],
+      MACHAKOS: [
+        "Mulolongo",
+        "Athi River",
+        "Konza City",
+        "Joska",
+        "Kangundo Road",
+        "Mua Hills",
+        "Central",
+        "South Park Estate",
+        "Encasa Apartments",
+        "Summit Urban Estates",
+        "Lukenya Hills Estate",
+        "Kyumvi",
+        "Kenya Israel",
+        "Greenpark Estate",
+        "Katani",
+        "Syokimau",
+        "Gateway Mall Gated Estate",
+        "Gratewall",
+      ],
+      MALINDI: ["Township"],
+      MANDERA: ["CBD", "Rhamu", "El Wak", "Takaba"],
+      MARALAL: [
+        "CBD",
+        "Wamba",
+        "Kisima",
+        "Baragoi",
+        "Lodosoit",
+        "Archers Post",
+      ],
+      MARSABIT: ["CBD", "Moyale", "Ileret", "Laisamis", "Loiyangalani"],
+      MAUA: [
+        "Maili Tatu",
+        "Mutuati",
+        "Kimongoro",
+        "Athiru",
+        "Kithetu",
+        "Kiegoi",
+      ],
+      MERU: ["Laare", "Nkubu", "Timau"],
+      MIGORI: [
+        "Migori CBD",
+        "Rongo",
+        "Uriri",
+        "Awendo",
+        "Muhuru Bay",
+        "Isbania",
+        "Nyatike",
+      ],
+      MOMBASA: [
+        "Kongowea",
+        "KWALE",
+        "Ukunda",
+        "Watamu",
+        "Bamburi",
+        "Changamwe",
+        "Jomvu",
+        "Kisauni",
+        "Kizingo",
+        "Likoni",
+        "Magongo",
+        "Mikindani",
+        "Miritini",
+        "Nyali",
+        "Shanzu",
+        "Tudor",
+      ],
+      "MURANG'A": [
+        "CBD",
+        "Kangema",
+        "Kiharu",
+        "Kabati",
+        "Kandara",
+        "Maragua",
+        "Makuyu",
+        "Kiriani",
+        "Gatura",
+      ],
+      NAIROBI: [
+        "Athiriver",
+        "Babadogo",
+        "Bellevue",
+        "Buru Buru",
+        "CBD",
+        "Chokaa",
+        "Chuka",
+        "Dagoreti Market",
+        "Dandora",
+        "Donholm",
+        "Eastleigh",
+        "Embakasi",
+        "Fedha",
+        "Gachie",
+        "Garden Estate",
+        "Gigiri",
+        "Githurai",
+        "Imara Daima",
+        "Industrial Area",
+        "Joska Town",
+        "Juja",
+        "Kahawa Sukari",
+        "Kahawa Wendani",
+        "Kahawa West",
+        "Kamulu",
+        "Kangemi",
+        "Karen",
+        "Kariobangi",
+        "Kasarani",
+        "Kawangware",
+        "Kayole",
+        "Kiambu",
+        "Kikuyu",
+        "Kileleshwa",
+        "Kilimani",
+        "Kinoo",
+        "Kiserian",
+        "Kitusuru",
+        "Komarock",
+        "Langata",
+        "Lavington",
+        "Limuru",
+        "Lower Kabete",
+        "Lucky Summer",
+        "Machakos",
+        "Mlolongo",
+        "Mombasa Road",
+        "Mukuru",
+        "Muthaiga",
+        "Mwiki",
+        "Ngara",
+        "Ngong Road",
+        "Njiru",
+        "Nyari",
+        "Pangani",
+        "Pipeline",
+        "Riverside",
+        "Rongai",
+        "Roysambu",
+        "Ruai",
+        "Ruaka",
+        "Ruiru",
+        "Runda",
+        "Saika",
+        "South B",
+        "South C",
+        "Spring Valley",
+        "Syokimau",
+        "Tassia",
+        "Thome",
+        "Umoja",
+        "Utawala",
+        "Uthiru",
+        "Westlands & Parklands",
+        "Zimmerman",
+      ],
+      NAIVASHA: [
+        "Kabati",
+        "Kayole Naivasha",
+        "Kehoto",
+        "Karagita",
+        "Kamere",
+        "Fly-Over",
+        "Delamere",
+        "Naivasha CBD",
+        "Mirera",
+        "Mai Mahiu",
+      ],
+      NAKURU: [
+        "Barnabas",
+        "Flamingo",
+        "Mireri Estates",
+        "Naka",
+        "Section 58",
+        "Upper Hill",
+        "Milimani",
+        "Nakuru Meadows",
+      ],
+      NANYUKI: [
+        "Mount Kenya Wildlife Estate (MKWE)",
+        "Mukima Ridge",
+        "Muthaiga Estate, Nanyuki",
+        "Sweetwaters / Baraka Estate",
+        "Sarova Maiyan Villas",
+        "Ol Saruni Gardens",
+        "Beverly Acres",
+        "Airstrip Gardens",
+        "Fahari Ridge 2",
+        "Nanyuki Town Centre",
+        "Bargain Area",
+        "Timau Belt",
+        "Likii Estate",
+        "Kwa Huku Estate",
+        "Nkando Estate",
+        "Snow View Estate",
+        "Madison Lane",
+        "Cedar Mall Estate",
+        "Burguret Area",
+        "Daiga & Ethi",
+        "Jua Kali Zone",
+      ],
+      NAROK: [
+        "Lenana Estate",
+        "Olerai Estate",
+        "Tumaini Estate",
+        "Ilmashariani",
+        "Leleshwa",
+        "Maasai Mara",
+        "Ololulunga",
+        "Nkareta",
+        "London Estate",
+      ],
+      NYAHURURU: [
+        "CBD",
+        "Gatundia Estate",
+        "Igwamiti",
+        "Madaraka Estate",
+        "Mairo Inya",
+        "Ndururumo Area",
+        "Ngano Estate",
+      ],
+      NYAMIRA: ["CBD", "Ekerubo", "Kebirigo", "Kijauri", "Nyansiongo"],
+      NYERI: [
+        "CBD",
+        "Chaka",
+        "Endarasha",
+        "Karatina",
+        "Mukurwe ini",
+        "Mweiga",
+        "Naro Moru",
+        "Othaya",
+      ],
+      RUIRU: [
+        "Daykio Bustani Estate",
+        "Easternville Estate",
+        "Kamakis",
+        "Kamiti",
+        "Membley Estate",
+        "Mhasibu Bustani Estate",
+        "Mugutha",
+        "Ruiru Town",
+        "Tatu City",
+      ],
+      SIAYA: ["Bondo", "CBD", "Ugunja", "Ugenya", "Yala", "Gem", "Sega"],
+      THIKA: ["Ngoingwa", "CBD", "Makongeni", "Kiahuria"],
+      VOI: ["CBD", "Kasigau", "Marungu", "Mbololo", "Ngolia", "Sagalla"],
+      WAJIR: ["Habaswein", "CBD", "Hadado", "Tarbaj", "Diff", "Eldas", "Bute"],
+      WEBUYE: [
+        "CBD",
+        "Bokoli",
+        "Cheptulu",
+        "Maraka",
+        "Matulo",
+        "Mihuu",
+        "Misikhu",
+        "Ndivisi",
+        "Sitikho",
+      ],
+      WOTE: ["CBD", "Kaiti", "Makueni"],
+      OLKALOU: ["Gichungo", "Kaimbaga", "Rurii"],
+      MAGUMU: ["CBD", "Forest", "Njabini", "Kibiru", "Mukera", "Kinangop"],
+      MWEA: ["CBD", "Kimbimbi", "Kutus"],
+    }),
+    []
   );
-  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim());
-  const isTownValid = installationTown.trim().length > 0;
-  const isDeliveryLocationValid = deliveryLocation.trim().length >= 5;
-  const isInstallationLocationValid =
-    (installationLocation.trim().length > 0 &&
-      installationLocation !== "Other") ||
-    (isInstallationLocationOther && installationLocation.trim().length > 0);
-  const isPreferredDateValid = preferredDate.trim().length > 0;
-  const isPreferredTimeValid = preferredTime.trim().length > 0;
-
-  // Locations data structure from locations.md
-  const locationsData: Record<string, string[]> = {
-    BOMET: [
-      "CBD",
-      "Longisa",
-      "Ndanai",
-      "Silibwet",
-      "Siongiroi",
-      "Sotik",
-      "University",
-    ],
-    BUSIA: [
-      "Alupe",
-      "Bumala",
-      "BurumbaAngoromMayenje",
-      "Butula",
-      "CBD",
-      "Nambale",
-    ],
-    BUNGOMA: ["CBD", "Chwele", "Kamukuywa", "Kanduyi", "Kimilili", "Sirisia"],
-    CHUKA: ["CBD", "Chuka University", "Igambang'ombe", "Maara"],
-    Eldoret: [
-      "Annex",
-      "Bahati",
-      "Munyaka",
-      "Pioneer",
-      "Sisibo",
-      "Upper Eldoville",
-      "Hillside",
-      "Kapsoya",
-    ],
-    EMBU: [
-      "Blue Valley",
-      "Itabua",
-      "Kamiu",
-      "Kangaru",
-      "Majengo",
-      "Matakari",
-      "Njukiri",
-    ],
-    GARISSA: ["CBD", "Galbet", "Iftin", "Township", "Waberi"],
-    HOMABAY: [
-      "CBD",
-      "Kendu Bay",
-      "Mbita",
-      "Ndhiwa",
-      "Gwasi",
-      "Kaspul",
-      "Rangwe",
-      "Karachuonyo",
-    ],
-    ISIOLO: ["CBD", "Merti", "Oldonyiro"],
-    ITEN: [
-      "Arror",
-      "Chebiemit",
-      "Chepkorio",
-      "Chesoi",
-      "Flax",
-      "Iten CBD",
-      "Kapsowar",
-      "Kaptarakwa",
-      "Kapyego",
-      "Nyaru",
-      "Tambach",
-      "Tot",
-    ],
-    KABARNET: ["CBD", "Eldama ravine", "Marigat", "Mogotio"],
-    KAKAMEGA: [
-      "CBD",
-      "Butere",
-      "Ikolomani",
-      "Khwisero",
-      "Lugari",
-      "Lukuyani",
-      "Malava",
-      "Matungu",
-      "Mumias",
-      "Navakholo",
-      "Shinyalu",
-    ],
-    KAPENGURIA: ["CBD", "Chepkram", "Kitalakape", "Kongelai", "Kanyarkwat"],
-    KAPSABET: ["CBD", "Mosoriot", "Kabiyet", "Nandi Hills", "Kaiboi"],
-    KERICHO: ["CBD", "Kapsaos", "Kipkelion", "Ainamoi"],
-    KERUGOYA: ["CBD", "Sagana", "Wanguru", "Kagumo", "Kagio"],
-    KILIFI: [
-      "CBD",
-      "Kaloleni",
-      "Magarini",
-      "Malindi",
-      "Mariakani",
-      "Mazeras",
-      "Mtwapa",
-      "Rabai",
-      "Watamu",
-    ],
-    KISII: [
-      "CBD",
-      "Kenyeya",
-      "Keroka",
-      "Marani",
-      "Masimba",
-      "Nyacheki",
-      "Nyamache",
-      "Nyamarambe",
-      "Ogembo",
-      "Suneka",
-      "Nyamataro",
-      "Nyanchwa",
-      "Jogoo",
-      "Mwembe",
-      "Nyakoe",
-      "Mosocho",
-      "Nyatieko",
-      "Bigege",
-      "Keumbu",
-      "Omogonchoro",
-      "Manga",
-    ],
-    KISUMU: [
-      "Kondele",
-      "Lolwe Estate",
-      "Manyatta",
-      "Milimani Estate",
-      "Mountain View Estate",
-      "Nyalenda",
-      "Okore Estate",
-      "Polyview Estate",
-      "Tom Mboya Estate",
-      "Translakes Estate (Kibos Road)",
-    ],
-    KITALE: [
-      "Kitale CBD",
-      "Milimani",
-      "Kiminini",
-      "Saboti",
-      "Kongelai",
-      "Kwanza",
-      "Endebess",
-      "Section 6",
-    ],
-    KITENGELA: [
-      "CBD",
-      "Kitengela Plains",
-      "Boston",
-      "Chuna",
-      "Muigai Prestige",
-      "Milimani",
-      "Kitengela Breeze",
-      "The Riverine",
-    ],
-    KITUI: [
-      "Township",
-      "Kwa Ngendu Estate",
-      "Kalawa Road Estate",
-      "Kyangwithya East & West",
-      "Kwa Vonza/Yatta",
-      "Kauwi",
-      "Mutomo",
-      "Kyuso",
-      "Zombe",
-      "Itoleka",
-      "Tulia",
-      "Kyanika",
-    ],
-    LODWAR: [
-      "Lodwar CBD",
-      "Loima",
-      "Lokichar",
-      "Kalokol",
-      "Kakuma",
-      "Lokichogio",
-    ],
-    LUANDA: [
-      "Vihiga Municipality",
-      "Chavagali",
-      "Mbale CBD",
-      "Serem",
-      "Kaimosi",
-      "Hamisi",
-      "Sabatia",
-      "Majengo-Vihiga",
-    ],
-    MACHAKOS: [
-      "Mulolongo",
-      "Athi River",
-      "Konza City",
-      "Joska",
-      "Kangundo Road",
-      "Mua Hills",
-      "Central",
-      "South Park Estate",
-      "Encasa Apartments",
-      "Summit Urban Estates",
-      "Lukenya Hills Estate",
-      "Kyumvi",
-      "Kenya Israel",
-      "Greenpark Estate",
-      "Katani",
-      "Syokimau",
-      "Gateway Mall Gated Estate",
-      "Gratewall",
-    ],
-    MALINDI: ["Township"],
-    MANDERA: ["CBD", "Rhamu", "El Wak", "Takaba"],
-    MARALAL: ["CBD", "Wamba", "Kisima", "Baragoi", "Lodosoit", "Archers Post"],
-    MARSABIT: ["CBD", "Moyale", "Ileret", "Laisamis", "Loiyangalani"],
-    MAUA: ["Maili Tatu", "Mutuati", "Kimongoro", "Athiru", "Kithetu", "Kiegoi"],
-    MERU: ["Laare", "Nkubu", "Timau"],
-    MIGORI: [
-      "Migori CBD",
-      "Rongo",
-      "Uriri",
-      "Awendo",
-      "Muhuru Bay",
-      "Isbania",
-      "Nyatike",
-    ],
-    MOMBASA: [
-      "Kongowea",
-      "KWALE",
-      "Ukunda",
-      "Watamu",
-      "Bamburi",
-      "Changamwe",
-      "Jomvu",
-      "Kisauni",
-      "Kizingo",
-      "Likoni",
-      "Magongo",
-      "Mikindani",
-      "Miritini",
-      "Nyali",
-      "Shanzu",
-      "Tudor",
-    ],
-    "MURANG'A": [
-      "CBD",
-      "Kangema",
-      "Kiharu",
-      "Kabati",
-      "Kandara",
-      "Maragua",
-      "Makuyu",
-      "Kiriani",
-      "Gatura",
-    ],
-    NAIROBI: [
-      "Athiriver",
-      "Babadogo",
-      "Bellevue",
-      "Buru Buru",
-      "CBD",
-      "Chokaa",
-      "Chuka",
-      "Dagoreti Market",
-      "Dandora",
-      "Donholm",
-      "Eastleigh",
-      "Embakasi",
-      "Fedha",
-      "Gachie",
-      "Garden Estate",
-      "Gigiri",
-      "Githurai",
-      "Imara Daima",
-      "Industrial Area",
-      "Joska Town",
-      "Juja",
-      "Kahawa Sukari",
-      "Kahawa Wendani",
-      "Kahawa West",
-      "Kamulu",
-      "Kangemi",
-      "Karen",
-      "Kariobangi",
-      "Kasarani",
-      "Kawangware",
-      "Kayole",
-      "Kiambu",
-      "Kikuyu",
-      "Kileleshwa",
-      "Kilimani",
-      "Kinoo",
-      "Kiserian",
-      "Kitusuru",
-      "Komarock",
-      "Langata",
-      "Lavington",
-      "Limuru",
-      "Lower Kabete",
-      "Lucky Summer",
-      "Machakos",
-      "Mlolongo",
-      "Mombasa Road",
-      "Mukuru",
-      "Muthaiga",
-      "Mwiki",
-      "Ngara",
-      "Ngong Road",
-      "Njiru",
-      "Nyari",
-      "Pangani",
-      "Pipeline",
-      "Riverside",
-      "Rongai",
-      "Roysambu",
-      "Ruai",
-      "Ruaka",
-      "Ruiru",
-      "Runda",
-      "Saika",
-      "South B",
-      "South C",
-      "Spring Valley",
-      "Syokimau",
-      "Tassia",
-      "Thome",
-      "Umoja",
-      "Utawala",
-      "Uthiru",
-      "Westlands & Parklands",
-      "Zimmerman",
-    ],
-    NAIVASHA: [
-      "Kabati",
-      "Kayole Naivasha",
-      "Kehoto",
-      "Karagita",
-      "Kamere",
-      "Fly-Over",
-      "Delamere",
-      "Naivasha CBD",
-      "Mirera",
-      "Mai Mahiu",
-    ],
-    NAKURU: [
-      "Barnabas",
-      "Flamingo",
-      "Mireri Estates",
-      "Naka",
-      "Section 58",
-      "Upper Hill",
-      "Milimani",
-      "Nakuru Meadows",
-    ],
-    NANYUKI: [
-      "Mount Kenya Wildlife Estate (MKWE)",
-      "Mukima Ridge",
-      "Muthaiga Estate, Nanyuki",
-      "Sweetwaters / Baraka Estate",
-      "Sarova Maiyan Villas",
-      "Ol Saruni Gardens",
-      "Beverly Acres",
-      "Airstrip Gardens",
-      "Fahari Ridge 2",
-      "Nanyuki Town Centre",
-      "Bargain Area",
-      "Timau Belt",
-      "Likii Estate",
-      "Kwa Huku Estate",
-      "Nkando Estate",
-      "Snow View Estate",
-      "Madison Lane",
-      "Cedar Mall Estate",
-      "Burguret Area",
-      "Daiga & Ethi",
-      "Jua Kali Zone",
-    ],
-    NAROK: [
-      "Lenana Estate",
-      "Olerai Estate",
-      "Tumaini Estate",
-      "Ilmashariani",
-      "Leleshwa",
-      "Maasai Mara",
-      "Ololulunga",
-      "Nkareta",
-      "London Estate",
-    ],
-    NYAHURURU: [
-      "CBD",
-      "Gatundia Estate",
-      "Igwamiti",
-      "Madaraka Estate",
-      "Mairo Inya",
-      "Ndururumo Area",
-      "Ngano Estate",
-    ],
-    NYAMIRA: ["CBD", "Ekerubo", "Kebirigo", "Kijauri", "Nyansiongo"],
-    NYERI: [
-      "CBD",
-      "Chaka",
-      "Endarasha",
-      "Karatina",
-      "Mukurwe ini",
-      "Mweiga",
-      "Naro Moru",
-      "Othaya",
-    ],
-    RUIRU: [
-      "Daykio Bustani Estate",
-      "Easternville Estate",
-      "Kamakis",
-      "Kamiti",
-      "Membley Estate",
-      "Mhasibu Bustani Estate",
-      "Mugutha",
-      "Ruiru Town",
-      "Tatu City",
-    ],
-    SIAYA: ["Bondo", "CBD", "Ugunja", "Ugenya", "Yala", "Gem", "Sega"],
-    THIKA: ["Ngoingwa", "CBD", "Makongeni", "Kiahuria"],
-    VOI: ["CBD", "Kasigau", "Marungu", "Mbololo", "Ngolia", "Sagalla"],
-    WAJIR: ["Habaswein", "CBD", "Hadado", "Tarbaj", "Diff", "Eldas", "Bute"],
-    WEBUYE: [
-      "CBD",
-      "Bokoli",
-      "Cheptulu",
-      "Maraka",
-      "Matulo",
-      "Mihuu",
-      "Misikhu",
-      "Ndivisi",
-      "Sitikho",
-    ],
-    WOTE: ["CBD", "Kaiti", "Makueni"],
-    OLKALOU: ["Gichungo", "Kaimbaga", "Rurii"],
-    MAGUMU: ["CBD", "Forest", "Njabini", "Kibiru", "Mukera", "Kinangop"],
-    MWEA: ["CBD", "Kimbimbi", "Kutus"],
-  };
 
   // Town options for dropdown (matching locations.md, removed Lamu)
-  const townOptions = [
-    "Nairobi",
-    "Mombasa",
-    "Kisumu",
-    "Nakuru",
-    "Eldoret",
-    "Thika",
-    "Malindi",
-    "Kitale",
-    "Garissa",
-    "Kakamega",
-    "Nyeri",
-    "Meru",
-    "Machakos",
-    "Embu",
-    "Kericho",
-    "Bungoma",
-    "Busia",
-    "Homa Bay",
-    "Kisii",
-    "Bomet",
-    "Chuka",
-    "Isiolo",
-    "Iten",
-    "Kabarnet",
-    "Kapenguria",
-    "Kapsabet",
-    "Kerugoya",
-    "Kilifi",
-    "Kitengela",
-    "Kitui",
-    "Lodwar",
-    "Luanda",
-    "Mandera",
-    "Maralal",
-    "Marsabit",
-    "Maua",
-    "Migori",
-    "Murang'a",
-    "Naivasha",
-    "Nanyuki",
-    "Narok",
-    "Nyahururu",
-    "Nyamira",
-    "Ruiru",
-    "Siaya",
-    "Voi",
-    "Wajir",
-    "Webuye",
-    "Wote",
-    "Olkalou",
-    "Magumu",
-    "Mwea",
-  ];
+  const townOptions = useMemo(
+    () => [
+      "Nairobi",
+      "Mombasa",
+      "Kisumu",
+      "Nakuru",
+      "Eldoret",
+      "Thika",
+      "Malindi",
+      "Kitale",
+      "Garissa",
+      "Kakamega",
+      "Nyeri",
+      "Meru",
+      "Machakos",
+      "Embu",
+      "Kericho",
+      "Bungoma",
+      "Busia",
+      "Homa Bay",
+      "Kisii",
+      "Bomet",
+      "Chuka",
+      "Isiolo",
+      "Iten",
+      "Kabarnet",
+      "Kapenguria",
+      "Kapsabet",
+      "Kerugoya",
+      "Kilifi",
+      "Kitengela",
+      "Kitui",
+      "Lodwar",
+      "Luanda",
+      "Mandera",
+      "Maralal",
+      "Marsabit",
+      "Maua",
+      "Migori",
+      "Murang'a",
+      "Naivasha",
+      "Nanyuki",
+      "Narok",
+      "Nyahururu",
+      "Nyamira",
+      "Ruiru",
+      "Siaya",
+      "Voi",
+      "Wajir",
+      "Webuye",
+      "Wote",
+      "Olkalou",
+      "Magumu",
+      "Mwea",
+    ],
+    []
+  );
 
   // Helper function to get installation location options based on selected town
-  const getInstallationLocationOptions = (): string[] => {
+  const getInstallationLocationOptions = useCallback((): string[] => {
     if (!installationTown) {
       return [];
     }
@@ -654,9 +722,12 @@ export default function TestMobilePage() {
       return [...locationsData[townKey], "Other"];
     }
     return ["Other"];
-  };
+  }, [installationTown, locationsData]);
 
-  const installationLocationOptions = getInstallationLocationOptions();
+  const installationLocationOptions = useMemo(
+    () => getInstallationLocationOptions(),
+    [getInstallationLocationOptions]
+  );
 
   // Auto-scroll How to Order slider
   useEffect(() => {
@@ -709,7 +780,7 @@ export default function TestMobilePage() {
   }, []);
 
   // Function to strip emojis from text for TTS
-  const stripEmojis = (text: string): string => {
+  const stripEmojis = useCallback((text: string): string => {
     // Remove emojis using regex pattern
     // This pattern matches most emoji ranges including:
     // - Emoticons, Miscellaneous Symbols, Dingbats
@@ -724,66 +795,69 @@ export default function TestMobilePage() {
       )
       .replace(/\s+/g, " ") // Replace multiple spaces with single space
       .trim();
-  };
+  }, []);
 
   // Function to speak text using Google Cloud TTS
-  const speakText = async (text: string) => {
-    if (!text || isMuted) return;
+  const speakText = useCallback(
+    async (text: string) => {
+      if (!text || isMuted) return;
 
-    // Strip emojis from text before TTS
-    const cleanText = stripEmojis(text);
-    if (!cleanText) return; // If text is only emojis, don't speak
+      // Strip emojis from text before TTS
+      const cleanText = stripEmojis(text);
+      if (!cleanText) return; // If text is only emojis, don't speak
 
-    // Only play audio if user has interacted with the page
-    if (!hasUserInteracted) {
-      // Wait for user interaction before playing audio
-      return;
-    }
+      // Only play audio if user has interacted with the page
+      if (!hasUserInteracted) {
+        // Wait for user interaction before playing audio
+        return;
+      }
 
-    try {
-      // Check if audio is currently playing
-      const isAudioPlaying =
-        audioRef.current &&
-        !audioRef.current.paused &&
-        audioRef.current.currentTime > 0 &&
-        !audioRef.current.ended;
+      try {
+        // Check if audio is currently playing
+        const isAudioPlaying =
+          audioRef.current &&
+          !audioRef.current.paused &&
+          audioRef.current.currentTime > 0 &&
+          !audioRef.current.ended;
 
-      // If audio is playing and almost done (within 0.5 seconds), wait for it to finish
-      if (isAudioPlaying && audioRef.current) {
-        const timeRemaining =
-          audioRef.current.duration - audioRef.current.currentTime;
-        if (timeRemaining <= 0.5) {
-          // Wait for current audio to finish, then play new one
-          audioRef.current.addEventListener(
-            "ended",
-            async () => {
-              // Now play the new audio
-              await playNewAudio(cleanText);
-            },
-            { once: true }
-          );
-          return;
+        // If audio is playing and almost done (within 0.5 seconds), wait for it to finish
+        if (isAudioPlaying && audioRef.current) {
+          const timeRemaining =
+            audioRef.current.duration - audioRef.current.currentTime;
+          if (timeRemaining <= 0.5) {
+            // Wait for current audio to finish, then play new one
+            audioRef.current.addEventListener(
+              "ended",
+              async () => {
+                // Now play the new audio
+                await playNewAudio(cleanText);
+              },
+              { once: true }
+            );
+            return;
+          }
         }
-      }
 
-      // Stop any currently playing audio (if it's not almost done)
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
+        // Stop any currently playing audio (if it's not almost done)
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        }
 
-      // Play new audio
-      await playNewAudio(cleanText);
-    } catch (error) {
-      console.error("TTS Error:", error);
-      // Only use Google Cloud TTS - no fallback
-      // Return to idle if error
-      setRobotAnimationState("idle");
-    }
-  };
+        // Play new audio
+        await playNewAudio(cleanText);
+      } catch (error) {
+        console.error("TTS Error:", error);
+        // Only use Google Cloud TTS - no fallback
+        // Return to idle if error
+        setRobotAnimationState("idle");
+      }
+    },
+    [isMuted, hasUserInteracted, stripEmojis]
+  );
 
   // Helper function to play new audio
-  const playNewAudio = async (cleanText: string) => {
+  const playNewAudio = useCallback(async (cleanText: string) => {
     try {
       console.log(
         "🎙️ Frontend: Calling TTS API for text:",
@@ -866,7 +940,7 @@ export default function TestMobilePage() {
       // Only use Google Cloud TTS - no fallback
       setRobotAnimationState("idle");
     }
-  };
+  }, []);
 
   // Check if user is currently typing in any input field
   useEffect(() => {
@@ -1728,7 +1802,7 @@ export default function TestMobilePage() {
     preferredTime,
   ]);
 
-  const scrollToStep2 = () => {
+  const scrollToStep2 = useCallback(() => {
     const scroll = () => {
       if (step2Ref.current) {
         const rect = step2Ref.current.getBoundingClientRect();
@@ -1755,73 +1829,48 @@ export default function TestMobilePage() {
       scroll();
     };
     window.addEventListener("resize", handleResize, { once: true });
-  };
+  }, []);
 
-  const showNameCheck = nameBlurred && isNameValid;
-  const showPhoneCheck = phoneBlurred && isPhoneValid;
-  const showAlternativeCheck = alternativeBlurred && isAlternativeValid;
-  const showEmailCheck = emailBlurred && isEmailValid;
-  const showTownCheck = townBlurred && isTownValid;
-  const showDeliveryLocationCheck =
-    deliveryLocationBlurred && isDeliveryLocationValid;
-  const showInstallationLocationCheck =
-    installationLocationBlurred && isInstallationLocationValid;
-
-  // Handle location selection from map picker
-  const handleMapLocationSelect = (data: {
-    town: string;
-    landmark: string;
-    installationLocation: string;
-    isValid: boolean;
-    error?: string;
-  }) => {
-    console.log("📥 Mobile page received location data:", {
-      town: data.town,
-      landmark: data.landmark,
-      installationLocation: data.installationLocation,
-      isValid: data.isValid,
-      error: data.error,
-    });
-
-    if (data.isValid) {
-      setInstallationTown(data.town);
-      setDeliveryLocation(data.landmark || "");
-      setInstallationLocation(data.installationLocation || "");
-      setIsInstallationLocationOther(false);
-      // Don't auto-blur for map selections - wait for user to confirm with "Done"
-      // This prevents the robot from speaking too early
-      // setTownBlurred(true);
-      // setDeliveryLocationBlurred(true);
-      // setInstallationLocationBlurred(true);
-      
-      console.log("✅ Location data set in form:", {
-        installationTown: data.town,
-        deliveryLocation: data.landmark || "",
-        installationLocation: data.installationLocation || "",
-        note: "These values will be sent to Microsoft Forms API",
-      });
-      
-      // Don't set robot message here - wait for user to click "Done"
-    } else {
-      console.warn("❌ Invalid location data received:", data.error);
-      // Invalid location - town not in service area
-      setInstallationTown("");
-      setDeliveryLocation("");
-      setInstallationLocation("");
-      setTownBlurred(false);
-      setDeliveryLocationBlurred(false);
-      setInstallationLocationBlurred(false);
-      
-      if (data.error) {
-        setRobotMessage(data.error);
-      }
-    }
-  };
-  const showPreferredDateCheck = preferredDateBlurred && isPreferredDateValid;
-  const showPreferredTimeCheck = preferredTimeBlurred && isPreferredTimeValid;
+  // Memoize check visibility flags
+  const showNameCheck = useMemo(
+    () => nameBlurred && isNameValid,
+    [nameBlurred, isNameValid]
+  );
+  const showPhoneCheck = useMemo(
+    () => phoneBlurred && isPhoneValid,
+    [phoneBlurred, isPhoneValid]
+  );
+  const showAlternativeCheck = useMemo(
+    () => alternativeBlurred && isAlternativeValid,
+    [alternativeBlurred, isAlternativeValid]
+  );
+  const showEmailCheck = useMemo(
+    () => emailBlurred && isEmailValid,
+    [emailBlurred, isEmailValid]
+  );
+  const showTownCheck = useMemo(
+    () => townBlurred && isTownValid,
+    [townBlurred, isTownValid]
+  );
+  const showDeliveryLocationCheck = useMemo(
+    () => deliveryLocationBlurred && isDeliveryLocationValid,
+    [deliveryLocationBlurred, isDeliveryLocationValid]
+  );
+  const showInstallationLocationCheck = useMemo(
+    () => installationLocationBlurred && isInstallationLocationValid,
+    [installationLocationBlurred, isInstallationLocationValid]
+  );
+  const showPreferredDateCheck = useMemo(
+    () => preferredDateBlurred && isPreferredDateValid,
+    [preferredDateBlurred, isPreferredDateValid]
+  );
+  const showPreferredTimeCheck = useMemo(
+    () => preferredTimeBlurred && isPreferredTimeValid,
+    [preferredTimeBlurred, isPreferredTimeValid]
+  );
 
   // Function to mask phone numbers
-  const maskPhoneNumber = (phone: string): string => {
+  const maskPhoneNumber = useCallback((phone: string): string => {
     if (!phone) return "";
     const digits = phone.replace(/\D/g, "");
     if (digits.length <= 4) return "****";
@@ -1829,7 +1878,41 @@ export default function TestMobilePage() {
     const start = digits.slice(0, 2);
     const end = digits.slice(-2);
     return `${start}****${end}`;
-  };
+  }, []);
+
+  // Handle location selection from map picker
+  const handleMapLocationSelect = useCallback(
+    (data: {
+      town: string;
+      landmark: string;
+      installationLocation: string;
+      isValid: boolean;
+      error?: string;
+    }) => {
+      if (data.isValid) {
+        setInstallationTown(data.town);
+        setDeliveryLocation(data.landmark || "");
+        setInstallationLocation(data.installationLocation || "");
+        setIsInstallationLocationOther(false);
+        setTownBlurred(true);
+        setDeliveryLocationBlurred(true);
+        setInstallationLocationBlurred(true);
+      } else {
+        setInstallationTown("");
+        setDeliveryLocation("");
+        setInstallationLocation("");
+        setTownBlurred(false);
+        setDeliveryLocationBlurred(false);
+        setInstallationLocationBlurred(false);
+        if (data.error) {
+          setRobotMessage(data.error);
+        }
+      }
+      setShowMapPicker(false);
+      scrollToStep2();
+    },
+    [scrollToStep2]
+  );
 
   return (
     <>
@@ -1853,6 +1936,34 @@ export default function TestMobilePage() {
         .installation-location-dropdown-opaque button:hover {
           background-color: rgb(38, 38, 38) !important;
           opacity: 1 !important;
+        }
+        @keyframes pulse-ring {
+          0% {
+            transform: scale(0.8);
+            opacity: 1;
+          }
+          50% {
+            transform: scale(1.2);
+            opacity: 0.5;
+          }
+          100% {
+            transform: scale(0.8);
+            opacity: 1;
+          }
+        }
+        .animate-pulse-ring {
+          animation: pulse-ring 2s ease-in-out infinite;
+        }
+        @keyframes subtle-glow {
+          0%, 100% {
+            box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 8px 2px rgba(251, 191, 36, 0.3);
+          }
+        }
+        .animate-subtle-glow {
+          animation: subtle-glow 2s ease-in-out infinite;
         }
       `,
         }}
@@ -2689,82 +2800,9 @@ export default function TestMobilePage() {
               </div>
             </div>
 
-            {/* Location Selection - Toggle */}
-            <div className="mb-6">
-              <div className="mb-4">
-                <label className={`block text-sm font-medium text-neutral-300 mb-3 ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
-                  Location Type
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => setLocationMode("current")}
-                    className={`px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
-                      locationMode === "current"
-                        ? "bg-neutral-800/50 border-yellow-400/60 text-yellow-400 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                        : "bg-neutral-900/90 border-neutral-800/50 text-neutral-400 hover:border-neutral-700/50"
-                    } ${poppins.variable}`}
-                    style={{ fontFamily: "var(--font-poppins), sans-serif" }}
-                  >
-                    <div className="flex items-center justify-center gap-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      <span className="text-sm font-medium">Current Location</span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => setLocationMode("different")}
-                    className={`px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
-                      locationMode === "different"
-                        ? "bg-neutral-800/50 border-yellow-400/60 text-yellow-400 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                        : "bg-neutral-900/90 border-neutral-800/50 text-neutral-400 hover:border-neutral-700/50"
-                    } ${poppins.variable}`}
-                    style={{ fontFamily: "var(--font-poppins), sans-serif" }}
-                  >
-                    <div className="flex items-center justify-center gap-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                      </svg>
-                      <span className="text-sm font-medium">Different Address</span>
-                    </div>
-                  </button>
-                </div>
-              </div>
-
-              {/* Location Selection - Map Picker or Manual Entry */}
-              {locationMode === "current" ? (
-                  <LocationMapPicker
-                    locationMode={locationMode}
-                    onLocationSelect={handleMapLocationSelect}
-                    onError={(message) => setRobotMessage(message)}
-                    townOptions={townOptions}
-                    onUseManualEntry={() => setLocationMode("different")}
-                    value={installationTown && deliveryLocation ? `${installationTown} - ${deliveryLocation}` : installationTown || ""}
-                    onBottomSheetChange={(isOpen) => setIsBottomSheetOpen(isOpen)}
-                    onLocationConfirmed={(data) => {
-                      // Mark fields as blurred only after user confirms
-                      setTownBlurred(true);
-                      setDeliveryLocationBlurred(true);
-                      setInstallationLocationBlurred(true);
-                      
-                      // Robot speaks only after user confirms by clicking "Done"
-                      const firstName = customerName.trim().split(" ")[0] || "there";
-                      const locationSuccess = [
-                        `Perfect ${firstName}! We've got your location! 📍`,
-                        `Excellent ${firstName}! We know where to find you! 🏠`,
-                        `Great ${firstName}! Your location is set! 🗺️`,
-                      ];
-                      const randomMessage =
-                        locationSuccess[Math.floor(Math.random() * locationSuccess.length)];
-                      setRobotMessage(randomMessage);
-                    }}
-                  />
-              ) : (
-                <>
-                  {/* Manual Entry Fields */}
-                {/* Customer Installation Town */}
-                <div className="mb-6 relative">
+            {/* Location Entry Fields */}
+            {/* Customer Installation Town */}
+            <div className="mb-6 relative">
               {/* Floating Label */}
               <div
                 className={`absolute left-3 pointer-events-none transition-all duration-300 ${
@@ -2852,8 +2890,55 @@ export default function TestMobilePage() {
                   <span className="block truncate">
                     {installationTown || ""}
                   </span>
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    {townBlurred && isTownValid ? (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center justify-center">
+                    {/* GPS Location Icon - Show when town is not selected */}
+                    {!installationTown && (
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowMapPicker(true);
+                          scrollToStep2();
+                        }}
+                        className="relative p-1.5 rounded-full hover:bg-yellow-400/10 transition-colors animate-subtle-glow group flex items-center justify-center cursor-pointer"
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Use current location"
+                        title="Tap to use your current location"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setShowMapPicker(true);
+                            scrollToStep2();
+                          }
+                        }}
+                      >
+                        {/* Pulsing ring effect */}
+                        <div className="absolute inset-0 rounded-full border-2 border-yellow-400/40 animate-pulse-ring"></div>
+                        {/* GPS icon */}
+                        <svg
+                          className="w-5 h-5 text-yellow-400 relative z-10"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                    {/* Check icon - Show when valid */}
+                    {townBlurred && isTownValid && (
                       <svg
                         className="w-5 h-5 text-yellow-400"
                         fill="none"
@@ -2867,7 +2952,9 @@ export default function TestMobilePage() {
                           d="M5 13l4 4L19 7"
                         />
                       </svg>
-                    ) : (
+                    )}
+                    {/* Dropdown arrow - Show when town is selected but not blurred yet */}
+                    {installationTown && !townBlurred && (
                       <svg
                         className="w-5 h-5 text-neutral-300"
                         fill="none"
@@ -3331,97 +3418,140 @@ export default function TestMobilePage() {
               </div>
             )}
 
-                {/* Specific Delivery Location (Nearest Landmark) */}
-                <div className="mb-6 relative">
-                  {/* Floating Label */}
+            {/* Specific Delivery Location (Nearest Landmark) */}
+            <div className="mb-6 relative">
+              {/* Floating Label */}
+              <div
+                className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                  deliveryLocationFocused || deliveryLocation
+                    ? "top-0 transform -translate-y-1/2"
+                    : "top-1/2 transform -translate-y-1/2"
+                }`}
+                style={{ zIndex: 30 }}
+              >
+                {/* Border cut background */}
+                {(deliveryLocationFocused || deliveryLocation) && (
                   <div
-                    className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                    className="absolute left-0"
+                    style={{
+                      top: "50%",
+                      background: "rgb(38, 38, 38)",
+                      height: "2px",
+                      width: "calc(100% + 4px)",
+                      marginLeft: "-4px",
+                      borderTopLeftRadius: "8px",
+                    }}
+                  />
+                )}
+                {/* Label text */}
+                <div className="px-1.5 relative">
+                  <span
+                    className={`text-xs font-medium transition-all duration-300 ${
                       deliveryLocationFocused || deliveryLocation
-                        ? "top-0 transform -translate-y-1/2"
-                        : "top-1/2 transform -translate-y-1/2"
-                    }`}
-                    style={{ zIndex: 30 }}
+                        ? "text-white/90"
+                        : "text-neutral-400"
+                    } ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
                   >
-                    {/* Border cut background */}
-                    {(deliveryLocationFocused || deliveryLocation) && (
-                      <div
-                        className="absolute left-0"
-                        style={{
-                          top: "50%",
-                          background: "rgb(38, 38, 38)",
-                          height: "2px",
-                          width: "calc(100% + 4px)",
-                          marginLeft: "-4px",
-                          borderTopLeftRadius: "8px",
-                        }}
-                      />
+                    {deliveryLocationFocused || deliveryLocation ? (
+                      <>
+                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                          7
+                        </span>
+                        Delivery Location (Nearest Landmark){" "}
+                        <span className="text-yellow-400">*</span>
+                      </>
+                    ) : (
+                      "Enter your Nearest landmark"
                     )}
-                    {/* Label text */}
-                    <div className="px-1.5 relative">
-                      <span
-                        className={`text-xs font-medium transition-all duration-300 ${
-                          deliveryLocationFocused || deliveryLocation
-                            ? "text-white/90"
-                            : "text-neutral-400"
-                        } ${poppins.variable}`}
+                  </span>
+                </div>
+              </div>
+              <div className="relative">
+                <input
+                  ref={deliveryLocationInputRef}
+                  type="text"
+                  placeholder=""
+                  value={deliveryLocation}
+                  onChange={(e) => setDeliveryLocation(e.target.value)}
+                  onFocus={() => {
+                    setDeliveryLocationFocused(true);
+                    scrollToStep2();
+                  }}
+                  onBlur={() => {
+                    setDeliveryLocationFocused(false);
+                    setDeliveryLocationBlurred(true);
+                  }}
+                  className={`w-full px-3 py-3.5 ${
+                    deliveryLocationFocused || deliveryLocation
+                      ? "pt-5"
+                      : "pt-3.5"
+                  } ${
+                    showDeliveryLocationCheck ? "pr-20" : "pr-20"
+                  } rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                    showDeliveryLocationCheck
+                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                      : "border-neutral-800/50"
+                  } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                    poppins.variable
+                  }`}
+                  style={{
+                    fontFamily: "var(--font-poppins), sans-serif",
+                    WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
+                    WebkitTextFillColor: "#ffffff",
+                    caretColor: "#ffffff",
+                  }}
+                  onClick={scrollToStep2}
+                  spellCheck={false}
+                  autoComplete="off"
+                />
+                {/* Check icon - Show when valid */}
+                {showDeliveryLocationCheck && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                    <svg
+                      className="w-5 h-5 text-yellow-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Map Picker - Bottom Sheet Overlay */}
+            {showMapPicker && (
+              <div className="fixed inset-0 z-50">
+                <div
+                  className="absolute inset-0 bg-black/50"
+                  onClick={() => setShowMapPicker(false)}
+                ></div>
+                <div className="absolute bottom-0 left-0 right-0 bg-neutral-900 rounded-t-3xl shadow-2xl max-h-[90vh] overflow-hidden">
+                  <div className="px-5 pt-4 pb-5">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3
+                        className={`text-lg font-semibold text-white ${poppins.variable}`}
                         style={{
                           fontFamily: "var(--font-poppins), sans-serif",
                         }}
                       >
-                        {deliveryLocationFocused || deliveryLocation ? (
-                          <>
-                            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                              7
-                            </span>
-                            Delivery Location (Nearest Landmark){" "}
-                            <span className="text-yellow-400">*</span>
-                          </>
-                        ) : (
-                          "Enter your Nearest landmark"
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="relative">
-                    <input
-                      ref={deliveryLocationInputRef}
-                      type="text"
-                      placeholder=""
-                      value={deliveryLocation}
-                      onChange={(e) => setDeliveryLocation(e.target.value)}
-                      onFocus={() => {
-                        setDeliveryLocationFocused(true);
-                        scrollToStep2();
-                      }}
-                      onBlur={() => {
-                        setDeliveryLocationFocused(false);
-                        setDeliveryLocationBlurred(true);
-                      }}
-                      className={`w-full px-3 py-3.5 ${
-                        deliveryLocationFocused || deliveryLocation
-                          ? "pt-5"
-                          : "pt-3.5"
-                      } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                        showDeliveryLocationCheck
-                          ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                          : "border-neutral-800/50"
-                      } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                        poppins.variable
-                      }`}
-                      style={{
-                        fontFamily: "var(--font-poppins), sans-serif",
-                        WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
-                        WebkitTextFillColor: "#ffffff",
-                        caretColor: "#ffffff",
-                      }}
-                      onClick={scrollToStep2}
-                      spellCheck={false}
-                      autoComplete="off"
-                    />
-                    {showDeliveryLocationCheck && (
-                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                        Select Location
+                      </h3>
+                      <button
+                        onClick={() => setShowMapPicker(false)}
+                        className="p-2 rounded-full hover:bg-neutral-800 transition-colors"
+                      >
                         <svg
-                          className="w-5 h-5 text-yellow-400"
+                          className="w-5 h-5 text-neutral-400"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -3430,16 +3560,48 @@ export default function TestMobilePage() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M5 13l4 4L19 7"
+                            d="M6 18L18 6M6 6l12 12"
                           />
                         </svg>
-                      </div>
-                    )}
+                      </button>
+                    </div>
+                    <LocationMapPicker
+                      locationMode="current"
+                      onLocationSelect={handleMapLocationSelect}
+                      onError={(message) => setRobotMessage(message)}
+                      townOptions={townOptions}
+                      onUseManualEntry={() => setShowMapPicker(false)}
+                      value={
+                        installationTown && deliveryLocation
+                          ? `${installationTown} - ${deliveryLocation}`
+                          : installationTown || ""
+                      }
+                      onBottomSheetChange={(isOpen) =>
+                        setIsBottomSheetOpen(isOpen)
+                      }
+                      onLocationConfirmed={(data) => {
+                        setTownBlurred(true);
+                        setDeliveryLocationBlurred(true);
+                        setInstallationLocationBlurred(true);
+                        setShowMapPicker(false);
+                        const firstName =
+                          customerName.trim().split(" ")[0] || "there";
+                        const locationSuccess = [
+                          `Perfect ${firstName}! We've got your location! 📍`,
+                          `Excellent ${firstName}! We know where to find you! 🏠`,
+                          `Great ${firstName}! Your location is set! 🗺️`,
+                        ];
+                        const randomMessage =
+                          locationSuccess[
+                            Math.floor(Math.random() * locationSuccess.length)
+                          ];
+                        setRobotMessage(randomMessage);
+                      }}
+                    />
                   </div>
                 </div>
-              </>
+              </div>
             )}
-            </div>
 
             {/* Preferred Date of Visit/Installation */}
             <div className="mb-6 relative">
@@ -3754,6 +3916,16 @@ export default function TestMobilePage() {
                   </p>
                 </div>
               )}
+
+              {/* Payment Disclaimer */}
+              <div className="mb-4 rounded-lg bg-neutral-800/60 border border-neutral-700/50 p-3">
+                <p className="text-xs text-neutral-300 text-center leading-relaxed">
+                  <span className="text-yellow-400">💳</span> Payment is only
+                  required after delivery and installation is complete. No
+                  upfront charges.
+                </p>
+              </div>
+
               <motion.button
                 type="button"
                 whileHover={{ scale: 1.02 }}

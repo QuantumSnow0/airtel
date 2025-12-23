@@ -20,7 +20,11 @@ export default function Home() {
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
-    return null;
+    return (
+      <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
+      </div>
+    );
   }
 
   return isDesktop ? <TestDesktopPage /> : <TestMobilePage />;

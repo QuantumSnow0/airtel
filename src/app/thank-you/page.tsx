@@ -379,21 +379,25 @@ export default function ThankYouPage() {
                 <div className="space-y-4">
                   {/* Antenna Card */}
                   <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
-                    {/* Image in Top Right - Cutting through border */}
-                    <div className="absolute -top-4 -right-4 w-32 h-32 md:w-40 md:h-40 z-20">
-                      <img
-                        src="/antenna.png"
-                        alt="5G Antenna"
-                        className="w-full h-full object-contain drop-shadow-lg"
-                      />
+                    {/* Title First */}
+                    <h3 className="text-white font-semibold text-lg md:text-xl mb-4 text-center">
+                      5G Antenna
+                    </h3>
+
+                    {/* Image Below Title */}
+                    <div className="flex justify-center mb-4">
+                      <div className="w-40 h-40 md:w-48 md:h-48">
+                        <img
+                          src="/antenna.png"
+                          alt="5G Antenna"
+                          className="w-full h-full object-contain drop-shadow-lg"
+                        />
+                      </div>
                     </div>
 
-                    {/* Details on Left */}
-                    <div className="relative z-10 pr-28 md:pr-36">
-                      <h3 className="text-white font-semibold text-lg md:text-xl mb-2">
-                        5G Antenna
-                      </h3>
-                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed">
+                    {/* Description Below Image */}
+                    <div className="relative z-10">
+                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed text-center">
                         High-gain directional antenna designed to capture the
                         strongest 5G signal for optimal performance and
                         coverage.
@@ -403,25 +407,29 @@ export default function ThankYouPage() {
 
                   {/* Router Card */}
                   <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
-                    {/* Image in Top Right - Cutting through border */}
-                    <div className="absolute -top-4 -right-4 w-24 h-24 md:w-32 md:h-32 z-20">
-                      <img
-                        src="/router-placeholder.png"
-                        alt="5G Router"
-                        className="w-full h-full object-contain drop-shadow-lg"
-                        onError={(e) => {
-                          e.currentTarget.src =
-                            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='12'%3ERouter%3C/text%3E%3C/svg%3E";
-                        }}
-                      />
+                    {/* Title First */}
+                    <h3 className="text-white font-semibold text-lg md:text-xl mb-4 text-center">
+                      5G Router
+                    </h3>
+
+                    {/* Image Below Title */}
+                    <div className="flex justify-center mb-4">
+                      <div className="w-40 h-40 md:w-48 md:h-48">
+                        <img
+                          src="/5grouter.png"
+                          alt="5G Router"
+                          className="w-full h-full object-contain drop-shadow-lg"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='12'%3ERouter%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
+                      </div>
                     </div>
 
-                    {/* Details on Left */}
-                    <div className="relative z-10 pr-20 md:pr-24">
-                      <h3 className="text-white font-semibold text-lg md:text-xl mb-2">
-                        5G Router
-                      </h3>
-                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed">
+                    {/* Description Below Image */}
+                    <div className="relative z-10">
+                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed text-center">
                         Advanced router with dual-band WiFi, multiple Ethernet
                         ports, and intelligent signal management for seamless
                         connectivity.
@@ -429,30 +437,134 @@ export default function ThankYouPage() {
                     </div>
                   </div>
 
-                  {/* Power Bank Card */}
+                  {/* White Ethernet Cable Card */}
                   <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
-                    {/* Image in Top Right - Cutting through border */}
-                    <div className="absolute -top-4 -right-4 w-24 h-24 md:w-32 md:h-32 z-20">
-                      <img
-                        src="/powerbank-placeholder.png"
-                        alt="Power Bank"
-                        className="w-full h-full object-contain drop-shadow-lg"
-                        onError={(e) => {
-                          e.currentTarget.src =
-                            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3EPower Bank%3C/text%3E%3C/svg%3E";
-                        }}
-                      />
+                    {/* Title First */}
+                    <h3 className="text-white font-semibold text-lg md:text-xl mb-4 text-center">
+                      Outdoor White Ethernet Cable
+                    </h3>
+
+                    {/* Image Below Title */}
+                    <div className="flex justify-center mb-4">
+                      <div className="w-40 h-40 md:w-48 md:h-48">
+                        <img
+                          src="/ethernet-white.png"
+                          alt="Outdoor White Ethernet Cable"
+                          className="w-full h-full object-contain drop-shadow-lg"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3EEthernet%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
+                      </div>
                     </div>
 
-                    {/* Details on Left */}
-                    <div className="relative z-10 pr-20 md:pr-24">
-                      <h3 className="text-white font-semibold text-lg md:text-xl mb-2">
-                        Power Bank
-                      </h3>
-                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed">
+                    {/* Description Below Image */}
+                    <div className="relative z-10">
+                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed text-center">
+                        Long outdoor-rated white Ethernet cable designed to
+                        connect your router to the 5G antenna. Weather-resistant
+                        and built for reliable signal transmission over extended
+                        distances, ensuring optimal connectivity between your
+                        indoor router and outdoor antenna.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Power Bank Card */}
+                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
+                    {/* Title First */}
+                    <h3 className="text-white font-semibold text-lg md:text-xl mb-4 text-center">
+                      Power Bank
+                    </h3>
+
+                    {/* Image Below Title - Larger */}
+                    <div className="flex justify-center mb-4">
+                      <div className="w-48 h-48 md:w-56 md:h-56">
+                        <img
+                          src="/powerbank.png"
+                          alt="Power Bank"
+                          className="w-full h-full object-cover drop-shadow-lg"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3EPower Bank%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Description Below Image */}
+                    <div className="relative z-10">
+                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed text-center">
                         High-capacity backup power supply ensuring your
                         connection stays active even during power outages,
                         keeping you connected 24/7.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Yellow Ethernet Cable Card */}
+                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
+                    {/* Title First */}
+                    <h3 className="text-white font-semibold text-lg md:text-xl mb-4 text-center">
+                      Yellow Ethernet Cable
+                    </h3>
+
+                    {/* Image Below Title */}
+                    <div className="flex justify-center mb-4">
+                      <div className="w-40 h-40 md:w-48 md:h-48">
+                        <img
+                          src="/ethernet-yellow.png"
+                          alt="Yellow Ethernet Cable"
+                          className="w-full h-full object-contain drop-shadow-lg"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3EEthernet%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Description Below Image */}
+                    <div className="relative z-10">
+                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed text-center">
+                        High-quality yellow Ethernet cable with RJ45 connectors
+                        for reliable wired connections between your router and
+                        devices, ensuring stable and fast data transfer for all
+                        your connected equipment.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Power Supply/Charger Card */}
+                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
+                    {/* Title First */}
+                    <h3 className="text-white font-semibold text-lg md:text-xl mb-4 text-center">
+                      Power Supply/Charger
+                    </h3>
+
+                    {/* Image Below Title */}
+                    <div className="flex justify-center mb-4">
+                      <div className="w-40 h-40 md:w-48 md:h-48">
+                        <img
+                          src="/charger.png"
+                          alt="Power Supply/Charger"
+                          className="w-full h-full object-contain drop-shadow-lg"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3ECharger%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Description Below Image */}
+                    <div className="relative z-10">
+                      <p className="text-neutral-400 text-sm md:text-base leading-relaxed text-center">
+                        Universal power adapter with UK plug, providing 12V DC
+                        output for your router and other devices. Certified and
+                        safe, ensuring reliable power delivery for your 5G
+                        SmartConnect kit.
                       </p>
                     </div>
                   </div>

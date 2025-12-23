@@ -221,8 +221,7 @@ export async function POST(request: NextRequest) {
       premium: "5G _30Mbps_30days at Ksh.3999",
     };
     const fullPackageName =
-      packageMap[preferred_package?.toLowerCase() || ""] ||
-      preferred_package;
+      packageMap[preferred_package?.toLowerCase() || ""] || preferred_package;
 
     // Convert time from 12-hour format to 24-hour format
     const convertTo24Hour = (time12h: string): string => {
@@ -495,4 +494,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
