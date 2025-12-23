@@ -5,7 +5,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { Poppins } from "next/font/google";
-import Link from "next/link";
 import "swiper/css";
 
 const poppins = Poppins({
@@ -20,7 +19,6 @@ const carouselSlides = [
     title: "What is it?",
     description:
       "Learn about the Airtel SmartConnect 5G router and its capabilities.",
-    link: "/product/overview",
   },
   {
     image: "/airtelcarousel2.jpeg",
@@ -259,184 +257,88 @@ export default function ProductCarousel() {
         >
           {carouselSlides.map((slide, index) => (
             <SwiperSlide key={index} style={{ height: "100%" }}>
-              {slide.link ? (
-                <Link href={slide.link} className="w-full h-full block relative group">
-                  <div className="w-full h-full relative">
-                {/* Image Section */}
-                <div className="absolute inset-0 overflow-hidden">
-                  <img
-                    src={slide.image}
-                    alt={slide.title}
-                    className="w-full h-full object-cover sm:object-stretch"
-                    style={{
-                      objectPosition:
-                        index === 3
-                          ? "center"
-                          : index === 0
-                          ? "center"
-                          : "bottom",
-                    }}
-                  />
-                  {/* Black Overlay */}
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: "rgba(0, 0, 0, 0.1)",
-                      zIndex: 1,
-                    }}
-                  />
-                  {/* Gradient Fade at Bottom - Enhanced for better text visibility */}
-                  <div
-                    className="absolute bottom-0 left-0 right-0 pointer-events-none"
-                    style={{
-                      height: "120px",
-                      background:
-                        "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9))",
-                      zIndex: 2,
-                    }}
-                  />
-                </div>
-                {/* Title and Description - Overlay at Bottom */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 pointer-events-none"
-                  style={{ zIndex: 3 }}
-                >
-                  {/* Content */}
-                  <div className="relative px-4 pb-6 pt-10">
-                    {/* Semi-transparent background for text readability - smooth gradient */}
-                    <div 
-                      className="absolute inset-0 pointer-events-none"
+              <div className="w-full h-full relative">
+                <div className="w-full h-full relative">
+                  {/* Image Section */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    <img
+                      src={slide.image}
+                      alt={slide.title}
+                      className="w-full h-full object-cover sm:object-stretch"
                       style={{
-                        background: "linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%)",
-                        backdropFilter: "blur(1px)",
-                        zIndex: -1,
-                        borderRadius: "0 0 12px 12px",
+                        objectPosition:
+                          index === 3
+                            ? "center"
+                            : index === 0
+                            ? "center"
+                            : "bottom",
                       }}
                     />
-                    <h3
-                      className={`text-2xl mb-3 leading-tight font-bold text-yellow-400 ${poppins.variable}`}
+                    {/* Black Overlay */}
+                    <div
+                      className="absolute inset-0 pointer-events-none"
                       style={{
-                        fontFamily: "var(--font-poppins), sans-serif",
-                        letterSpacing: "0.01em",
-                        textShadow: "0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(251, 191, 36, 0.6)",
-                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))",
+                        background: "rgba(0, 0, 0, 0.1)",
+                        zIndex: 1,
                       }}
-                    >
-                      {slide.title}
-                    </h3>
-                    <p
-                      className={`text-base text-white font-medium leading-relaxed ${poppins.variable}`}
-                      style={{
-                        fontFamily: "var(--font-poppins), sans-serif",
-                        letterSpacing: "0.01em",
-                        lineHeight: "1.6",
-                        wordWrap: "break-word",
-                        hyphens: "auto",
-                        textShadow: "0 2px 8px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.8)",
-                        filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9))",
-                      }}
-                    >
-                      {slide.description}
-                    </p>
-                  </div>
-                    {/* Link Indicator */}
-                    {slide.link && (
-                      <div className="absolute bottom-3 right-3 flex items-center gap-2 px-3 py-1.5 bg-yellow-400/20 backdrop-blur-sm rounded-full border border-yellow-400/40 group-hover:bg-yellow-400/30 transition-all duration-200" style={{ zIndex: 10 }}>
-                        <span className={`text-xs font-semibold text-yellow-400 ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
-                          Learn More
-                        </span>
-                        <svg className="w-4 h-4 text-yellow-400 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                </Link>
-              ) : (
-                <div className="w-full h-full relative">
-                  <div className="w-full h-full relative">
-                    {/* Image Section */}
-                    <div className="absolute inset-0 overflow-hidden">
-                      <img
-                        src={slide.image}
-                        alt={slide.title}
-                        className="w-full h-full object-cover sm:object-stretch"
-                        style={{
-                          objectPosition:
-                            index === 3
-                              ? "center"
-                              : index === 0
-                              ? "center"
-                              : "bottom",
-                        }}
-                      />
-                      {/* Black Overlay */}
-                      <div
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                          background: "rgba(0, 0, 0, 0.1)",
-                          zIndex: 1,
-                        }}
-                      />
-                      {/* Gradient Fade at Bottom - Enhanced for better text visibility */}
-                      <div
-                        className="absolute bottom-0 left-0 right-0 pointer-events-none"
-                        style={{
-                          height: "120px",
-                          background:
-                            "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9))",
-                          zIndex: 2,
-                        }}
-                      />
-                    </div>
-                    {/* Title and Description - Overlay at Bottom */}
+                    />
+                    {/* Gradient Fade at Bottom - Enhanced for better text visibility */}
                     <div
                       className="absolute bottom-0 left-0 right-0 pointer-events-none"
-                      style={{ zIndex: 3 }}
-                    >
-                      {/* Content */}
-                      <div className="relative px-4 pb-6 pt-10">
-                        {/* Semi-transparent background for text readability - smooth gradient */}
-                        <div 
-                          className="absolute inset-0 pointer-events-none"
-                          style={{
-                            background: "linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%)",
-                            backdropFilter: "blur(1px)",
-                            zIndex: -1,
-                            borderRadius: "0 0 12px 12px",
-                          }}
-                        />
-                        <h3
-                          className={`text-2xl mb-3 leading-tight font-bold text-yellow-400 ${poppins.variable}`}
-                          style={{
-                            fontFamily: "var(--font-poppins), sans-serif",
-                            letterSpacing: "0.01em",
-                            textShadow: "0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(251, 191, 36, 0.6)",
-                            filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))",
-                          }}
-                        >
-                          {slide.title}
-                        </h3>
-                        <p
-                          className={`text-base text-white font-medium leading-relaxed ${poppins.variable}`}
-                          style={{
-                            fontFamily: "var(--font-poppins), sans-serif",
-                            letterSpacing: "0.01em",
-                            lineHeight: "1.6",
-                            wordWrap: "break-word",
-                            hyphens: "auto",
-                            textShadow: "0 2px 8px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.8)",
-                            filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9))",
-                          }}
-                        >
-                          {slide.description}
-                        </p>
-                      </div>
+                      style={{
+                        height: "120px",
+                        background:
+                          "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9))",
+                        zIndex: 2,
+                      }}
+                    />
+                  </div>
+                  {/* Title and Description - Overlay at Bottom */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 pointer-events-none"
+                    style={{ zIndex: 3 }}
+                  >
+                    {/* Content */}
+                    <div className="relative px-4 pb-6 pt-10">
+                      {/* Semi-transparent background for text readability - smooth gradient */}
+                      <div 
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background: "linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%)",
+                          backdropFilter: "blur(1px)",
+                          zIndex: -1,
+                          borderRadius: "0 0 12px 12px",
+                        }}
+                      />
+                      <h3
+                        className={`text-2xl mb-3 leading-tight font-bold text-yellow-400 ${poppins.variable}`}
+                        style={{
+                          fontFamily: "var(--font-poppins), sans-serif",
+                          letterSpacing: "0.01em",
+                          textShadow: "0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(251, 191, 36, 0.6)",
+                          filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))",
+                        }}
+                      >
+                        {slide.title}
+                      </h3>
+                      <p
+                        className={`text-base text-white font-medium leading-relaxed ${poppins.variable}`}
+                        style={{
+                          fontFamily: "var(--font-poppins), sans-serif",
+                          letterSpacing: "0.01em",
+                          lineHeight: "1.6",
+                          wordWrap: "break-word",
+                          hyphens: "auto",
+                          textShadow: "0 2px 8px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.8)",
+                          filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9))",
+                        }}
+                      >
+                        {slide.description}
+                      </p>
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
