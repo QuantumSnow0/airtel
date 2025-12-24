@@ -308,7 +308,7 @@ export default function TroubleshootingPage() {
       />
 
       <div className={`min-h-screen bg-neutral-900 text-white ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
-        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
+        <div className="max-w-4xl mx-auto px-2 py-6 sm:py-8">
           {/* Breadcrumbs */}
           <nav className="mb-4 text-sm text-neutral-400" aria-label="Breadcrumb">
             <ol className="flex items-center gap-2">
@@ -330,23 +330,107 @@ export default function TroubleshootingPage() {
             <p className="text-sm sm:text-base md:text-lg text-neutral-300 mb-2">
               Complete troubleshooting guide for your Airtel SmartConnect 5G Router. Find default passwords, admin login details, LED indicator meanings, factory reset instructions, and solutions to all common problems.
             </p>
-            <p className="text-xs sm:text-sm md:text-base text-neutral-400">
+            <p className="text-xs sm:text-sm md:text-base text-neutral-400 mb-4">
               This guide covers device-specific information including default credentials, IP addresses, LED status indicators, SIM card installation, and step-by-step solutions for Kenya users.
             </p>
+            <div className="p-3 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">
+              <p className="text-xs sm:text-sm text-neutral-300">
+                <strong className="text-yellow-400">Need a new router?</strong> We offer fast delivery of Airtel SmartConnect 5G routers. <Link href="/mobile" className="text-yellow-400 hover:text-yellow-300 underline font-semibold">Order now</Link> for quick setup and reliable connection.
+              </p>
+            </div>
           </header>
 
+          {/* Quick Navigation / Table of Contents */}
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                01
+              </div>
+              <h2 className="text-lg sm:text-xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>🔍</span> Quick Navigation
+              </h2>
+            </div>
+            
+            {/* Common Problems - Quick Links */}
+            <div className="mb-4">
+              <h3 className="text-sm sm:text-base font-semibold text-white mb-3">Common Problems</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Link href="#no-signal" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">📶</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">No Signal / Weak Signal</span>
+                </Link>
+                <Link href="#slow-internet" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">🐌</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">Slow Internet</span>
+                </Link>
+                <Link href="#wifi-issues" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">📡</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">WiFi Connection Issues</span>
+                </Link>
+                <Link href="#power-issues" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">🔌</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">Power & Battery Issues</span>
+                </Link>
+                <Link href="#sim-card-issues" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">📱</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">SIM Card Issues</span>
+                </Link>
+                <Link href="#configuration-issues" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">⚙️</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">Configuration Issues</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Reference Guides */}
+            <div>
+              <h3 className="text-sm sm:text-base font-semibold text-white mb-3">Reference Guides</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Link href="#led-indicators" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">💡</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">LED Indicators Guide</span>
+                </Link>
+                <Link href="#device-label" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">🏷️</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">Default Passwords & Settings</span>
+                </Link>
+                <Link href="#factory-reset" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">🔄</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">Factory Reset Guide</span>
+                </Link>
+                <Link href="#sim-card" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">📱</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">SIM Card Installation</span>
+                </Link>
+                <Link href="#router-settings" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">⚙️</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">Access Router Settings</span>
+                </Link>
+                <Link href="#wifi-password" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">🔐</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">Find WiFi Password</span>
+                </Link>
+              </div>
+            </div>
+          </section>
+
           {/* Quick Reference - Default Credentials (SEO Optimized) */}
-          <section className="mb-6 p-4 sm:p-5 bg-gradient-to-r from-yellow-400/10 to-amber-400/10 border border-yellow-400/20 rounded-lg">
-            <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
-              <span>🔑</span> Airtel 5G Router Default Username and Password
-            </h2>
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                02
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>🔑</span> Airtel 5G Router Default Username and Password
+              </h2>
+            </div>
             <p className="text-neutral-300 mb-3 text-xs sm:text-sm">
               Looking for the default login credentials for your Airtel SmartConnect 5G Router? Here's everything you need to access the admin panel and configure your device.
             </p>
             <div className="grid md:grid-cols-2 gap-3 text-neutral-200">
               <div className="space-y-2">
                 <p className="font-semibold text-yellow-400 text-sm sm:text-base">Default Admin Login Credentials:</p>
-                <div className="bg-neutral-900/50 p-2 sm:p-3 rounded-lg border border-neutral-700">
+                <div className="p-2 sm:p-3">
                   <ul className="space-y-1.5">
                     <li className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
                       <strong className="text-yellow-400 text-xs sm:text-sm">Username:</strong> 
@@ -364,7 +448,7 @@ export default function TroubleshootingPage() {
               </div>
               <div className="space-y-2">
                 <p className="font-semibold text-yellow-400 text-sm sm:text-base">Router Access Information:</p>
-                <div className="bg-neutral-900/50 p-2 sm:p-3 rounded-lg border border-neutral-700">
+                <div className="p-2 sm:p-3">
                   <ul className="space-y-1.5">
                     <li className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
                       <strong className="text-yellow-400 text-xs sm:text-sm">IP Address:</strong> 
@@ -372,7 +456,9 @@ export default function TroubleshootingPage() {
                     </li>
                     <li className="flex flex-col sm:flex-row items-start gap-1 sm:gap-2">
                       <strong className="text-yellow-400 text-xs sm:text-sm">Mobile App:</strong> 
-                      <span className="text-xs sm:text-sm">TZLink (available on Google Play Store & Apple App Store)</span>
+                      <span className="text-xs sm:text-sm">
+                        <a href="https://play.google.com/store/apps/details?id=com.tozed.TZLink" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline">TZLink</a> (available on <a href="https://play.google.com/store/apps/details?id=com.tozed.TZLink" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline">Google Play Store</a> & Apple App Store)
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -387,10 +473,15 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* LED Indicators Guide */}
-          <section id="led-indicators" className="mb-6 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
-            <h2 className="text-2xl font-semibold text-yellow-400 mb-4 flex items-center gap-2">
-              <span>💡</span> Understanding LED Indicators
-            </h2>
+          <section id="led-indicators" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                03
+              </div>
+              <h2 className="text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>💡</span> Understanding LED Indicators
+              </h2>
+            </div>
             <p className="text-neutral-300 mb-6">
               LED indicators are your first clue to diagnosing router issues. Here's what each LED color and pattern means for your Airtel SmartConnect 5G Router.
             </p>
@@ -403,29 +494,38 @@ export default function TroubleshootingPage() {
                   The router has a single LED at the center button that shows the boot sequence and power status:
                 </p>
                 <div className="space-y-3">
-                  <div className="flex flex-col sm:flex-row items-start gap-3 p-3 bg-neutral-900/30 rounded-lg">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 rounded-lg border border-neutral-700 flex items-center justify-center shrink-0 overflow-hidden mx-auto sm:mx-0">
+                  <div className="flex flex-col sm:flex-row items-start gap-3 py-2">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shrink-0 overflow-hidden">
                       <Image src="/router/router-red-light.jpeg" alt="Airtel router red LED - initial boot" width={80} height={80} className="object-cover" />
                     </div>
-                    <div className="flex-1 text-center sm:text-left">
+                    <div className="flex-1">
                       <p className="font-semibold text-white mb-1 text-sm sm:text-base">Red LED - Initial Boot</p>
-                      <p className="text-neutral-300 text-xs sm:text-sm">Router is starting up. This is normal during power-on. The LED will change to blue, then green as boot completes.</p>
+                      <p className="text-neutral-300 text-xs sm:text-sm">Router is starting up. This is normal during power-on. The LED will quickly change to purple/violet (mixed color), where most of the boot time is spent.</p>
                     </div>
                   </div>
-                  <div className="flex flex-col sm:flex-row items-start gap-3 p-3 bg-neutral-900/30 rounded-lg">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 rounded-lg border border-neutral-700 flex items-center justify-center shrink-0 overflow-hidden mx-auto sm:mx-0">
+                  <div className="flex flex-col sm:flex-row items-start gap-3 py-2">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shrink-0 overflow-hidden">
+                      <Image src="/router/router-gradient-light.jpeg" alt="Airtel router purple/violet mixed LED - booting" width={80} height={80} className="object-cover" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-white mb-1 text-sm sm:text-base">Purple/Violet LED (Mixed Color) - Booting</p>
+                      <p className="text-neutral-300 text-xs sm:text-sm"><strong className="text-yellow-400">Most boot time is spent here.</strong> The LED shows a purple/violet mixed color (combination of red and blue). This is the main boot phase where the router is initializing its systems. This happens after red and before blue.</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-start gap-3 py-2">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shrink-0 overflow-hidden">
                       <Image src="/router/router-blue-light.jpeg" alt="Airtel router blue LED - connecting" width={80} height={80} className="object-cover" />
                     </div>
-                    <div className="flex-1 text-center sm:text-left">
+                    <div className="flex-1">
                       <p className="font-semibold text-white mb-1 text-sm sm:text-base">Blue LED - Connecting</p>
-                      <p className="text-neutral-300 text-xs sm:text-sm">Router is establishing connection. This happens briefly after red, then rapidly switches to green.</p>
+                      <p className="text-neutral-300 text-xs sm:text-sm"><strong className="text-yellow-400">Very brief - you might miss it!</strong> Router is establishing connection. This happens very quickly after the purple/violet phase, then rapidly switches to green. It's normal if you don't see this blue phase.</p>
                     </div>
                   </div>
-                  <div className="flex flex-col sm:flex-row items-start gap-3 p-3 bg-neutral-900/30 rounded-lg">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 rounded-lg border border-neutral-700 flex items-center justify-center shrink-0 overflow-hidden mx-auto sm:mx-0">
+                  <div className="flex flex-col sm:flex-row items-start gap-3 py-2">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shrink-0 overflow-hidden">
                       <Image src="/router/router-green-light.jpeg" alt="Airtel router green LED - powered on" width={80} height={80} className="object-cover" />
                     </div>
-                    <div className="flex-1 text-center sm:text-left">
+                    <div className="flex-1">
                       <p className="font-semibold text-white mb-1 text-sm sm:text-base">Green LED - Powered On</p>
                       <p className="text-neutral-300 text-xs sm:text-sm">Router is fully booted and WiFi SSID is visible. <strong className="text-yellow-400">Important:</strong> Green router LED only means the router is on - it does NOT indicate good internet connection. Check the antenna signal LED below for actual connection status.</p>
                     </div>
@@ -443,60 +543,72 @@ export default function TroubleshootingPage() {
                   <Image src="/router/antenna.png" alt="Airtel SmartConnect antenna showing all 5 LEDs" width={200} height={150} className="rounded-lg mb-2 mx-auto" />
                   <p className="text-xs text-neutral-400 text-center">Airtel SmartConnect Antenna - 5 LEDs Total</p>
                 </div>
-                <div className="space-y-3">
-                  <div className="flex flex-col sm:flex-row items-start gap-3 p-3 bg-green-900/10 border border-green-500/30 rounded-lg">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 rounded-lg border-2 border-green-500 flex items-center justify-center shrink-0 overflow-hidden mx-auto sm:mx-0">
-                      <Image src="/router/antenna-green-signal.png" alt="Airtel antenna green signal LED - excellent connection" width={80} height={80} className="object-cover" />
-                    </div>
-                    <div className="flex-1 text-center sm:text-left">
-                      <p className="font-semibold text-green-400 mb-1 text-sm sm:text-base">🟢 Green Signal LED - EXCELLENT</p>
-                      <p className="text-neutral-300 text-xs sm:text-sm mb-2">This is what you want! Green means you have excellent signal strength and the best possible connection. Your internet should work perfectly with fast speeds.</p>
-                      <p className="text-xs text-neutral-400">✅ Optimal performance | ✅ Fast speeds | ✅ Stable connection</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col sm:flex-row items-start gap-3 p-3 bg-orange-900/10 border border-orange-500/30 rounded-lg">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 rounded-lg border-2 border-orange-500 flex items-center justify-center shrink-0 overflow-hidden mx-auto sm:mx-0">
-                      <Image src="/router/antenna-orange-signal.png" alt="Airtel antenna orange signal LED - good connection" width={80} height={80} className="object-cover" />
-                    </div>
-                    <div className="flex-1 text-center sm:text-left">
-                      <p className="font-semibold text-orange-400 mb-1 text-sm sm:text-base">🟠 Orange Signal LED - GOOD</p>
-                      <p className="text-neutral-300 text-xs sm:text-sm mb-2">Acceptable signal strength. Your connection should work, but speeds may be slower than with green. This is still usable for most internet activities.</p>
-                      <p className="text-xs text-neutral-400">⚠️ Good performance | ⚠️ Moderate speeds | ✅ Connection stable</p>
+                <div className="space-y-4">
+                  <div className="py-3">
+                    <div className="flex items-start gap-3">
+                      <div className="w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center shrink-0 overflow-hidden">
+                        <Image src="/router/antenna-green-signal.png" alt="Airtel antenna green signal LED - excellent connection" width={160} height={160} className="object-contain w-full h-full scale-150" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-green-400 mb-1.5 text-sm sm:text-base">🟢 Green Signal LED - EXCELLENT</p>
+                        <p className="text-neutral-300 text-xs sm:text-sm mb-2">This is what you want! Green means you have excellent signal strength and the best possible connection. Your internet should work perfectly with fast speeds.</p>
+                        <p className="text-xs text-neutral-400">✅ Optimal performance | ✅ Fast speeds | ✅ Stable connection</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex flex-col sm:flex-row items-start gap-3 p-3 bg-red-900/10 border border-red-500/30 rounded-lg">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 rounded-lg border-2 border-red-500 flex items-center justify-center shrink-0 overflow-hidden mx-auto sm:mx-0">
-                      <Image src="/router/antenna-red-signal.png" alt="Airtel antenna red signal LED - poor or no signal" width={80} height={80} className="object-cover" />
+                  <div className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center shrink-0 overflow-hidden">
+                        <Image src="/router/antenna-orange-signal.png" alt="Airtel antenna orange signal LED - good connection" width={160} height={160} className="object-contain w-full h-full scale-150" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-orange-400 mb-1.5 text-sm sm:text-base">🟠 Orange Signal LED - GOOD</p>
+                        <p className="text-neutral-300 text-xs sm:text-sm mb-2">Acceptable signal strength. Your connection should work, but speeds may be slower than with green. This is still usable for most internet activities.</p>
+                        <p className="text-xs text-neutral-400">⚠️ Good performance | ⚠️ Moderate speeds | ✅ Connection stable</p>
+                      </div>
                     </div>
-                    <div className="flex-1 text-center sm:text-left">
-                      <p className="font-semibold text-red-400 mb-1 text-sm sm:text-base">🔴 Red Signal LED - POOR/NO SIGNAL</p>
-                      <p className="text-neutral-300 text-xs sm:text-sm mb-2"><strong className="text-red-400">Avoid this at all costs!</strong> Red means you're not receiving signal or have very weak signal. Internet will not work or will be extremely slow. You need to reposition the antenna.</p>
-                      <p className="text-xs text-neutral-400 mb-2">❌ No/poor connection | ❌ Very slow or no internet | ⚠️ Needs repositioning</p>
-                      <p className="text-xs sm:text-sm text-yellow-400">💡 <Link href="#no-signal" className="underline">See "No Signal" troubleshooting section</Link> for solutions</p>
+                  </div>
+                  <div className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center shrink-0 overflow-hidden">
+                        <Image src="/router/antenna-red-signal.png" alt="Airtel antenna red signal LED - poor or no signal" width={160} height={160} className="object-contain w-full h-full scale-150" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-red-400 mb-1.5 text-sm sm:text-base">🔴 Red Signal LED - POOR/NO SIGNAL</p>
+                        <p className="text-neutral-300 text-xs sm:text-sm mb-2"><strong className="text-red-400">Avoid this at all costs!</strong> Red means you're not receiving signal or have very weak signal. Internet will not work or will be extremely slow. You need to reposition the antenna.</p>
+                        <p className="text-xs text-neutral-400 mb-2">❌ No/poor connection | ❌ Very slow or no internet | ⚠️ Needs repositioning</p>
+                        <p className="text-xs sm:text-sm text-yellow-400">💡 <Link href="#no-signal" className="underline">See "No Signal" troubleshooting section</Link> for solutions</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Boot Sequence */}
-              <div className="mt-5 p-3 sm:p-4 bg-neutral-900/50 rounded-lg border border-neutral-700">
+              <div className="mt-5 p-3 sm:p-4">
                 <h4 className="font-semibold text-white mb-2 text-sm sm:text-base">Normal Boot Sequence:</h4>
                 <ol className="space-y-1.5 text-xs sm:text-sm text-neutral-300 ml-4">
-                  <li>1. Router LED turns <span className="text-red-400">red</span> (initial boot)</li>
-                  <li>2. Router LED changes to <span className="text-blue-400">blue</span> (connecting)</li>
-                  <li>3. Router LED turns <span className="text-green-400">green</span> (router ready)</li>
-                  <li>4. Antenna power LED lights on</li>
-                  <li>5. Antenna signal LED shows connection status (<span className="text-green-400">green</span> = best, <span className="text-orange-400">orange</span> = good, <span className="text-red-400">red</span> = poor)</li>
+                  <li>1. Router LED turns <span className="text-red-400">red</span> (initial boot - brief)</li>
+                  <li>2. Router LED changes to <span className="text-purple-400">purple/violet</span> (mixed color - <strong>most boot time spent here</strong>)</li>
+                  <li>3. Router LED changes to <span className="text-blue-400">blue</span> (connecting - very brief, you might miss it)</li>
+                  <li>4. Router LED turns <span className="text-green-400">green</span> (router ready)</li>
+                  <li>5. Antenna power LED lights on</li>
+                  <li>6. Antenna signal LED shows connection status (<span className="text-green-400">green</span> = best, <span className="text-orange-400">orange</span> = good, <span className="text-red-400">red</span> = poor)</li>
                 </ol>
               </div>
             </div>
           </section>
 
           {/* Device Label Information */}
-          <section id="device-label" className="mb-6 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
-            <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
-              <span>🏷️</span> Device Label Information (Default Passwords & Settings)
-            </h2>
+          <section id="device-label" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                04
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>🏷️</span> Device Label Information (Default Passwords & Settings)
+              </h2>
+            </div>
             <p className="text-neutral-300 mb-3 text-sm sm:text-base">
               All important default information is printed on a label located at the <strong>back of the router</strong>. This label contains all the credentials and settings you need:
             </p>
@@ -513,7 +625,7 @@ export default function TroubleshootingPage() {
               <li>• Input voltage specifications</li>
               <li>• MAC address and serial number</li>
             </ul>
-            <div className="p-3 bg-yellow-400/10 border border-yellow-400/30 rounded-lg">
+            <div className="p-3">
               <p className="text-xs sm:text-sm text-yellow-200">
                 <strong>💡 Pro Tip:</strong> If you've forgotten your WiFi password or changed the admin password, you can find the defaults on this label. If you've changed them and forgotten, you'll need to <Link href="#factory-reset" className="underline font-semibold">perform a factory reset</Link> to restore defaults.
               </p>
@@ -521,15 +633,20 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Factory Reset Guide */}
-          <section id="factory-reset" className="mb-6 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
-            <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
-              <span>🔄</span> How to Factory Reset Airtel SmartConnect Router
-            </h2>
+          <section id="factory-reset" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                05
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>🔄</span> How to Factory Reset Airtel SmartConnect Router
+              </h2>
+            </div>
             <p className="text-neutral-300 mb-3 text-sm sm:text-base">
               Factory reset restores your router to default settings (default WiFi password, default admin password, etc.). This is useful if you've forgotten your passwords or need to start fresh.
             </p>
             <div className="space-y-3">
-              <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+              <div className="p-3">
                 <p className="text-xs sm:text-sm text-red-200">
                   <strong>⚠️ Warning:</strong> Factory reset will erase all your custom settings including WiFi passwords, admin password changes, and network configurations. You'll need to set everything up again after reset.
                 </p>
@@ -568,19 +685,29 @@ export default function TroubleshootingPage() {
                   </li>
                 </ol>
               </div>
-              <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-700">
+              <div className="p-3">
                 <p className="text-xs sm:text-sm text-neutral-300">
                   <strong>After Reset:</strong> You'll need to reconnect all your devices to WiFi using the default password from the device label. You can also change the WiFi password again through the admin panel at <code className="bg-neutral-800 px-2 py-1 rounded">192.168.1.1</code> using username <code className="bg-neutral-800 px-2 py-1 rounded">admin</code> and password <code className="bg-neutral-800 px-2 py-1 rounded">admin</code>.
+                </p>
+              </div>
+              <div className="mt-4 p-3 bg-neutral-800/30 border border-neutral-700/50 rounded-lg">
+                <p className="text-xs sm:text-sm text-neutral-300">
+                  <strong className="text-yellow-400">Need a replacement router?</strong> We offer fast delivery of new Airtel SmartConnect routers with easy setup. <Link href="/mobile" className="text-yellow-400 hover:text-yellow-300 underline font-semibold">Order a replacement router</Link>.
                 </p>
               </div>
             </div>
           </section>
 
           {/* Router Ports & Connections */}
-          <section id="router-ports" className="mb-6 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
-            <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
-              <span>🔌</span> Router Ports & Connections
-            </h2>
+          <section id="router-ports" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                06
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>🔌</span> Router Ports & Connections
+              </h2>
+            </div>
             <p className="text-neutral-300 mb-3 text-sm sm:text-base">
               Understanding the router ports is essential for proper setup. Here's what each port does:
             </p>
@@ -594,7 +721,7 @@ export default function TroubleshootingPage() {
                 <p className="text-neutral-300 text-xs sm:text-sm mb-2">
                   This is the <strong className="text-yellow-400">first port</strong> on the router, specifically designed to connect the antenna to the router. This is NOT a regular LAN port.
                 </p>
-                <div className="p-2 sm:p-3 bg-yellow-400/10 border border-yellow-400/30 rounded-lg mb-2">
+                <div className="p-2 sm:p-3 mb-2">
                   <p className="text-xs sm:text-sm text-yellow-200">
                     <strong>⚠️ Critical:</strong> The ethernet cable from the antenna MUST be connected to the W/LAN1 port. If connected to a regular LAN port, the router won't receive signal from the antenna and you'll have no internet.
                   </p>
@@ -620,10 +747,15 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* SIM Card Installation */}
-          <section id="sim-card" className="mb-6 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
-            <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
-              <span>📱</span> SIM Card Installation Guide
-            </h2>
+          <section id="sim-card" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                07
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>📱</span> SIM Card Installation Guide
+              </h2>
+            </div>
             <p className="text-neutral-300 mb-3 text-sm sm:text-base">
               The SIM card slot is located at the bottom of the antenna (the outdoor unit). Follow these steps to properly install your Airtel 5G SIM card.
             </p>
@@ -670,7 +802,7 @@ export default function TroubleshootingPage() {
                   </li>
                 </ol>
               </div>
-              <div className="p-3 bg-yellow-400/10 border border-yellow-400/30 rounded-lg">
+              <div className="p-3">
                 <p className="text-xs sm:text-sm text-yellow-200">
                   <strong>💡 Important:</strong> Make sure your SIM card has an active Airtel data plan. The device needs an active data subscription to work. If the signal LED is red after installation, check <Link href="#no-signal" className="underline font-semibold">No Signal troubleshooting</Link>.
                 </p>
@@ -679,16 +811,37 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Accessing Router Settings */}
-          <section id="router-settings" className="mb-6 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
-            <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
-              <span>⚙️</span> How to Access Router Settings (Admin Panel)
-            </h2>
+          <section id="router-settings" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                08
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>⚙️</span> How to Access Router Settings (Admin Panel)
+              </h2>
+            </div>
             <p className="text-neutral-300 mb-3 text-sm sm:text-base">
               To change WiFi password, view connected devices, or configure advanced settings, you need to access the router's admin panel.
             </p>
             <div className="space-y-3">
               <div>
-                <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Method 1: Web Browser (Recommended)</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Method 1: Mobile App (TZLink) - Recommended</h3>
+                <div className="mb-3 p-2 bg-neutral-900/50 rounded-lg">
+                  <Image src="/router/tzlinkapp.jpeg" alt="TZLink mobile app for Airtel router management" width={300} height={200} className="rounded-lg w-full h-auto max-w-[300px] mx-auto" />
+                  <p className="text-xs text-neutral-400 mt-2 text-center">TZLink Mobile App</p>
+                </div>
+                <ol className="space-y-1.5 ml-4 text-neutral-200 text-xs sm:text-sm">
+                  <li>1. Download <strong>TZLink</strong> app from <a href="https://play.google.com/store/apps/details?id=com.tozed.TZLink" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline">Google Play Store</a> or Apple App Store</li>
+                  <li>2. Open the app and connect to your router's WiFi network</li>
+                  <li>3. The app should automatically detect your router</li>
+                  <li>4. Use the same login credentials (admin/admin) if prompted</li>
+                </ol>
+                <p className="text-xs sm:text-sm text-neutral-400 mt-2 ml-4">
+                  💡 <a href="https://play.google.com/store/apps/details?id=com.tozed.TZLink" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline">Download TZLink from Google Play Store</a>
+                </p>
+              </div>
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Method 2: Web Browser</h3>
                 <ol className="space-y-1.5 ml-4 text-neutral-200 text-xs sm:text-sm">
                   <li>1. Connect your device (phone, laptop, tablet) to the router's WiFi network</li>
                   <li>2. Open any web browser (Chrome, Safari, Firefox, etc.)</li>
@@ -704,16 +857,7 @@ export default function TroubleshootingPage() {
                   <li className="text-xs sm:text-sm text-neutral-400 mt-2">💡 These default credentials are also printed on the <Link href="#device-label" className="text-yellow-400 underline">router label</Link> at the back</li>
                 </ol>
               </div>
-              <div>
-                <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Method 2: Mobile App (TZLink)</h3>
-                <ol className="space-y-1.5 ml-4 text-neutral-200 text-xs sm:text-sm">
-                  <li>1. Download <strong>TZLink</strong> app from Google Play Store or Apple App Store</li>
-                  <li>2. Open the app and connect to your router's WiFi network</li>
-                  <li>3. The app should automatically detect your router</li>
-                  <li>4. Use the same login credentials (admin/admin) if prompted</li>
-                </ol>
-              </div>
-              <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-700">
+              <div className="p-3">
                 <p className="text-xs sm:text-sm text-neutral-300">
                   <strong>Can't Access Admin Panel?</strong> Make sure you're connected to the router's WiFi network first. You cannot access 192.168.1.1 from outside the network. If you've changed the admin password and forgotten it, you'll need to <Link href="#factory-reset" className="text-yellow-400 underline">perform a factory reset</Link>.
                 </p>
@@ -722,10 +866,15 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Finding WiFi Password */}
-          <section id="wifi-password" className="mb-6 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
-            <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
-              <span>🔐</span> How to Find Your WiFi Password
-            </h2>
+          <section id="wifi-password" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                09
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>🔐</span> How to Find Your WiFi Password
+              </h2>
+            </div>
             <p className="text-neutral-300 mb-3 text-sm sm:text-base">
               Forgot your WiFi password? Here are several ways to find or reset it.
             </p>
@@ -735,6 +884,10 @@ export default function TroubleshootingPage() {
                 <p className="text-neutral-300 mb-2 text-xs sm:text-sm">
                   If you haven't changed the WiFi password, it's printed on the label at the back of the router. Look for:
                 </p>
+                <div className="mb-3 p-2 bg-neutral-900/50 rounded-lg">
+                  <Image src="/router/router-back-details.png" alt="Airtel router back label showing WiFi passwords and SSID" width={400} height={300} className="rounded-lg w-full h-auto" />
+                  <p className="text-xs text-neutral-400 mt-1 text-center">Router Back Label - Shows WiFi SSID and Passwords</p>
+                </div>
                 <ul className="space-y-1 ml-4 text-neutral-200 text-xs sm:text-sm">
                   <li>• <strong>2.4G SSID</strong> and its password</li>
                   <li>• <strong>5G SSID</strong> and its password</li>
@@ -759,11 +912,16 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Troubleshooting Sections */}
-          <section id="troubleshooting" className="mb-6">
-            <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 mb-4">Common Problems & Solutions</h2>
+          <section id="troubleshooting" className="mb-8 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                10
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400">Common Problems & Solutions</h2>
+            </div>
             
             {/* No Signal */}
-            <article id="no-signal" className="mb-4 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
+            <article id="no-signal" className="mb-6 py-3 sm:py-4">
               <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>📶</span> No Signal or Weak Signal
               </h3>
@@ -800,7 +958,7 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* Slow Internet */}
-            <article className="mb-4 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
+            <article id="slow-internet" className="mb-6 py-3 sm:py-4">
               <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>🐌</span> Slow Internet Speed
               </h3>
@@ -824,7 +982,7 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* WiFi Issues */}
-            <article className="mb-4 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
+            <article id="wifi-issues" className="mb-6 py-3 sm:py-4">
               <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>📡</span> WiFi Connection Issues
               </h3>
@@ -854,7 +1012,7 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* SIM Card Issues */}
-            <article className="mb-4 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
+            <article id="sim-card-issues" className="mb-6 py-3 sm:py-4">
               <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>📱</span> SIM Card Issues
               </h3>
@@ -877,7 +1035,7 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* Configuration Issues */}
-            <article className="mb-4 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
+            <article id="configuration-issues" className="mb-6 py-3 sm:py-4">
               <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>⚙️</span> Configuration & Setup Issues
               </h3>
@@ -888,7 +1046,7 @@ export default function TroubleshootingPage() {
                     <li><strong className="text-yellow-400">1.</strong> Ensure you're connected to the router's WiFi network first</li>
                     <li><strong className="text-yellow-400">2.</strong> Try the IP address: <code className="bg-neutral-900 px-2 py-1 rounded">192.168.1.1</code></li>
                     <li><strong className="text-yellow-400">3.</strong> Use default login: username <code className="bg-neutral-900 px-2 py-1 rounded">admin</code>, password <code className="bg-neutral-900 px-2 py-1 rounded">admin</code></li>
-                    <li><strong className="text-yellow-400">4.</strong> Try using the TZLink mobile app instead</li>
+                    <li><strong className="text-yellow-400">4.</strong> Try using the <a href="https://play.google.com/store/apps/details?id=com.tozed.TZLink" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline">TZLink mobile app</a> instead</li>
                     <li><strong className="text-yellow-400">5.</strong> Clear browser cache and try again</li>
                     <li><strong className="text-yellow-400">6.</strong> If you changed the admin password and forgot it, <Link href="#factory-reset" className="text-yellow-400 underline">factory reset</Link> is required</li>
                   </ol>
@@ -903,7 +1061,7 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* Power Issues */}
-            <article className="mb-4 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
+            <article id="power-issues" className="mb-6 py-3 sm:py-4">
               <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>🔌</span> Power & Battery Issues
               </h3>
@@ -930,57 +1088,99 @@ export default function TroubleshootingPage() {
                     <li><strong className="text-yellow-400">4.</strong> If still stuck, contact Airtel support - may need firmware update or replacement</li>
                   </ol>
                 </div>
+                <div className="mt-4 p-3 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">
+                  <p className="text-xs sm:text-sm text-neutral-300 mb-2">
+                    <strong className="text-yellow-400">Need a replacement router?</strong> We offer fast delivery of new Airtel SmartConnect routers.
+                  </p>
+                  <Link
+                    href="/mobile"
+                    className="inline-flex items-center gap-2 text-yellow-400 hover:text-yellow-300 text-xs sm:text-sm font-semibold transition-colors"
+                  >
+                    Order a new router
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                </div>
               </div>
             </article>
           </section>
 
           {/* Still Need Help */}
-          <section className="mt-6 p-4 sm:p-5 bg-neutral-800/50 border border-neutral-700 rounded-lg">
+          <section className="mt-6 py-3 sm:py-4">
             <h2 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3">
               Still Need Help?
             </h2>
             <p className="text-neutral-300 mb-4 text-sm sm:text-base">
-              If you've tried all troubleshooting steps and your Airtel SmartConnect 5G Router is still not working, contact Airtel customer support for personalized assistance.
+              If you've tried all troubleshooting steps and your Airtel SmartConnect 5G Router is still not working, contact Airtel customer support for personalized assistance. Alternatively, if you need a replacement device, we offer fast delivery of new routers.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 mb-4">
               <a
-                href="tel:0789457580"
+                href="tel:0733100500"
                 className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-yellow-400/20 hover:bg-yellow-400/30 border border-yellow-400/40 rounded-lg text-yellow-400 transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                Call Support: 0789457580
+                Call Support: 0733 100 500
               </a>
               <Link
                 href="/mobile"
-                className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-neutral-700/50 hover:bg-neutral-700 border border-neutral-600 rounded-lg text-neutral-300 hover:text-white transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-400/20 to-amber-400/20 hover:from-yellow-400/30 hover:to-amber-400/30 border border-yellow-400/40 rounded-lg text-yellow-400 font-semibold transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-                Back to Home
+                Order New Router
               </Link>
             </div>
+            <Link
+              href="/mobile"
+              className="inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-yellow-400 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to Home
+            </Link>
           </section>
 
           {/* Related Topics */}
-          <section className="mt-6 p-4 sm:p-5 bg-neutral-800/30 border border-neutral-700/50 rounded-lg">
+          <section className="mt-6 py-3 sm:py-4">
             <h2 className="text-base sm:text-lg font-semibold text-neutral-300 mb-3">
               Related Topics
             </h2>
-            <ul className="space-y-2 text-neutral-400">
-              <li>
-                <Link href="/product/overview" className="hover:text-yellow-400 transition-colors">
-                  → Learn more about Airtel SmartConnect 5G Router
-                </Link>
-              </li>
-              <li>
-                <Link href="/mobile" className="hover:text-yellow-400 transition-colors">
-                  → Order Airtel SmartConnect Router
-                </Link>
-              </li>
-            </ul>
+            <div className="space-y-3">
+              <Link
+                href="/mobile"
+                className="flex items-center gap-3 p-4 bg-gradient-to-r from-yellow-400/10 to-amber-400/10 hover:from-yellow-400/20 hover:to-amber-400/20 border border-yellow-400/30 rounded-lg transition-colors group"
+              >
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-yellow-400/20 group-hover:bg-yellow-400/30 transition-colors shrink-0">
+                  <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-yellow-400 group-hover:text-yellow-300 transition-colors">
+                    Order Airtel SmartConnect 5G Router
+                  </p>
+                  <p className="text-xs text-neutral-400 mt-0.5">
+                    Fast delivery • Easy setup • Reliable connection
+                  </p>
+                </div>
+                <svg className="w-5 h-5 text-yellow-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+              <ul className="space-y-2 text-neutral-400">
+                <li>
+                  <Link href="/product/overview" className="hover:text-yellow-400 transition-colors flex items-center gap-2">
+                    <span>→</span>
+                    <span>Learn more about Airtel SmartConnect 5G Router</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </section>
         </div>
       </div>
