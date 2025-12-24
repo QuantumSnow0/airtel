@@ -169,6 +169,10 @@ export default function RootLayout({
     name: "5G Smart Connect - Outdoor Unit",
     description:
       "Airtel 5G Smart Connect Outdoor Unit with weather-resistant design, high-gain antenna, signal amplification, and flexible mounting options.",
+    image: "https://www.airtel5grouter.co.ke/airtel.png",
+    url: "https://www.airtel5grouter.co.ke",
+    sku: "AIRTEL-5G-SC-ODU",
+    mpn: "AIRTEL-5G-SC-ODU",
     brand: {
       "@type": "Brand",
       name: "Airtel",
@@ -181,16 +185,28 @@ export default function RootLayout({
       {
         "@type": "Offer",
         name: "5G 15Mbps 30 days",
-        price: "2999",
+        price: 2999,
         priceCurrency: "KES",
         availability: "https://schema.org/InStock",
+        url: "https://www.airtel5grouter.co.ke",
+        priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+        seller: {
+          "@type": "Organization",
+          name: "Airtel Kenya",
+        },
       },
       {
         "@type": "Offer",
         name: "5G 30Mbps 30 days",
-        price: "3999",
+        price: 3999,
         priceCurrency: "KES",
         availability: "https://schema.org/InStock",
+        url: "https://www.airtel5grouter.co.ke",
+        priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+        seller: {
+          "@type": "Organization",
+          name: "Airtel Kenya",
+        },
       },
     ],
     aggregateRating: {
