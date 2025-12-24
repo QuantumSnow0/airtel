@@ -24,8 +24,9 @@ const carouselSlides = [
   },
   {
     image: "/airtelcarousel2.jpeg",
-    title: "High-Gain Antenna",
-    description: "Offers strong and consistent indoor coverage.",
+    title: "Troubleshooting",
+    description: "Common issues and solutions to get your device working perfectly.",
+    link: "/product/troubleshooting",
   },
   {
     image: "/aitelcarousel3.jpg",
