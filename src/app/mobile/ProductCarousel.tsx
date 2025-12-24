@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { Poppins } from "next/font/google";
+import Link from "next/link";
 import "swiper/css";
 
 const poppins = Poppins({
@@ -256,8 +257,8 @@ export default function ProductCarousel() {
           className="h-full"
           style={{ height: "100%" }}
         >
-          {carouselSlides.map((slide, index) => (
-            <SwiperSlide key={index} style={{ height: "100%" }}>
+          {carouselSlides.map((slide, index) => {
+            const slideContent = (
               <div className="w-full h-full relative">
                 <div className="w-full h-full relative">
                   {/* Image Section */}
@@ -335,13 +336,80 @@ export default function ProductCarousel() {
                         }}
                       >
                         {slide.description}
+                        {/* Badge - Learn More for slides with link, Coming Soon only for "What is it?" */}
+                        {slide.link ? (
+                          <>
+                            <span className="inline-block w-full" style={{ textAlign: "right" }}>
+                              <span className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-yellow-400/20 backdrop-blur-sm border border-yellow-400/40 rounded-full align-middle">
+                                <span
+                                  className={`text-xs font-semibold text-yellow-400 ${poppins.variable}`}
+                                  style={{
+                                    fontFamily: "var(--font-poppins), sans-serif",
+                                    letterSpacing: "0.05em",
+                                    textShadow: "0 1px 3px rgba(0, 0, 0, 0.8)",
+                                  }}
+                                >
+                                  Learn More
+                                </span>
+                                <svg
+                                  className="w-3.5 h-3.5 text-yellow-400"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                  style={{
+                                    filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))",
+                                  }}
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2.5}
+                                    d="M9 5l7 7-7 7"
+                                  />
+                                </svg>
+                              </span>
+                            </span>
+                          </>
+                        ) : slide.title === "What is it?" ? (
+                          <>
+                            <span className="inline-block w-full" style={{ textAlign: "right" }}>
+                              <span className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-500/20 backdrop-blur-sm border border-neutral-500/40 rounded-full align-middle">
+                                <span
+                                  className={`text-xs font-semibold text-neutral-300 ${poppins.variable}`}
+                                  style={{
+                                    fontFamily: "var(--font-poppins), sans-serif",
+                                    letterSpacing: "0.05em",
+                                    textShadow: "0 1px 3px rgba(0, 0, 0, 0.8)",
+                                  }}
+                                >
+                                  Coming Soon
+                                </span>
+                              </span>
+                            </span>
+                          </>
+                        ) : null}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-            </SwiperSlide>
-          ))}
+            );
+
+            return (
+              <SwiperSlide key={index} style={{ height: "100%" }}>
+                {slide.link ? (
+                  <Link 
+                    href={slide.link} 
+                    className="block w-full h-full cursor-pointer hover:opacity-95 transition-opacity"
+                  >
+                    {slideContent}
+                  </Link>
+                ) : (
+                  slideContent
+                )}
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
     </div>
