@@ -1,0 +1,24 @@
+Additional Information for Google Ads Appeal
+
+1. Website Purpose: 
+Our website (airtel5grouter.co.ke) is an enhanced version of Airtel's original lead capture form. We converted their form (original form: https://forms.office.com/r/0Ra9M1FSAy) into a modern, user-friendly website to improve customer experience while maintaining the same functionality and data submission process.
+
+2. Technical Integration: 
+All customer submissions are processed through Airtel's official Microsoft Forms system, ensuring data goes directly to Airtel Networks Kenya Limited. This technical integration demonstrates our legitimate, authorized partnership.
+
+3. Compliance Improvements: 
+After the initial suspension, we immediately made significant compliance improvements:
+- Added comprehensive footer clearly stating we are an authorized agent
+- Implemented detailed Privacy Policy explaining our role
+- Added Terms of Service clearly stating our relationship with Airtel
+- Added trademark disclaimers acknowledging Airtel's intellectual property
+- Clearly separated our contact information from Airtel's official contact details
+
+4. Multiple Accounts: 
+I acknowledge that I mistakenly created a second Google Ads account after the suspension, thinking that after making compliance improvements, we could start fresh. I now understand this was incorrect and that I should have appealed the original suspension instead. I am willing to close the second account and am committed to using only one account going forward.
+
+5. Authorization: 
+We have proper authorization documentation from Airtel Networks Kenya Limited that confirms our status as an authorized agent. This documentation can be provided for Google's review upon request.
+
+6. Commitment to Compliance: 
+We are fully committed to maintaining transparency and compliance with Google's advertising policies. We understand the importance of clearly disclosing our agent status and have taken all necessary steps to ensure our website is fully compliant.
