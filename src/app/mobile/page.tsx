@@ -2394,8 +2394,18 @@ export default function TestMobilePage() {
               >
                 Step 2: Almost There
               </h2>
+              <p className="text-xs text-neutral-400 mb-4">
+                Installation Request Form - Fill in your details to request Airtel 5G router installation
+              </p>
             </div>
 
+            {/* Installation Request Form */}
+            <form
+              id="installation-request-form"
+              name="installation-request-form"
+              aria-label="Airtel 5G Router Installation Request Form"
+              noValidate
+            >
             {/* Sample Form Field - Customer Name */}
             <div className="mb-6 relative">
               {/* Floating Label */}
@@ -2450,6 +2460,8 @@ export default function TestMobilePage() {
                 <input
                   ref={nameInputRef}
                   type="text"
+                  name="customer-name"
+                  id="customer-name"
                   placeholder=""
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
@@ -2461,6 +2473,9 @@ export default function TestMobilePage() {
                     setNameFocused(false);
                     setNameBlurred(true);
                   }}
+                  autoComplete="name"
+                  aria-label="Full Name"
+                  aria-required="true"
                   className={`w-full px-3 py-3.5 ${
                     nameFocused || customerName ? "pt-5" : "pt-3.5"
                   } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
@@ -2549,6 +2564,8 @@ export default function TestMobilePage() {
                 <input
                   ref={phoneInputRef}
                   type="tel"
+                  name="customer-phone"
+                  id="customer-phone"
                   placeholder=""
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
@@ -2560,6 +2577,9 @@ export default function TestMobilePage() {
                     setPhoneFocused(false);
                     setPhoneBlurred(true);
                   }}
+                  autoComplete="tel"
+                  aria-label="Airtel Phone Number"
+                  aria-required="true"
                   className={`w-full px-3 py-3.5 ${
                     phoneFocused || customerPhone ? "pt-5" : "pt-3.5"
                   } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
@@ -2649,6 +2669,8 @@ export default function TestMobilePage() {
                 <input
                   ref={alternativeInputRef}
                   type="tel"
+                  name="customer-alternative-phone"
+                  id="customer-alternative-phone"
                   placeholder=""
                   value={customerAlternativeNumber}
                   onChange={(e) => setCustomerAlternativeNumber(e.target.value)}
@@ -2660,6 +2682,9 @@ export default function TestMobilePage() {
                     setAlternativeFocused(false);
                     setAlternativeBlurred(true);
                   }}
+                  autoComplete="tel-national"
+                  aria-label="Alternative Phone Number"
+                  aria-required="true"
                   className={`w-full px-3 py-3.5 ${
                     alternativeFocused || customerAlternativeNumber
                       ? "pt-5"
@@ -2750,6 +2775,8 @@ export default function TestMobilePage() {
                 <input
                   ref={emailInputRef}
                   type="email"
+                  name="customer-email"
+                  id="customer-email"
                   placeholder=""
                   value={customerEmail}
                   onChange={(e) => setCustomerEmail(e.target.value)}
@@ -2761,6 +2788,8 @@ export default function TestMobilePage() {
                     setEmailFocused(false);
                     setEmailBlurred(true);
                   }}
+                  autoComplete="email"
+                  aria-label="Email Address"
                   className={`w-full px-3 py-3.5 ${
                     emailFocused || customerEmail ? "pt-5" : "pt-3.5"
                   } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
@@ -2778,7 +2807,6 @@ export default function TestMobilePage() {
                   }}
                   onClick={scrollToStep2}
                   spellCheck={false}
-                  autoComplete="email"
                 />
                 {emailBlurred && isEmailValid && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -4185,6 +4213,7 @@ export default function TestMobilePage() {
                 )}
               </motion.button>
             </div>
+            </form>
           </div>
         </motion.section>
 
