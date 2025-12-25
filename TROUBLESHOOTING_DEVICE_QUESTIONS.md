@@ -46,49 +46,69 @@ answer: at the back of the router router /router/router-back-details.png
 
 5. **Normal Operation Indicators**
    - What should users see when device is working normally?
-   answer: The router led should be green /router/router-green-light.jpeg and the antenna signal led should be for best green 
+   answer: The router led should be green /router/router-green-light.jpeg and the antenna signal led /router/antenna-signal-led.png should be for best green /router/antenna-green-signal.png optimal orange /router/antenna-orange-signal.png
    - How long does it take to boot up/connect?
+   answer: i explain the boot sequence somewhere above
    - What's the normal LED pattern when working?
+   answer: i explain the boot sequence somewhere above
    - *Why: Users need to know what "normal" looks like*
 
 6. **Error States**
    - What error messages or codes can the device display?
+   answer: basically if the router led is stuck at red /router/router-red-light.jpeg and the antenna leds doesnt follow this two pattern /router/antenna-green-signal.png and /router/antenna-orange-signal.png and if the signal led on the antenna is red /antenna-red-signal.png it basically means you are not recieving any signal
    - What do specific error codes mean?
+   answer: explained somewhere above
    - Are there any error patterns (blinking sequences, etc.)?
+   answer: explaining somewhere above
    - *Why: Specific error messages help diagnose exact problems*
 
 7. **Signal Strength Indicators**
    - How does the device show signal strength? (LED bars, colors, etc.)
+   answer: already explanined above
    - What signal strength is considered good/fair/poor?
+    answer: already explanined above
    - How do users check current signal strength?
+    answer: already explanined above
    - *Why: Signal strength is the #1 troubleshooting factor*
 
 ### Device Settings & Configuration
 
 8. **Accessing Settings**
    - What's the default IP address to access settings? (192.168.1.1, etc.)
+   answer: 192.168.1.1
    - Is there a mobile app? What's it called?
+   answer: The recommended mobile app is TZLink available on both playstore and apple store
    - What's the default admin username/password?
+   answer: username: admin password: admin
    - *Why: Users need to access settings for configuration*
 
 9. **Important Settings**
    - What are the key settings users might need to change?
+   please try to explain the recommended settings to change
    - Are there settings that commonly cause problems if misconfigured?
+   please explain for me
    - What settings should users NOT change?
+   please explain for me
    - *Why: Misconfiguration is a common issue source*
 
 10. **Network Information**
     - What's the default WiFi network name (SSID)?
+  answer: accessible behind the router /router/router-back-details.png
     - What's the default WiFi password?
+    answer: accessible behind the router /router/router-back-details.png
     - How do users find their current WiFi password?
+    please explain for me here
     - *Why: Connection issues often relate to WiFi credentials*
 
 ### Device-Specific Issues
 
 11. **Common Device-Specific Problems**
     - Are there known issues with this specific device model?
+    skip for later
     - Are there firmware bugs users should know about?
+    skip for later
     - Any recalls or known hardware issues?
+    skip for later
     - *Why: Device-specific issues need device-specific solutions*
 
 12. **Maintenance Requirements**
