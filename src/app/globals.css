@@ -209,6 +209,26 @@ input[type="date"].date-input-custom::-webkit-calendar-picker-indicator {
   filter: invert(1) brightness(0.8) sepia(1) saturate(5) hue-rotate(15deg);
 }
 
+/* Hide robot when customer resubmit modal is open */
+body.customer-resubmit-modal-open .floating-robot-guide {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Toast slide-up animation */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 input[type="date"].date-input-custom::-webkit-calendar-picker-indicator:hover {
   filter: invert(1) brightness(1) sepia(1) saturate(5) hue-rotate(15deg);
 }

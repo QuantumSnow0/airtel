@@ -12,6 +12,8 @@ import { motion } from "framer-motion";
 import ProductCarousel from "./ProductCarousel";
 import PricingCards from "../components/PricingCards";
 import LocationMapPicker from "../components/LocationMapPicker";
+import PreviousSubmissionToast from "../components/PreviousSubmissionToast";
+import CustomerResubmitModal from "../components/CustomerResubmitModal";
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
 
@@ -73,6 +75,62 @@ export default function TestMobilePage() {
   const [customerAlternativeNumber, setCustomerAlternativeNumber] =
     useState("");
   const [customerEmail, setCustomerEmail] = useState("");
+
+  // Real-time previous submission detection
+  useEffect(() => {
+    // Clear any existing timeout
+    if (checkTimeoutRef.current) {
+      clearTimeout(checkTimeoutRef.current);
+    }
+
+    // Only check if we have email and at least one phone number
+    const hasEmail = customerEmail.trim().length > 0;
+    const hasPhone = customerPhone.trim().length > 0 || customerAlternativeNumber.trim().length > 0;
+    
+    if (!hasEmail || !hasPhone) {
+      setPreviousSubmissionFound({ found: false });
+      return;
+    }
+
+    // Debounce the check (wait 800ms after user stops typing)
+    checkTimeoutRef.current = setTimeout(async () => {
+      try {
+        const response = await fetch("/api/customer-resubmit/check", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: customerEmail.trim(),
+            airtelNumber: customerPhone.trim(),
+            alternateNumber: customerAlternativeNumber.trim(),
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.found && data.customerName) {
+          setPreviousSubmissionFound({
+            found: true,
+            customerName: data.customerName,
+            leadId: data.leadId,
+          });
+        } else {
+          setPreviousSubmissionFound({ found: false });
+        }
+      } catch (error) {
+        // Silently fail - don't interrupt user experience
+        console.error("Error checking for previous submission:", error);
+        setPreviousSubmissionFound({ found: false });
+      }
+    }, 800);
+
+    return () => {
+      if (checkTimeoutRef.current) {
+        clearTimeout(checkTimeoutRef.current);
+      }
+    };
+  }, [customerEmail, customerPhone, customerAlternativeNumber]);
   const [installationTown, setInstallationTown] = useState("");
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [installationLocation, setInstallationLocation] = useState("");
@@ -138,6 +196,13 @@ export default function TestMobilePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
   const [duplicateMatch, setDuplicateMatch] = useState<any>(null);
+  const [previousSubmissionFound, setPreviousSubmissionFound] = useState<{
+    found: boolean;
+    customerName?: string;
+    leadId?: string;
+  }>({ found: false });
+  const [showResubmitModal, setShowResubmitModal] = useState(false);
+  const checkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [submitStatus, setSubmitStatus] = useState<{
     state: "idle" | "success" | "error";
     message: string;
@@ -1916,6 +1981,25 @@ export default function TestMobilePage() {
 
   return (
     <>
+      {/* Previous Submission Toast */}
+      {previousSubmissionFound.found && previousSubmissionFound.customerName && (
+        <PreviousSubmissionToast
+          customerName={previousSubmissionFound.customerName}
+          onViewClick={() => {
+            setShowResubmitModal(true);
+            setPreviousSubmissionFound({ found: false });
+          }}
+          onDismiss={() => setPreviousSubmissionFound({ found: false })}
+        />
+      )}
+
+      {/* Customer Resubmit Modal */}
+      <CustomerResubmitModal
+        isOpen={showResubmitModal}
+        onClose={() => setShowResubmitModal(false)}
+        prefillEmail={customerEmail.trim()}
+      />
+
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -1977,7 +2061,7 @@ export default function TestMobilePage() {
         {/* Floating Robot Guide - Appears on scroll */}
         {robotVisible && !isBottomSheetOpen && (
           <motion.div
-            className="fixed right-4 pointer-events-none"
+            className="fixed right-4 pointer-events-none floating-robot-guide"
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{
