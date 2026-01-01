@@ -339,7 +339,7 @@ export default function CustomerResubmitModal({
 
               <div className="flex gap-3 pt-2">
                 <button
-                  onClick={handleEmailLookup}
+                  onClick={() => handleEmailLookup()}
                   disabled={loading || !email.trim()}
                   className="flex-1 px-4 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-neutral-900 font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
