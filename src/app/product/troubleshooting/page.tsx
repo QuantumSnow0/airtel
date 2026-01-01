@@ -121,12 +121,40 @@ export default function TroubleshootingPage() {
     ],
   };
 
+  // Product Schema for Outdoor Unit
+  const outdoorUnitProductSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "5G Smart Connect - Outdoor Unit",
+    description: "Airtel 5G Smart Connect Outdoor Unit with weather-resistant design, high-gain antenna, signal amplification, and flexible mounting options.",
+    image: "https://www.airtel5grouter.co.ke/antenna.png",
+    brand: {
+      "@type": "Brand",
+      name: "Airtel",
+    },
+    manufacturer: {
+      "@type": "Organization",
+      name: "Airtel Kenya",
+    },
+    model: "ZLT X17M",
+    category: "Fixed Wireless Access Equipment",
+    offers: {
+      "@type": "Offer",
+      availability: "https://schema.org/InStock",
+      priceCurrency: "KES",
+    },
+  };
+
   return (
     <>
       {/* Structured Data for SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(outdoorUnitProductSchema) }}
       />
       <script
         type="application/ld+json"
