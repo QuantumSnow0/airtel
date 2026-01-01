@@ -20,6 +20,7 @@ const carouselSlides = [
     title: "What is it?",
     description:
       "Learn about the Airtel SmartConnect 5G router and its capabilities.",
+    link: "/product/overview",
   },
   {
     image: "/airtelcarousel2.jpeg",

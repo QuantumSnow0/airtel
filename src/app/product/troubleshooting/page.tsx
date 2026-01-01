@@ -386,6 +386,10 @@ export default function TroubleshootingPage() {
             <div>
               <h3 className="text-sm sm:text-base font-semibold text-white mb-3">Reference Guides</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Link href="#technical-specs" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">📋</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">Technical Specifications</span>
+                </Link>
                 <Link href="#led-indicators" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
                   <span className="text-lg">💡</span>
                   <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">LED Indicators Guide</span>
@@ -401,6 +405,10 @@ export default function TroubleshootingPage() {
                 <Link href="#sim-card" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
                   <span className="text-lg">📱</span>
                   <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">SIM Card Installation</span>
+                </Link>
+                <Link href="#nfc-function" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
+                  <span className="text-lg">📲</span>
+                  <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-yellow-400">NFC OneHop Connection</span>
                 </Link>
                 <Link href="#router-settings" className="flex items-center gap-2 p-2.5 bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-colors group">
                   <span className="text-lg">⚙️</span>
@@ -472,11 +480,53 @@ export default function TroubleshootingPage() {
             </p>
           </section>
 
+          {/* Technical Specifications */}
+          <section id="technical-specs" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                03
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>📋</span> Technical Specifications
+              </h2>
+            </div>
+            <p className="text-neutral-300 mb-4 text-sm sm:text-base">
+              Understanding the technical specifications helps ensure proper installation and operation of your Airtel SmartConnect 5G Router.
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="p-3 sm:p-4 bg-neutral-900/50 rounded-lg">
+                <h3 className="font-semibold text-white mb-3 text-sm sm:text-base">Outdoor Unit (Antenna) - ZLT X17M</h3>
+                <ul className="space-y-1.5 text-xs sm:text-sm text-neutral-300">
+                  <li>• <strong className="text-yellow-400">Operating Temperature:</strong> -30°C to +60°C (performance may be limited below -30°C)</li>
+                  <li>• <strong className="text-yellow-400">Relative Humidity:</strong> 5% to 95%</li>
+                  <li>• <strong className="text-yellow-400">Size:</strong> 195mm × 110mm × 42mm</li>
+                  <li>• <strong className="text-yellow-400">Weight:</strong> Approximately 600g</li>
+                </ul>
+              </div>
+              <div className="p-3 sm:p-4 bg-neutral-900/50 rounded-lg">
+                <h3 className="font-semibold text-white mb-3 text-sm sm:text-base">Indoor Unit (Router) - ZLT W304VA PRO</h3>
+                <ul className="space-y-1.5 text-xs sm:text-sm text-neutral-300">
+                  <li>• <strong className="text-yellow-400">Working Temperature:</strong> 0°C to +40°C</li>
+                  <li>• <strong className="text-yellow-400">Relative Humidity:</strong> 5% to 95%</li>
+                  <li>• <strong className="text-yellow-400">Power Supply:</strong> AC 100V-240V, 50Hz-60Hz</li>
+                  <li>• <strong className="text-yellow-400">Output:</strong> DC 12V/2A</li>
+                  <li>• <strong className="text-yellow-400">Size:</strong> 230mm × 140mm × 150mm</li>
+                  <li>• <strong className="text-yellow-400">Weight:</strong> 470g</li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-4 p-3 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">
+              <p className="text-xs sm:text-sm text-neutral-300">
+                <strong className="text-yellow-400">💡 Important:</strong> Ensure your installation location meets these temperature and humidity requirements for optimal performance. The outdoor unit can operate in extreme temperatures, but performance may be limited below -30°C.
+              </p>
+            </div>
+          </section>
+
           {/* LED Indicators Guide */}
           <section id="led-indicators" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
-                03
+                04
               </div>
               <h2 className="text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>💡</span> Understanding LED Indicators
@@ -535,14 +585,63 @@ export default function TroubleshootingPage() {
 
               {/* Antenna LEDs */}
               <div>
-                <h3 className="text-lg sm:text-xl font-semibold text-white mb-3">Antenna Signal LED (Most Important)</h3>
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-3">Outdoor Unit (Antenna) LEDs - Complete Guide</h3>
                 <p className="text-neutral-300 mb-3 text-sm sm:text-base">
-                  The antenna has 5 LEDs total, but the <strong className="text-yellow-400">signal LED is the most important</strong> - it shows your actual internet connection quality. When the antenna boots, the power LED lights first, then all LEDs activate. Watch the signal LED specifically:
+                  The outdoor unit (antenna) has <strong className="text-yellow-400">5 LED indicators</strong> that show different status information. Understanding all of them helps diagnose issues:
                 </p>
                 <div className="mb-4 p-2 bg-neutral-900/50 rounded-lg">
                   <Image src="/router/antenna.png" alt="Airtel SmartConnect antenna showing all 5 LEDs" width={200} height={150} className="rounded-lg mb-2 mx-auto" />
                   <p className="text-xs text-neutral-400 text-center">Airtel SmartConnect Antenna - 5 LEDs Total</p>
                 </div>
+                
+                {/* Complete LED Guide Table */}
+                <div className="mb-4 p-3 bg-neutral-900/50 rounded-lg">
+                  <h4 className="font-semibold text-white mb-3 text-sm sm:text-base">All Outdoor Unit LED Indicators:</h4>
+                  <div className="space-y-2 text-xs sm:text-sm">
+                    <div className="flex flex-col sm:flex-row gap-2 py-2 border-b border-neutral-700/50">
+                      <div className="font-semibold text-yellow-400 sm:w-32">LED 1: 4G Status</div>
+                      <div className="text-neutral-300 flex-1">
+                        <span className="text-green-400">● On:</span> Device connected to 4G network | 
+                        <span className="text-neutral-500"> ○ Off:</span> Not connected to 4G
+                      </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 py-2 border-b border-neutral-700/50">
+                      <div className="font-semibold text-yellow-400 sm:w-32">LED 2: 5G Status</div>
+                      <div className="text-neutral-300 flex-1">
+                        <span className="text-green-400">● On:</span> Device connected to 5G network | 
+                        <span className="text-neutral-500"> ○ Off:</span> Not connected to 5G
+                      </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 py-2 border-b border-neutral-700/50">
+                      <div className="font-semibold text-yellow-400 sm:w-32">LED 3: Signal Strength</div>
+                      <div className="text-neutral-300 flex-1">
+                        <span className="text-red-400">🔴 Red:</span> Weak signal | 
+                        <span className="text-yellow-400">🟡 Yellow:</span> Medium signal | 
+                        <span className="text-green-400">🟢 Green:</span> Excellent signal | 
+                        <span className="text-neutral-500"> ○ Off:</span> No signal
+                      </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 py-2 border-b border-neutral-700/50">
+                      <div className="font-semibold text-yellow-400 sm:w-32">LED 4: ETH (Ethernet)</div>
+                      <div className="text-neutral-300 flex-1">
+                        <span className="text-green-400">● On:</span> Network port connected normally | 
+                        <span className="text-yellow-400">⚡ Flashing:</span> Data transmitting | 
+                        <span className="text-neutral-500"> ○ Off:</span> Not connected
+                      </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 py-2">
+                      <div className="font-semibold text-yellow-400 sm:w-32">LED 5: Power</div>
+                      <div className="text-neutral-300 flex-1">
+                        <span className="text-green-400">● On:</span> Device powered normally | 
+                        <span className="text-neutral-500"> ○ Off:</span> Power issue
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <p className="text-neutral-300 mb-3 text-sm sm:text-base">
+                  The <strong className="text-yellow-400">signal strength LED (LED 3)</strong> is the most important for troubleshooting - it shows your actual internet connection quality:
+                </p>
                 <div className="space-y-4">
                   <div className="py-3">
                     <div className="flex items-start gap-3">
@@ -562,7 +661,7 @@ export default function TroubleshootingPage() {
                         <Image src="/router/antenna-orange-signal.png" alt="Airtel antenna orange signal LED - good connection" width={160} height={160} className="object-contain w-full h-full scale-150" />
                       </div>
                       <div className="flex-1">
-                        <p className="font-semibold text-orange-400 mb-1.5 text-sm sm:text-base">🟠 Orange Signal LED - GOOD</p>
+                        <p className="font-semibold text-orange-400 mb-1.5 text-sm sm:text-base">🟡 Yellow/Orange Signal LED - MEDIUM</p>
                         <p className="text-neutral-300 text-xs sm:text-sm mb-2">Acceptable signal strength. Your connection should work, but speeds may be slower than with green. This is still usable for most internet activities.</p>
                         <p className="text-xs text-neutral-400">⚠️ Good performance | ⚠️ Moderate speeds | ✅ Connection stable</p>
                       </div>
@@ -584,6 +683,38 @@ export default function TroubleshootingPage() {
                 </div>
               </div>
 
+              {/* Indoor Unit LEDs */}
+              <div className="mt-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-3">Indoor Unit (Router) LED Indicators</h3>
+                <p className="text-neutral-300 mb-3 text-sm sm:text-base">
+                  The indoor unit (router) has LED indicators that show different operational states:
+                </p>
+                <div className="p-3 bg-neutral-900/50 rounded-lg">
+                  <div className="space-y-2 text-xs sm:text-sm">
+                    <div className="flex flex-col sm:flex-row gap-2 py-2 border-b border-neutral-700/50">
+                      <div className="font-semibold text-blue-400 sm:w-40">Blue (Flashing)</div>
+                      <div className="text-neutral-300 flex-1">Starting MESH network</div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 py-2 border-b border-neutral-700/50">
+                      <div className="font-semibold text-blue-400 sm:w-40">Blue (Bright)</div>
+                      <div className="text-neutral-300 flex-1">MESH network is running</div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 py-2 border-b border-neutral-700/50">
+                      <div className="font-semibold text-green-400 sm:w-40">Green (Bright)</div>
+                      <div className="text-neutral-300 flex-1">Normal working condition</div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 py-2 border-b border-neutral-700/50">
+                      <div className="font-semibold text-red-400 sm:w-40">Red (Flashing)</div>
+                      <div className="text-neutral-300 flex-1">MESH network timeout or failure</div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 py-2">
+                      <div className="font-semibold text-white sm:w-40">White (Flashing)</div>
+                      <div className="text-neutral-300 flex-1">Restored to factory settings or in the process of upgrading</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Boot Sequence */}
               <div className="mt-5 p-3 sm:p-4">
                 <h4 className="font-semibold text-white mb-2 text-sm sm:text-base">Normal Boot Sequence:</h4>
@@ -592,8 +723,10 @@ export default function TroubleshootingPage() {
                   <li>2. Router LED changes to <span className="text-purple-400">purple/violet</span> (mixed color - <strong>most boot time spent here</strong>)</li>
                   <li>3. Router LED changes to <span className="text-blue-400">blue</span> (connecting - very brief, you might miss it)</li>
                   <li>4. Router LED turns <span className="text-green-400">green</span> (router ready)</li>
-                  <li>5. Antenna power LED lights on</li>
-                  <li>6. Antenna signal LED shows connection status (<span className="text-green-400">green</span> = best, <span className="text-orange-400">orange</span> = good, <span className="text-red-400">red</span> = poor)</li>
+                  <li>5. Antenna power LED (LED 5) lights on</li>
+                  <li>6. Antenna 4G/5G status LEDs (LED 1 & 2) show network connection</li>
+                  <li>7. Antenna signal LED (LED 3) shows connection quality (<span className="text-green-400">green</span> = excellent, <span className="text-yellow-400">yellow</span> = medium, <span className="text-red-400">red</span> = weak)</li>
+                  <li>8. Antenna ETH LED (LED 4) shows ethernet connection status</li>
                 </ol>
               </div>
             </div>
@@ -603,7 +736,7 @@ export default function TroubleshootingPage() {
           <section id="device-label" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
-                04
+                05
               </div>
               <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>🏷️</span> Device Label Information (Default Passwords & Settings)
@@ -636,7 +769,7 @@ export default function TroubleshootingPage() {
           <section id="factory-reset" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
-                05
+                06
               </div>
               <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>🔄</span> How to Factory Reset Airtel SmartConnect Router
@@ -681,6 +814,9 @@ export default function TroubleshootingPage() {
                     <strong className="text-yellow-400">Step 6:</strong> Release the reset button and wait for the device to complete the reboot cycle. This may take 2-3 minutes.
                   </li>
                   <li className="text-neutral-200 text-sm sm:text-base">
+                    <strong className="text-yellow-400">Alternative Method (Indoor Unit):</strong> The indoor unit (router) also has a RESET button. Press and hold for <strong className="text-yellow-400">6 seconds</strong> to restore factory settings. The LED will show white (flashing) when factory reset is in progress.
+                  </li>
+                  <li className="text-neutral-200 text-sm sm:text-base">
                     <strong className="text-yellow-400">Step 7:</strong> After reboot, the device will have restored to factory defaults. Your WiFi SSID and password will be back to the defaults shown on the <Link href="#device-label" className="text-yellow-400 underline">device label</Link>.
                   </li>
                 </ol>
@@ -702,7 +838,7 @@ export default function TroubleshootingPage() {
           <section id="router-ports" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
-                06
+                07
               </div>
               <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>🔌</span> Router Ports & Connections
@@ -717,13 +853,18 @@ export default function TroubleshootingPage() {
             </div>
             <div className="space-y-3">
               <div>
-                <h3 className="font-semibold text-white mb-2 text-sm sm:text-base">W/LAN1 Port (Most Important)</h3>
+                <h3 className="font-semibold text-white mb-2 text-sm sm:text-base">WAN Port (W/LAN1) - Most Important</h3>
                 <p className="text-neutral-300 text-xs sm:text-sm mb-2">
-                  This is the <strong className="text-yellow-400">first port</strong> on the router, specifically designed to connect the antenna to the router. This is NOT a regular LAN port.
+                  This is the <strong className="text-yellow-400">first port</strong> on the router, specifically designed to connect the outdoor unit (antenna) to the indoor unit (router). This port supports <strong className="text-yellow-400">POE (Power over Ethernet)</strong> power supply and standard protocol for uplink device communication.
                 </p>
                 <div className="p-2 sm:p-3 mb-2">
                   <p className="text-xs sm:text-sm text-yellow-200">
-                    <strong>⚠️ Critical:</strong> The ethernet cable from the antenna MUST be connected to the W/LAN1 port. If connected to a regular LAN port, the router won't receive signal from the antenna and you'll have no internet.
+                    <strong>⚠️ Critical:</strong> The ethernet cable from the antenna MUST be connected to the WAN/W/LAN1 port. If connected to a regular LAN port, the router won't receive signal from the antenna and you'll have no internet. This port also provides power to the outdoor unit via POE.
+                  </p>
+                </div>
+                <div className="p-2 sm:p-3 mb-2 bg-neutral-900/50 rounded">
+                  <p className="text-xs sm:text-sm text-neutral-300">
+                    <strong className="text-yellow-400">Installation Note:</strong> Use a standard 8-core network cable (CAT5E or CAT6). Put a waterproof protective cover on the cable before inserting it into the RJ45 network port on the outdoor unit. This ensures proper weatherproofing for outdoor installation.
                   </p>
                 </div>
                 <div className="p-2 bg-neutral-900/50 rounded">
@@ -740,7 +881,19 @@ export default function TroubleshootingPage() {
               <div>
                 <h3 className="font-semibold text-white mb-2 text-sm sm:text-base">USB Port</h3>
                 <p className="text-neutral-300 text-xs sm:text-sm">
-                  The router has a USB port for connecting external devices or storage. Check your router manual for supported USB device types.
+                  The router has a USB port used for data transmission. It can also be connected to an external 5V power supply device if needed.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2 text-sm sm:text-base">MESH Button</h3>
+                <p className="text-neutral-300 text-xs sm:text-sm">
+                  Press and hold the MESH button for <strong className="text-yellow-400">1-3 seconds</strong> to start or configure a MESH network. This allows multiple routers to work together for extended WiFi coverage. The router LED will show blue (flashing) when starting MESH network, and blue (bright) when MESH network is running.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2 text-sm sm:text-base">RESET Button</h3>
+                <p className="text-neutral-300 text-xs sm:text-sm">
+                  Press and hold the RESET button for <strong className="text-yellow-400">6 seconds</strong> to restore factory settings. The LED will show white (flashing) when factory reset is in progress.
                 </p>
               </div>
             </div>
@@ -750,7 +903,7 @@ export default function TroubleshootingPage() {
           <section id="sim-card" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
-                07
+                08
               </div>
               <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>📱</span> SIM Card Installation Guide
@@ -810,11 +963,43 @@ export default function TroubleshootingPage() {
             </div>
           </section>
 
+          {/* NFC Function */}
+          <section id="nfc-function" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                09
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+                <span>📲</span> NFC OneHop - Quick WiFi Connection
+              </h2>
+            </div>
+            <p className="text-neutral-300 mb-3 text-sm sm:text-base">
+              The router supports NFC (Near Field Communication) for easy WiFi connection without entering passwords.
+            </p>
+            <div className="space-y-3">
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-white mb-2">How to Use NFC OneHop:</h3>
+                <ol className="space-y-1.5 ml-4 text-neutral-200 text-xs sm:text-sm">
+                  <li>1. Ensure your Android device has NFC enabled</li>
+                  <li>2. Locate the NFC area at the <strong className="text-yellow-400">lower right corner</strong> of the router (indoor unit)</li>
+                  <li>3. Tap your NFC-enabled Android device to the NFC area on the router</li>
+                  <li>4. When your phone shows the connection prompt, click <strong className="text-yellow-400">"Connect"</strong></li>
+                  <li>5. Your device will automatically connect to the WiFi network without entering a password</li>
+                </ol>
+              </div>
+              <div className="p-3 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">
+                <p className="text-xs sm:text-sm text-neutral-300">
+                  <strong className="text-yellow-400">💡 Tip:</strong> NFC OneHop can be enabled or disabled in the router's web configuration page under Wi-Fi Settings. This feature only works with NFC-enabled Android devices.
+                </p>
+              </div>
+            </div>
+          </section>
+
           {/* Accessing Router Settings */}
           <section id="router-settings" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
-                08
+                10
               </div>
               <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>⚙️</span> How to Access Router Settings (Admin Panel)
@@ -869,7 +1054,7 @@ export default function TroubleshootingPage() {
           <section id="wifi-password" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
-                09
+                11
               </div>
               <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>🔐</span> How to Find Your WiFi Password
@@ -915,7 +1100,7 @@ export default function TroubleshootingPage() {
           <section id="troubleshooting" className="mb-8 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
-                10
+                12
               </div>
               <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400">Common Problems & Solutions</h2>
             </div>
@@ -938,7 +1123,10 @@ export default function TroubleshootingPage() {
                     <li><strong className="text-yellow-400">4.</strong> Move antenna to a higher location (rooftop, upper floor) for better signal</li>
                     <li><strong className="text-yellow-400">5.</strong> Remove obstructions between antenna and cell tower (trees, buildings, metal structures)</li>
                     <li><strong className="text-yellow-400">6.</strong> Ensure you're in an area with Airtel network coverage</li>
-                    <li><strong className="text-yellow-400">7.</strong> Check the ethernet cable connection between antenna and router. The cable should be connected to the <strong>W/LAN1 port</strong> on the router (not the regular LAN ports)</li>
+                    <li><strong className="text-yellow-400">7.</strong> Check the ethernet cable connection between antenna and router. The cable should be connected to the <strong>WAN/W/LAN1 port</strong> on the router (not the regular LAN ports). Ensure you're using a standard 8-core network cable (CAT5E or CAT6) with proper waterproof protection</li>
+                    <li><strong className="text-yellow-400">8.</strong> Check the outdoor unit ETH LED (LED 4) - it should be on (connected) or flashing (data transmitting). If off, check the ethernet cable connection</li>
+                    <li><strong className="text-yellow-400">9.</strong> Verify the outdoor unit power LED (LED 5) is on - if off, check POE power supply from the router's WAN port</li>
+                    <li><strong className="text-yellow-400">10.</strong> Check outdoor unit 4G/5G status LEDs (LED 1 & 2) - at least one should be on if connected to network. If both are off, there's no network connection</li>
                   </ol>
                 </div>
                 <div>
@@ -951,7 +1139,8 @@ export default function TroubleshootingPage() {
                     <li><strong className="text-yellow-400">2.</strong> Elevate the antenna higher (rooftop installation is best)</li>
                     <li><strong className="text-yellow-400">3.</strong> Remove any metal objects or thick walls blocking the signal path</li>
                     <li><strong className="text-yellow-400">4.</strong> Check if antenna is properly mounted and not loose</li>
-                    <li><strong className="text-yellow-400">5.</strong> Ensure ethernet cable from antenna to router is securely connected to the W/LAN1 port (the first port, different from regular LAN ports)</li>
+                    <li><strong className="text-yellow-400">5.</strong> Ensure ethernet cable from antenna to router is securely connected to the WAN/W/LAN1 port (the first port, different from regular LAN ports). Check that the outdoor unit ETH LED (LED 4) is on or flashing</li>
+                    <li><strong className="text-yellow-400">6.</strong> Verify the outdoor unit is receiving power - check that the power LED (LED 5) is on. The WAN port provides POE power to the outdoor unit</li>
                   </ol>
                 </div>
               </div>
@@ -1083,9 +1272,11 @@ export default function TroubleshootingPage() {
                   </p>
                   <ol className="space-y-1.5 ml-4 text-neutral-200 text-xs sm:text-sm">
                     <li><strong className="text-yellow-400">1.</strong> Unplug power adapter, wait 30 seconds, plug back in</li>
-                    <li><strong className="text-yellow-400">2.</strong> Check power adapter is providing correct voltage</li>
-                    <li><strong className="text-yellow-400">3.</strong> Ensure ethernet cable from antenna is connected to the <strong>W/LAN1 port</strong> on the router (this is the first port, specifically for connecting the antenna - not the regular LAN ports for devices)</li>
-                    <li><strong className="text-yellow-400">4.</strong> If still stuck, contact Airtel support - may need firmware update or replacement</li>
+                    <li><strong className="text-yellow-400">2.</strong> Check power adapter is providing correct voltage (DC 12V/2A, Input AC 100V-240V, 50Hz-60Hz)</li>
+                    <li><strong className="text-yellow-400">3.</strong> Ensure ethernet cable from antenna is connected to the <strong>WAN/W/LAN1 port</strong> on the router (this is the first port, specifically for connecting the antenna - not the regular LAN ports for devices)</li>
+                    <li><strong className="text-yellow-400">4.</strong> Check outdoor unit power LED (LED 5) - if off, the outdoor unit isn't receiving POE power from the router</li>
+                    <li><strong className="text-yellow-400">5.</strong> Check outdoor unit ETH LED (LED 4) - should be on (connected) or flashing (data transmitting). If off, check ethernet cable connection</li>
+                    <li><strong className="text-yellow-400">6.</strong> If still stuck, contact Airtel support - may need firmware update or replacement</li>
                   </ol>
                 </div>
                 <div className="mt-4 p-3 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">
