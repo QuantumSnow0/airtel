@@ -144,8 +144,14 @@ export default function ProductOverviewPage() {
     offers: {
       "@type": "Offer",
       availability: "https://schema.org/InStock",
-      price: "1999",
+      price: 1999,
       priceCurrency: "KES",
+      priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      url: "https://www.airtel5grouter.co.ke/product/overview",
+      seller: {
+        "@type": "Organization",
+        name: "Airtel Kenya",
+      },
       shippingDetails: {
         "@type": "OfferShippingDetails",
         shippingRate: {
@@ -331,7 +337,7 @@ export default function ProductOverviewPage() {
         }}
       />
 
-      <div className={`min-h-screen bg-neutral-900 text-white ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
+    <div className={`min-h-screen bg-neutral-900 text-white ${poppins.variable}`} style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {/* Breadcrumbs */}
           <nav className="mb-4 text-sm text-neutral-400" aria-label="Breadcrumb">
@@ -350,7 +356,7 @@ export default function ProductOverviewPage() {
           <header className="mb-8 sm:mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent">
               What is Airtel SmartConnect 5G Home & Office WiFi?
-            </h1>
+          </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-neutral-300 mb-4 sm:mb-6 leading-relaxed">
               Fixed Wireless Access (FWA) system providing reliable, high-speed internet for homes and offices in Kenya
             </p>
@@ -557,8 +563,8 @@ export default function ProductOverviewPage() {
                 <h3 className="font-semibold text-white mb-2 text-lg">NFC OneHop</h3>
                 <p className="text-sm text-neutral-300">
                   Quick WiFi connection using NFC-enabled Android devices. Tap the NFC area on the router to connect without entering passwords. <Link href="/product/troubleshooting#nfc-function" className="text-yellow-400 hover:text-yellow-300 underline">NFC setup guide</Link>
-                </p>
-              </div>
+          </p>
+        </div>
 
               <div className="p-5 bg-gradient-to-br from-neutral-800/50 to-neutral-800/30 border border-neutral-700 hover:border-yellow-400/50 rounded-lg transition-all">
                 <div className="text-3xl mb-3">⚙️</div>
@@ -877,7 +883,7 @@ export default function ProductOverviewPage() {
                   <li>• <strong className="text-yellow-400">Continued Access:</strong> You can still browse, but at slower speeds</li>
                   <li>• <strong className="text-yellow-400">Additional Bundles:</strong> Purchase extra data bundles to restore higher speeds</li>
                   <li>• <strong className="text-yellow-400">Flexibility:</strong> Add data as needed, no contract restrictions</li>
-                </ul>
+            </ul>
               </div>
             </div>
           </section>
@@ -1347,7 +1353,7 @@ export default function ProductOverviewPage() {
                     <p className="text-sm sm:text-base text-neutral-400 leading-relaxed max-w-2xl">
                       Ready to experience reliable 5G internet? Order your Airtel SmartConnect router and get professional installation included.
                     </p>
-                  </div>
+        </div>
                   
                   <div className="flex flex-col sm:flex-row gap-3 shrink-0">
                     <Link
@@ -1394,20 +1400,20 @@ export default function ProductOverviewPage() {
             </div>
           </section>
 
-          {/* Back Button */}
-          <div className="mt-8">
+        {/* Back Button */}
+        <div className="mt-8">
             <Link
-              href="/mobile"
+            href="/mobile"
               className="inline-flex items-center gap-2 px-4 py-2 text-neutral-400 hover:text-yellow-400 transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to Home
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Home
             </Link>
-          </div>
         </div>
       </div>
+    </div>
     </>
   );
 }

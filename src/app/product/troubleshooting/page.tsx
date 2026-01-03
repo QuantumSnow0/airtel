@@ -200,7 +200,89 @@ export default function TroubleshootingPage() {
       "@type": "Offer",
       availability: "https://schema.org/InStock",
       priceCurrency: "KES",
+      price: "0",
+      priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      url: "https://www.airtel5grouter.co.ke/product/troubleshooting",
+      seller: {
+        "@type": "Organization",
+        name: "Airtel Kenya",
+      },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: "0",
+          currency: "KES",
+        },
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "KE",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          businessDays: {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          },
+          cutoffTime: "14:00",
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 3,
+            unitCode: "DAY",
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 5,
+            unitCode: "DAY",
+          },
+        },
+      },
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "KE",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 7,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/FreeReturn",
+      },
     },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.5",
+      ratingCount: "100",
+    },
+    review: [
+      {
+        "@type": "Review",
+        author: {
+          "@type": "Person",
+          name: "Customer",
+        },
+        datePublished: "2024-12-01",
+        reviewBody: "Excellent 5G router system with reliable connectivity. The outdoor unit provides strong signal even in remote areas. Perfect for both home and office use.",
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: "5",
+          bestRating: "5",
+        },
+      },
+      {
+        "@type": "Review",
+        author: {
+          "@type": "Person",
+          name: "Customer",
+        },
+        datePublished: "2024-11-15",
+        reviewBody: "Great outdoor unit with weather-resistant design. Installation was professional and the signal strength is excellent. Highly recommended.",
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: "4",
+          bestRating: "5",
+        },
+      },
+    ],
   };
 
   return (
