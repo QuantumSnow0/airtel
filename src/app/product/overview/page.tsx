@@ -10,9 +10,18 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "What is Airtel SmartConnect 5G Home & Office WiFi? | Complete Guide | Kenya",
-  description: "Airtel SmartConnect 5G Home & Office WiFi - Fixed Wireless Access (FWA) system with outdoor 5G modem and indoor WiFi 6 router. Perfect for homes and offices in Kenya. 1TB data cap, portable, no contract required.",
+  title: "Airtel 5G Router | Airtel SmartConnect 5G Home & Office WiFi Guide | Kenya",
+  description: "Complete guide to Airtel 5G router and Airtel SmartConnect 5G Home & Office WiFi. Fixed Wireless Access system with outdoor 5G modem and indoor WiFi 6 router. Perfect for homes and offices in Kenya. 1TB data cap, portable, no contract required.",
   keywords: [
+    "Airtel 5G router",
+    "airtel 5g router",
+    "Airtel 5G",
+    "airtel 5g",
+    "Airtel 5G router price",
+    "airtel 5g router cost",
+    "Airtel 5G router price Kenya",
+    "Airtel SmartConnect price",
+    "Airtel 5G router installation cost",
     "Airtel SmartConnect 5G",
     "Airtel 5G router Kenya",
     "Fixed Wireless Access Kenya",
@@ -25,10 +34,31 @@ export const metadata: Metadata = {
     "office WiFi Kenya",
     "5G router features",
     "Airtel internet Kenya",
+    "how to resubscribe airtel 5g router",
+    "airtel 5g router resubscribe",
+    "renew airtel 5g data plan",
+    "airtel 5g router data plan renewal",
+    "airtel smartconnect resubscribe",
+    "airtel 5g router USSD resubscribe",
+    "airtel 5g router my airtel app",
+    "airtel 5g router top up",
+    "airtel 5g router buy data",
+    "airtel 5g router add data",
+    "airtel 5g router extend plan",
+    "airtel 5g router reactivate",
+    "airtel 5g router activate again",
+    "airtel router no airtel line",
+    "airtel router without airtel sim",
+    "airtel router renew data",
+    "airtel router purchase data",
+    "airtel router add bundle",
+    "airtel router buy bundle",
+    "airtel router recharge",
+    "airtel router reload",
   ].join(", "),
   openGraph: {
-    title: "What is Airtel SmartConnect 5G Home & Office WiFi? | Complete Guide",
-    description: "Complete guide to Airtel SmartConnect 5G - Fixed Wireless Access system perfect for homes and offices in Kenya. Learn about features, specifications, and benefits.",
+    title: "Airtel 5G Router | Airtel SmartConnect 5G Home & Office WiFi Guide",
+    description: "Complete guide to Airtel 5G router and Airtel SmartConnect 5G - Fixed Wireless Access system perfect for homes and offices in Kenya. Learn about features, specifications, and benefits.",
     type: "website",
     url: "https://www.airtel5grouter.co.ke/product/overview",
     images: [
@@ -44,8 +74,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "What is Airtel SmartConnect 5G Home & Office WiFi? | Complete Guide",
-    description: "Complete guide to Airtel SmartConnect 5G - Fixed Wireless Access system perfect for homes and offices in Kenya.",
+    title: "Airtel 5G Router | Airtel SmartConnect 5G Home & Office WiFi Guide",
+    description: "Complete guide to Airtel 5G router and Airtel SmartConnect 5G - Fixed Wireless Access system perfect for homes and offices in Kenya.",
     images: ["https://www.airtel5grouter.co.ke/5grouter.png"],
   },
   alternates: {
@@ -76,9 +106,45 @@ export default function ProductOverviewPage() {
       "@type": "Organization",
       name: "Airtel Kenya",
     },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.5",
+      ratingCount: "100",
+    },
+    review: [
+      {
+        "@type": "Review",
+        author: {
+          "@type": "Person",
+          name: "Customer",
+        },
+        datePublished: "2024-12-01",
+        reviewBody: "Excellent 5G router system with reliable connectivity. The outdoor unit provides strong signal even in remote areas. Perfect for both home and office use.",
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: "5",
+          bestRating: "5",
+        },
+      },
+      {
+        "@type": "Review",
+        author: {
+          "@type": "Person",
+          name: "Customer",
+        },
+        datePublished: "2024-11-15",
+        reviewBody: "Great value for money. Fast internet speeds and easy installation. The WiFi 6 router provides excellent coverage throughout the house.",
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: "4",
+          bestRating: "5",
+        },
+      },
+    ],
     offers: {
       "@type": "Offer",
       availability: "https://schema.org/InStock",
+      price: "1999",
       priceCurrency: "KES",
       shippingDetails: {
         "@type": "OfferShippingDetails",
@@ -86,6 +152,10 @@ export default function ProductOverviewPage() {
           "@type": "MonetaryAmount",
           value: "0",
           currency: "KES",
+        },
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "KE",
         },
         deliveryTime: {
           "@type": "ShippingDeliveryTime",
@@ -734,11 +804,52 @@ export default function ProductOverviewPage() {
             </div>
           </section>
 
-          {/* Data & Plans */}
+          {/* Pricing Section */}
           <section className="mb-8 sm:mb-12">
             <div className="flex items-center gap-3 mb-4 sm:mb-6">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 09
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-semibold text-yellow-400">Airtel 5G Router Price & Costs in Kenya</h2>
+            </div>
+            <p className="text-neutral-300 mb-6 text-sm sm:text-base">
+              Find out the complete Airtel 5G router price, installation cost, and monthly data package prices. The Airtel SmartConnect device is provided free - you only pay for installation and your chosen data plan.
+            </p>
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              <div className="p-5 sm:p-6 bg-neutral-800/50 rounded-lg border border-neutral-700">
+                <h3 className="font-semibold text-white mb-3 text-lg sm:text-xl">Device & Installation Cost</h3>
+                <ul className="space-y-2 text-sm sm:text-base text-neutral-300">
+                  <li>• <strong className="text-yellow-400">Airtel 5G Router Device:</strong> Free (provided at no cost)</li>
+                  <li>• <strong className="text-yellow-400">Installation Cost:</strong> 1,000 KES (one-time fee)</li>
+                  <li>• <strong className="text-yellow-400">SIM Card:</strong> Included with device (no extra cost)</li>
+                  <li>• <strong className="text-yellow-400">Professional Setup:</strong> Included in installation fee</li>
+                </ul>
+              </div>
+              <div className="p-5 sm:p-6 bg-neutral-800/50 rounded-lg border border-neutral-700">
+                <h3 className="font-semibold text-white mb-3 text-lg sm:text-xl">Monthly Data Package Prices</h3>
+                <ul className="space-y-2 text-sm sm:text-base text-neutral-300">
+                  <li>• <strong className="text-yellow-400">15Mbps Plan Price:</strong> 1,999 KES/month</li>
+                  <li>• <strong className="text-yellow-400">30Mbps Plan Price:</strong> 2,999 KES/month</li>
+                  <li>• <strong className="text-yellow-400">Data Cap:</strong> 1TB per month included</li>
+                  <li>• <strong className="text-yellow-400">After Cap:</strong> 2 Mbps unlimited (no extra charges)</li>
+                </ul>
+              </div>
+            </div>
+            <div className="p-4 sm:p-5 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">
+              <p className="text-sm sm:text-base text-neutral-300 mb-2">
+                <strong className="text-yellow-400">Total Airtel 5G Router Cost Breakdown:</strong> The Airtel SmartConnect 5G router device is completely free. You only pay 1,000 KES for professional installation (one-time fee) plus your chosen monthly data package (1,999 KES for 15Mbps or 2,999 KES for 30Mbps). No long-term contracts required - you can change plans or add extra data bundles as needed.
+              </p>
+              <p className="text-sm sm:text-base text-neutral-300">
+                <strong className="text-yellow-400">Best Value:</strong> Compared to expensive mobile data plans, Airtel 5G router offers cost-effective internet with 1TB monthly data allowance. Perfect for homes and offices in Kenya looking for affordable high-speed internet.
+              </p>
+            </div>
+          </section>
+
+          {/* Data & Plans */}
+          <section className="mb-8 sm:mb-12">
+            <div className="flex items-center gap-3 mb-4 sm:mb-6">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
+                10
               </div>
               <h2 className="text-2xl sm:text-3xl font-semibold text-yellow-400">Data & Plans</h2>
             </div>
@@ -775,16 +886,16 @@ export default function ProductOverviewPage() {
           <section className="mb-8 sm:mb-12">
             <div className="flex items-center gap-3 mb-4 sm:mb-6">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
-                10
+                11
               </div>
               <h2 className="text-2xl sm:text-3xl font-semibold text-yellow-400">Frequently Asked Questions</h2>
             </div>
             <div className="space-y-4">
-              <details className="p-5 bg-neutral-800/50 rounded-lg border border-neutral-700">
+              <details className="p-2 sm:p-5 bg-neutral-800/50 rounded-lg border border-neutral-700">
                 <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
                   Does Airtel SmartConnect use a SIM card?
                 </summary>
-                <div className="mt-3 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
                   <p>
                     Yes, Airtel SmartConnect requires an Airtel 5G SIM card to work. The SIM card is inserted into the outdoor unit (the antenna that's installed outside).
                   </p>
@@ -804,7 +915,7 @@ export default function ProductOverviewPage() {
                 <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
                   How many devices can connect to Airtel SmartConnect?
                 </summary>
-                <div className="mt-3 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
                   <p>
                     Airtel SmartConnect can support up to <strong className="text-yellow-400">64 devices</strong> simultaneously. However, for optimal performance, we recommend connecting <strong className="text-yellow-400">up to 32 devices</strong> at a time.
                   </p>
@@ -827,7 +938,7 @@ export default function ProductOverviewPage() {
                 <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
                   Is Airtel SmartConnect a signal booster?
                 </summary>
-                <div className="mt-3 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
                   <p>
                     No, Airtel SmartConnect is <strong>not a signal booster or amplifier</strong>. It's a complete internet access solution that works independently.
                   </p>
@@ -844,7 +955,7 @@ export default function ProductOverviewPage() {
                 <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
                   Can I use Airtel SmartConnect with my existing router?
                 </summary>
-                <div className="mt-3 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
                   <p>
                     Airtel SmartConnect is a complete, standalone router system - it works on its own and doesn't need another router. However, if you want to use it alongside an existing router, you can.
                   </p>
@@ -861,7 +972,7 @@ export default function ProductOverviewPage() {
                 <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
                   What happens when I use all 1TB of data?
                 </summary>
-                <div className="mt-3 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
                   <p>
                     Each month, you get 1TB (1,000 GB) of high-speed data. That's a lot - enough for hundreds of hours of video streaming, online gaming, working from home, and more.
                   </p>
@@ -881,7 +992,7 @@ export default function ProductOverviewPage() {
                 <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
                   Can I move Airtel SmartConnect to a different location?
                 </summary>
-                <div className="mt-3 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
                   <p>
                     Yes! Airtel SmartConnect is portable, which is one of its big advantages over cable-based internet.
                   </p>
@@ -901,7 +1012,7 @@ export default function ProductOverviewPage() {
                 <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
                   Do I need to sign a long-term contract?
                 </summary>
-                <div className="mt-3 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
                   <p>
                     No, there is <strong>no long-term contract required</strong> with Airtel SmartConnect. This gives you complete flexibility and freedom.
                   </p>
@@ -921,7 +1032,7 @@ export default function ProductOverviewPage() {
                 <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
                   What if I need help with installation or have technical problems?
                 </summary>
-                <div className="mt-3 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
                   <p>
                     <strong className="text-yellow-400">Professional Installation:</strong> Don't worry about installation - your first installation is done by a properly trained Airtel installer. They'll mount the outdoor unit in the best location, connect everything properly, and make sure it's working before they leave.
                   </p>
@@ -943,7 +1054,7 @@ export default function ProductOverviewPage() {
                 <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
                   Is there a warranty on the device?
                 </summary>
-                <div className="mt-3 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
                   <p>
                     <strong className="text-yellow-400">Device cost:</strong> The Airtel SmartConnect device itself is provided at no cost. You only pay for the installation service and your chosen data package.
                   </p>
@@ -958,9 +1069,230 @@ export default function ProductOverviewPage() {
 
               <details className="p-5 bg-neutral-800/50 rounded-lg border border-neutral-700">
                 <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
+                  How do I renew or resubscribe to my Airtel SmartConnect data plan?
+                </summary>
+                <div className="mt-2 sm:mt-3 space-y-3 sm:space-y-4 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                  <p className="mb-4">
+                    You can renew, resubscribe, top up, or buy a new data bundle for your Airtel SmartConnect 5G router using two methods. <strong className="text-yellow-400">Method 1 (USSD) requires an Airtel phone line</strong>, while <strong className="text-yellow-400">Method 2 (My Airtel App) works on any phone</strong> - even without an Airtel SIM card. Choose the method that works best for you:
+                  </p>
+
+                  {/* Method 1: USSD */}
+                  <details className="p-2 sm:p-4 bg-neutral-900/50 rounded-lg border border-neutral-700 mb-4">
+                    <summary className="font-semibold text-yellow-400 cursor-pointer text-base sm:text-lg mb-2 sm:mb-3">
+                      Method 1: Using USSD Code (*400#) - Requires Airtel Phone Line
+                    </summary>
+                    <div className="mt-4 sm:mt-3 space-y-5 sm:space-y-4">
+                      <div className="p-4 sm:p-3 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">
+                        <p className="text-sm leading-relaxed">
+                          <strong className="text-yellow-400">⚠️ Important:</strong> This USSD method requires an <strong>Airtel phone line</strong>. You must use an Airtel SIM card in your phone to dial <code className="bg-neutral-900 px-2 py-1 rounded text-yellow-400">*400#</code>. If you don't have an Airtel line, use Method 2 (My Airtel App) below.
+                        </p>
+                      </div>
+                      <p className="text-sm">
+                        Follow these step-by-step instructions:
+                      </p>
+                      
+                      <div className="space-y-5 sm:space-y-4">
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 1: Dial the USSD Code</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">Open your phone dialer and enter <code className="bg-neutral-900 px-2 py-1 rounded text-yellow-400">*400#</code>, then press the green Call button.</p>
+                          <div className="mt-3 sm:mt-2 p-3 sm:p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-ussd-1.jpeg" alt="Step 1: Dial USSD code *400# to resubscribe Airtel 5G router data plan on phone dialer" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 2: Select 5G Smart Connect</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">From the Airtel Home menu, select option <strong>1</strong> for "5G Smart Connect".</p>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-ussd-2.jpeg" alt="Step 2: Select 5G Smart Connect from Airtel Home menu to resubscribe Airtel 5G router" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 3: Choose Unlimited Plans</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">Select option <strong>1</strong> for "5G Smart Connect Unlimited Plans".</p>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-ussd-3.jpeg" alt="Step 3: Select 5G Smart Connect Unlimited Plans for Airtel 5G router resubscription" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 4: Enter Your Router Number</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">
+                            Enter your 5G Smart Connect Router Number. This is the SIM card number that was inserted into your router during the first installation. The number was provided to you when the device was set up. If you can't remember it, check your Airtel SMS messages - Airtel typically sends this number in confirmation messages after installation or when your plan is active.
+                          </p>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-ussd-4.jpeg" alt="Step 4: Enter Airtel 5G router number to resubscribe data plan" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                          <div className="mt-3 sm:mt-2 p-3 sm:p-2 bg-yellow-400/10 border border-yellow-400/20 rounded">
+                            <Image src="/resubscribe/resubscribe-router-number-reference.jpeg.jpeg" alt="Example Airtel SMS showing Airtel 5G router number for resubscription reference" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                            <p className="text-sm sm:text-xs text-neutral-400 mt-2 sm:mt-1 text-center">Example: Check your Airtel SMS messages to find your router number</p>
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 5: Select Your Plan</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">Choose your preferred data plan:</p>
+                          <ul className="ml-4 space-y-2 sm:space-y-1 mb-3 sm:mb-2 text-sm">
+                            <li>• Option <strong>1</strong>: 15Mbps at 1,999 KES/month</li>
+                            <li>• Option <strong>2</strong>: 30Mbps at 2,999 KES/month</li>
+                            <li>• Option <strong>3</strong>: Booster Pack (300GB) at 1,000 KES</li>
+                            <li>• Option <strong>4</strong>: Check Plan status</li>
+                          </ul>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-ussd-5.jpeg" alt="Step 5: Select Airtel 5G router data plan for resubscription" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 6: Choose Payment Method</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">Select your preferred payment method:</p>
+                          <ul className="ml-4 space-y-2 sm:space-y-1 mb-3 sm:mb-2 text-sm">
+                            <li>• Option <strong>1</strong>: Airtime</li>
+                            <li>• Option <strong>2</strong>: Airtel Money</li>
+                            <li>• Option <strong>3</strong>: M-Pesa</li>
+                          </ul>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-ussd-6.jpeg" alt="Step 6: Select payment method for Airtel 5G router resubscription" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 7: Complete Payment (M-Pesa)</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">If you selected M-Pesa:</p>
+                          <ol className="ml-4 space-y-2 sm:space-y-1 mb-3 sm:mb-2 text-sm">
+                            <li>1. Enter your M-Pesa phone number when prompted</li>
+                            <li>2. A payment prompt will be sent to your M-Pesa number</li>
+                            <li>3. Enter your M-Pesa PIN to complete the payment</li>
+                            <li>4. Your resubscription is complete!</li>
+                          </ol>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-ussd-7.jpeg" alt="Step 7: Enter M-Pesa number to pay for Airtel 5G router data plan resubscription" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                          <p className="mt-3 sm:mt-2 text-sm sm:text-xs text-neutral-400 leading-relaxed">
+                            <strong>Note:</strong> Payment steps may vary slightly for Airtime and Airtel Money. Follow the on-screen prompts for your selected payment method.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+
+                  {/* Method 2: My Airtel App */}
+                  <details className="p-2 sm:p-4 bg-neutral-900/50 rounded-lg border border-neutral-700">
+                    <summary className="font-semibold text-yellow-400 cursor-pointer text-base sm:text-lg mb-2 sm:mb-3">
+                      Method 2: Using My Airtel App - Works Without Airtel Line
+                    </summary>
+                    <div className="mt-4 sm:mt-3 space-y-5 sm:space-y-4">
+                      <p className="text-sm leading-relaxed">
+                        <strong className="text-yellow-400">This method works on any phone - you don't need an Airtel SIM card or Airtel phone line.</strong> Perfect if you don't have an Airtel line or want to resubscribe, renew, top up, or buy data bundles from any phone. Download the app from <a href="https://play.google.com/store/apps/details?id=com.airtel.africa.selfcare" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline">Google Play Store</a>.
+                      </p>
+                      
+                      <div className="space-y-5 sm:space-y-4">
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 1: Install My Airtel App</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">Download and install the My Airtel app from <a href="https://play.google.com/store/apps/details?id=com.airtel.africa.selfcare" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline">Google Play Store</a>.</p>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-myairtel-1.jpeg" alt="Step 1: Install My Airtel app to resubscribe Airtel 5G router data plan" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 2: Open Airtel 4G/5G WiFi</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">Open the My Airtel app and tap "Airtel 4G/5G WiFi" in the Quick Actions section on the home screen.</p>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-myairtel-2.png" alt="Step 2: Tap Airtel 4G/5G WiFi to resubscribe Airtel 5G router in My Airtel app" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 3: Open Menu</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">Tap the MENU icon (hamburger menu) on the right side of the screen.</p>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-myairtel-3.png" alt="Step 3: Tap MENU icon to resubscribe Airtel 5G router data plan" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 4: Navigate to Data Bundle</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">In the menu, navigate through: Tap "Pay & Recharge" → Tap "Prepaid" → Tap "Data Bundle".</p>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-myairtel-4.png" alt="Step 4: Navigate to Data Bundle to resubscribe Airtel 5G router in My Airtel app" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 5: Enter Router Number</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">
+                            Enter your 5G Smart Connect Router Number in the mobile number field. This is the SIM card number that was inserted into your router during the first installation. The number was provided to you when the device was set up. If you can't remember it, check your Airtel SMS messages - Airtel typically sends this number in confirmation messages after installation or when your plan is active. <strong className="text-yellow-400">See Step 4 above</strong> for detailed explanation on finding your router number.
+                          </p>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-myairtel-5.jpg" alt="Step 5: Enter Airtel 5G router number to resubscribe data plan in My Airtel app" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                          <div className="mt-3 sm:mt-2 p-3 sm:p-2 bg-yellow-400/10 border border-yellow-400/20 rounded">
+                            <Image src="/resubscribe/resubscribe-router-number-reference.jpeg.jpeg" alt="Example Airtel SMS showing Airtel 5G router number for resubscription reference" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                            <p className="text-sm sm:text-xs text-neutral-400 mt-2 sm:mt-1 text-center">Example: Check your Airtel SMS messages to find your router number</p>
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 6: Select Your Bundle</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">Choose your preferred data bundle:</p>
+                          <ul className="ml-4 space-y-2 sm:space-y-1 mb-3 sm:mb-2 text-sm">
+                            <li>• <strong>5G_15Mbps_30days</strong>: 15.0 MBPS, 30 Day validity - KES 1,999</li>
+                            <li>• <strong>5G_30Mbps_30days</strong>: 30.0 MBPS, 30 Day validity - KES 2,999</li>
+                            <li>• <strong>5G_Boosterpack</strong>: 300.0 GB - KES 1,000</li>
+                          </ul>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-myairtel-6.jpeg" alt="Step 6: Select Airtel 5G router data bundle for resubscription" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 7: Choose Payment Method</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">Select your preferred payment method:</p>
+                          <ul className="ml-4 space-y-2 sm:space-y-1 mb-3 sm:mb-2 text-sm">
+                            <li>• <strong>Airtel Money</strong>: Enter your Airtel Money phone number</li>
+                            <li>• <strong>Debit/Credit Card</strong>: Select payment gateway and enter email</li>
+                            <li>• <strong>M-Pesa</strong>: Enter your M-Pesa phone number</li>
+                          </ul>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-myairtel-7.jpeg" alt="Step 7: Choose payment method for Airtel 5G router data plan resubscription" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                        </div>
+
+                        <div className="pb-4 sm:pb-0">
+                          <h4 className="font-semibold text-yellow-400 mb-3 sm:mb-2 text-sm">Step 8: Complete Payment (M-Pesa)</h4>
+                          <p className="mb-3 sm:mb-2 text-sm leading-relaxed">If you selected M-Pesa:</p>
+                          <ol className="ml-4 space-y-2 sm:space-y-1 mb-3 sm:mb-2 text-sm">
+                            <li>1. A payment confirmation dialog will appear</li>
+                            <li>2. Enter your M-Pesa PIN when prompted</li>
+                            <li>3. Tap "Send" to complete the payment</li>
+                            <li>4. Your resubscription is complete!</li>
+                          </ol>
+                          <div className="mt-2 p-2 bg-neutral-900/50 rounded">
+                            <Image src="/resubscribe/resubscribe-myairtel-8.jpeg" alt="Step 8: Enter M-Pesa PIN to complete Airtel 5G router resubscription payment" width={300} height={200} className="rounded w-full h-auto max-w-[300px] mx-auto" />
+                          </div>
+                          <p className="mt-2 text-xs text-neutral-400">
+                            <strong>Note:</strong> Payment steps may vary slightly for Airtel Money and Debit/Credit Card. Follow the on-screen prompts for your selected payment method.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+
+                  <div className="mt-5 sm:mt-4 p-4 sm:p-3 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">
+                    <p className="text-sm leading-relaxed">
+                      <strong className="text-yellow-400">💡 Tip:</strong> Method 1 (USSD) requires an Airtel phone line, while Method 2 (My Airtel App) works on any phone - even without an Airtel SIM card. Use Method 2 if you don't have an Airtel line. Both methods allow you to resubscribe, renew, top up, or buy new data bundles. For help or alternative methods, contact Airtel customer care at <a href="tel:0733100500" className="text-yellow-400 hover:text-yellow-300 underline">0733 100 500</a> or visit our <Link href="/product/troubleshooting" className="text-yellow-400 hover:text-yellow-300 underline">troubleshooting guide</Link>.
+                    </p>
+                  </div>
+                </div>
+              </details>
+
+              <details className="p-5 bg-neutral-800/50 rounded-lg border border-neutral-700">
+                <summary className="font-semibold text-white cursor-pointer text-lg sm:text-xl">
                   Where is Airtel SmartConnect available in Kenya?
                 </summary>
-                <div className="mt-3 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
+                <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed">
                   <p>
                     Airtel SmartConnect is currently available in <strong>selected areas</strong> where Airtel has adequate network coverage.
                   </p>

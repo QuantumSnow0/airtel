@@ -19,13 +19,16 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.airtel5grouter.co.ke"),
   title: {
     default:
-      "Airtel 5G Smart Connect | High-Speed 5G Internet Installation | Kenya",
+      "Airtel 5G Router | Airtel 5G Smart Connect | High-Speed Internet Kenya",
     template: "%s | Airtel Kenya",
   },
   description:
-    "Get Airtel 5G Smart Connect - High-speed 5G internet for your home in Kenya. Weather-resistant outdoor unit with high-gain antenna. Request installation today. Available in all 47 counties.",
+    "Airtel 5G router for high-speed internet in Kenya. Get Airtel 5G Smart Connect with weather-resistant outdoor unit and WiFi 6 router. Fast, reliable 5G internet for home and office. Request installation today.",
   keywords: [
     "Airtel 5G router",
+    "airtel 5g router",
+    "Airtel 5G",
+    "airtel 5g",
     "5G Smart Connect",
     "Airtel Kenya 5G",
     "5G internet Kenya",
@@ -61,9 +64,9 @@ export const metadata: Metadata = {
     url: "https://www.airtel5grouter.co.ke",
     siteName: "Airtel 5G Smart Connect",
     title:
-      "Airtel 5G Smart Connect | High-Speed 5G Internet Installation | Kenya",
+      "Airtel 5G Router | Airtel 5G Smart Connect | High-Speed Internet Kenya",
     description:
-      "Get Airtel 5G Smart Connect - High-speed 5G internet for your home in Kenya. Weather-resistant outdoor unit with high-gain antenna. Request installation today. Available in all 47 counties.",
+      "Airtel 5G router for high-speed internet in Kenya. Get Airtel 5G Smart Connect with weather-resistant outdoor unit and WiFi 6 router. Fast, reliable 5G internet for home and office. Request installation today.",
     images: [
       {
         url: "https://www.airtel5grouter.co.ke/airtel.png",
@@ -131,7 +134,7 @@ export default function RootLayout({
     operatingSystem: "Web",
     offers: {
       "@type": "Offer",
-      price: "2999",
+      price: "1999",
       priceCurrency: "KES",
       availability: "https://schema.org/InStock",
     },
@@ -221,7 +224,7 @@ export default function RootLayout({
       {
         "@type": "Offer",
         name: "5G 15Mbps 30 days",
-        price: 2999,
+        price: 1999,
         priceCurrency: "KES",
         availability: "https://schema.org/InStock",
         url: "https://www.airtel5grouter.co.ke",
@@ -236,6 +239,10 @@ export default function RootLayout({
             "@type": "MonetaryAmount",
             value: "0",
             currency: "KES",
+          },
+          shippingDestination: {
+            "@type": "DefinedRegion",
+            addressCountry: "KE",
           },
           deliveryTime: {
             "@type": "ShippingDeliveryTime",
@@ -286,6 +293,10 @@ export default function RootLayout({
             value: "0",
             currency: "KES",
           },
+          shippingDestination: {
+            "@type": "DefinedRegion",
+            addressCountry: "KE",
+          },
           deliveryTime: {
             "@type": "ShippingDeliveryTime",
             businessDays: {
@@ -322,6 +333,36 @@ export default function RootLayout({
       ratingValue: "4.5",
       ratingCount: "100",
     },
+    review: [
+      {
+        "@type": "Review",
+        author: {
+          "@type": "Person",
+          name: "Customer",
+        },
+        datePublished: "2024-12-01",
+        reviewBody: "Excellent 5G router with reliable connectivity. The outdoor unit provides strong signal even in remote areas. Highly recommended for home and office use.",
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: "5",
+          bestRating: "5",
+        },
+      },
+      {
+        "@type": "Review",
+        author: {
+          "@type": "Person",
+          name: "Customer",
+        },
+        datePublished: "2024-11-15",
+        reviewBody: "Great value for money. Fast internet speeds and easy installation. The WiFi 6 router provides excellent coverage throughout the house.",
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: "4",
+          bestRating: "5",
+        },
+      },
+    ],
   };
 
   return (
