@@ -246,6 +246,7 @@ export default function TroubleshootingPage() {
         merchantReturnDays: 7,
         returnMethod: "https://schema.org/ReturnByMail",
         returnFees: "https://schema.org/FreeReturn",
+        refundType: "https://schema.org/FullRefund",
       },
     },
     aggregateRating: {
@@ -396,6 +397,7 @@ export default function TroubleshootingPage() {
             headline: "Airtel 5G Router Troubleshooting Guide",
             description: "Complete troubleshooting guide for Airtel SmartConnect 5G router including factory reset, LED indicators, SIM card installation, router settings, WiFi password, and common problems.",
             url: "https://www.airtel5grouter.co.ke/product/troubleshooting",
+            image: "https://www.airtel5grouter.co.ke/router/router-back-details.png",
             mainEntityOfPage: {
               "@type": "WebPage",
               "@id": "https://www.airtel5grouter.co.ke/product/troubleshooting",
@@ -403,6 +405,7 @@ export default function TroubleshootingPage() {
             author: {
               "@type": "Organization",
               name: "Airtel Kenya",
+              url: "https://www.airtelkenya.com",
             },
             publisher: {
               "@type": "Organization",
@@ -412,8 +415,8 @@ export default function TroubleshootingPage() {
                 url: "https://www.airtel5grouter.co.ke/airtel.png",
               },
             },
-            datePublished: "2024-01-01",
-            dateModified: new Date().toISOString().split("T")[0],
+            datePublished: "2024-01-01T00:00:00+03:00",
+            dateModified: new Date().toISOString(),
             articleSection: [
               "Technical Specifications",
               "LED Indicators",
@@ -620,17 +623,23 @@ export default function TroubleshootingPage() {
             "@type": "Article",
             headline: "Airtel 5G Router Troubleshooting Guide",
             description: "Complete troubleshooting guide for Airtel SmartConnect 5G Router including default passwords, admin login, LED indicators, factory reset, and solutions to common problems.",
+            url: "https://www.airtel5grouter.co.ke/product/troubleshooting",
             image: "https://www.airtel5grouter.co.ke/router/router-back-details.png",
             author: {
               "@type": "Organization",
               name: "Airtel 5G Router Support",
+              url: "https://www.airtelkenya.com",
             },
             publisher: {
               "@type": "Organization",
               name: "Airtel 5G Router Support",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.airtel5grouter.co.ke/airtel.png",
+              },
             },
-            datePublished: "2024-01-01",
-            dateModified: new Date().toISOString().split("T")[0],
+            datePublished: "2024-01-01T00:00:00+03:00",
+            dateModified: new Date().toISOString(),
             mainEntityOfPage: {
               "@type": "WebPage",
               "@id": "https://www.airtel5grouter.co.ke/product/troubleshooting",

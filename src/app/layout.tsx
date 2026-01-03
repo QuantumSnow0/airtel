@@ -199,6 +199,7 @@ export default function RootLayout({
       merchantReturnDays: 7,
       returnMethod: "https://schema.org/ReturnByMail",
       returnFees: "https://schema.org/FreeReturn",
+      refundType: "https://schema.org/FullRefund",
     },
   };
 
@@ -272,6 +273,7 @@ export default function RootLayout({
           merchantReturnDays: 7,
           returnMethod: "https://schema.org/ReturnByMail",
           returnFees: "https://schema.org/FreeReturn",
+          refundType: "https://schema.org/FullRefund",
         },
       },
       {
@@ -325,6 +327,7 @@ export default function RootLayout({
           merchantReturnDays: 7,
           returnMethod: "https://schema.org/ReturnByMail",
           returnFees: "https://schema.org/FreeReturn",
+          refundType: "https://schema.org/FullRefund",
         },
       },
     ],

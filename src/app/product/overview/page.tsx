@@ -98,6 +98,7 @@ export default function ProductOverviewPage() {
     "@type": "Product",
     name: "Airtel SmartConnect 5G Home & Office WiFi",
     description: "Fixed Wireless Access (FWA) system consisting of outdoor 5G modem (ZLT X17M) and indoor WiFi 6 router (ZLT W304VA PRO) for reliable home and office internet connectivity in Kenya.",
+    image: "https://www.airtel5grouter.co.ke/5grouter.png",
     brand: {
       "@type": "Brand",
       name: "Airtel",
@@ -191,6 +192,7 @@ export default function ProductOverviewPage() {
         merchantReturnDays: 7,
         returnMethod: "https://schema.org/ReturnByMail",
         returnFees: "https://schema.org/FreeReturn",
+        refundType: "https://schema.org/FullRefund",
       },
     },
   };
@@ -290,8 +292,8 @@ export default function ProductOverviewPage() {
         url: "https://www.airtel5grouter.co.ke/airtel.png",
       },
     },
-    datePublished: "2024-01-01",
-    dateModified: new Date().toISOString().split("T")[0],
+    datePublished: "2024-01-01T00:00:00+03:00",
+    dateModified: new Date().toISOString(),
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": "https://www.airtel5grouter.co.ke/product/overview",
