@@ -326,6 +326,7 @@ export default function TroubleshootingPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "HowTo",
+            url: "https://www.airtel5grouter.co.ke/product/troubleshooting#factory-reset",
             name: "How to Factory Reset Airtel SmartConnect 5G Router",
             description: "Step-by-step guide to factory reset your Airtel SmartConnect router to restore default settings including WiFi password and admin credentials.",
             image: "https://www.airtel5grouter.co.ke/router/antenna-reset-button.png",
@@ -385,6 +386,168 @@ export default function TroubleshootingPage() {
           }),
         }}
       />
+      {/* Article Schema for Troubleshooting Page */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: "Airtel 5G Router Troubleshooting Guide",
+            description: "Complete troubleshooting guide for Airtel SmartConnect 5G router including factory reset, LED indicators, SIM card installation, router settings, WiFi password, and common problems.",
+            url: "https://www.airtel5grouter.co.ke/product/troubleshooting",
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": "https://www.airtel5grouter.co.ke/product/troubleshooting",
+            },
+            author: {
+              "@type": "Organization",
+              name: "Airtel Kenya",
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "Airtel Kenya",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.airtel5grouter.co.ke/airtel.png",
+              },
+            },
+            datePublished: "2024-01-01",
+            dateModified: new Date().toISOString().split("T")[0],
+            articleSection: [
+              "Technical Specifications",
+              "LED Indicators",
+              "Device Label Information",
+              "Factory Reset",
+              "Router Ports",
+              "SIM Card Installation",
+              "NFC Function",
+              "Router Settings",
+              "WiFi Password",
+              "Troubleshooting",
+              "No Signal",
+              "Slow Internet",
+              "WiFi Issues",
+              "SIM Card Issues",
+              "Configuration Issues",
+              "Resubscription",
+              "Power Issues",
+            ],
+          }),
+        }}
+      />
+      {/* TableOfContents Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "TableOfContents",
+            about: {
+              "@type": "WebPage",
+              url: "https://www.airtel5grouter.co.ke/product/troubleshooting",
+            },
+            hasPart: [
+              {
+                "@type": "WebPageElement",
+                position: 1,
+                name: "Technical Specifications",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#technical-specs",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 2,
+                name: "Understanding LED Indicators",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#led-indicators",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 3,
+                name: "Device Label Information",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#device-label",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 4,
+                name: "How to Factory Reset",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#factory-reset",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 5,
+                name: "Router Ports & Connections",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#router-ports",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 6,
+                name: "SIM Card Installation Guide",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#sim-card",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 7,
+                name: "NFC OneHop",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#nfc-function",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 8,
+                name: "How to Access Router Settings",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#router-settings",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 9,
+                name: "How to Find Your WiFi Password",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#wifi-password",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 10,
+                name: "No Signal or Weak Signal",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#no-signal",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 11,
+                name: "Slow Internet Speed",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#slow-internet",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 12,
+                name: "WiFi Connection Issues",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#wifi-issues",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 13,
+                name: "SIM Card Issues",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#sim-card-issues",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 14,
+                name: "Configuration & Setup Issues",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#configuration-issues",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 15,
+                name: "How to Resubscribe, Renew, or Top Up",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#resubscribe",
+              },
+              {
+                "@type": "WebPageElement",
+                position: 16,
+                name: "Power & Battery Issues",
+                url: "https://www.airtel5grouter.co.ke/product/troubleshooting#power-issues",
+              },
+            ],
+          }),
+        }}
+      />
       {/* HowTo Schema for SIM Card Installation */}
       <script
         type="application/ld+json"
@@ -392,6 +555,7 @@ export default function TroubleshootingPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "HowTo",
+            url: "https://www.airtel5grouter.co.ke/product/troubleshooting#sim-card",
             name: "How to Install SIM Card in Airtel SmartConnect 5G Router",
             description: "Step-by-step guide to properly install your Airtel 5G SIM card into the SmartConnect router antenna.",
             image: "https://www.airtel5grouter.co.ke/router/antenna-sim-slot.png",
@@ -653,12 +817,12 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Technical Specifications */}
-          <section id="technical-specs" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 03
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+              <h2 id="technical-specs" className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>📋</span> Technical Specifications
               </h2>
             </div>
@@ -695,12 +859,12 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* LED Indicators Guide */}
-          <section id="led-indicators" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 04
               </div>
-              <h2 className="text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+              <h2 id="led-indicators" className="text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>💡</span> Understanding LED Indicators
               </h2>
             </div>
@@ -905,12 +1069,12 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Device Label Information */}
-          <section id="device-label" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 05
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+              <h2 id="device-label" className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>🏷️</span> Device Label Information (Default Passwords & Settings)
               </h2>
             </div>
@@ -938,12 +1102,12 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Factory Reset Guide */}
-          <section id="factory-reset" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 06
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+              <h2 id="factory-reset" className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>🔄</span> How to Factory Reset Airtel SmartConnect Router
               </h2>
             </div>
@@ -1007,12 +1171,12 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Router Ports & Connections */}
-          <section id="router-ports" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 07
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+              <h2 id="router-ports" className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>🔌</span> Router Ports & Connections
               </h2>
             </div>
@@ -1072,12 +1236,12 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* SIM Card Installation */}
-          <section id="sim-card" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 08
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+              <h2 id="sim-card" className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>📱</span> SIM Card Installation Guide
               </h2>
             </div>
@@ -1136,12 +1300,12 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* NFC Function */}
-          <section id="nfc-function" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 09
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+              <h2 id="nfc-function" className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>📲</span> NFC OneHop - Quick WiFi Connection
               </h2>
             </div>
@@ -1168,12 +1332,12 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Accessing Router Settings */}
-          <section id="router-settings" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 10
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+              <h2 id="router-settings" className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>⚙️</span> How to Access Router Settings (Admin Panel)
               </h2>
             </div>
@@ -1223,12 +1387,12 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Finding WiFi Password */}
-          <section id="wifi-password" className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
+          <section className="mb-8 py-3 sm:py-4 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 11
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
+              <h2 id="wifi-password" className="text-xl sm:text-2xl font-semibold text-yellow-400 flex items-center gap-2">
                 <span>🔐</span> How to Find Your WiFi Password
               </h2>
             </div>
@@ -1269,17 +1433,17 @@ export default function TroubleshootingPage() {
           </section>
 
           {/* Troubleshooting Sections */}
-          <section id="troubleshooting" className="mb-8 border-b border-neutral-700/50 pb-6">
+          <section className="mb-8 border-b border-neutral-700/50 pb-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-neutral-900 font-bold text-lg sm:text-xl shrink-0">
                 12
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-yellow-400">Common Problems & Solutions</h2>
+              <h2 id="troubleshooting" className="text-xl sm:text-2xl font-semibold text-yellow-400">Common Problems & Solutions</h2>
             </div>
             
             {/* No Signal */}
-            <article id="no-signal" className="mb-6 py-3 sm:py-4">
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+            <article className="mb-6 py-3 sm:py-4">
+              <h3 id="no-signal" className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>📶</span> No Signal or Weak Signal
               </h3>
               <div className="space-y-3">
@@ -1319,8 +1483,8 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* Slow Internet */}
-            <article id="slow-internet" className="mb-6 py-3 sm:py-4">
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+            <article className="mb-6 py-3 sm:py-4">
+              <h3 id="slow-internet" className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>🐌</span> Slow Internet Speed
               </h3>
               <div className="space-y-3">
@@ -1343,8 +1507,8 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* WiFi Issues */}
-            <article id="wifi-issues" className="mb-6 py-3 sm:py-4">
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+            <article className="mb-6 py-3 sm:py-4">
+              <h3 id="wifi-issues" className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>📡</span> WiFi Connection Issues
               </h3>
               <div className="space-y-3">
@@ -1373,8 +1537,8 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* SIM Card Issues */}
-            <article id="sim-card-issues" className="mb-6 py-3 sm:py-4">
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+            <article className="mb-6 py-3 sm:py-4">
+              <h3 id="sim-card-issues" className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>📱</span> SIM Card Issues
               </h3>
               <div className="space-y-3">
@@ -1396,8 +1560,8 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* Configuration Issues */}
-            <article id="configuration-issues" className="mb-6 py-3 sm:py-4">
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+            <article className="mb-6 py-3 sm:py-4">
+              <h3 id="configuration-issues" className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>⚙️</span> Configuration & Setup Issues
               </h3>
               <div className="space-y-3">
@@ -1422,8 +1586,8 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* Resubscription Guide */}
-            <article id="resubscribe" className="mb-6 py-3 sm:py-4">
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+            <article className="mb-6 py-3 sm:py-4">
+              <h3 id="resubscribe" className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>🔄</span> How to Resubscribe, Renew, or Top Up Your Airtel 5G Router Data Plan
               </h3>
               <div className="space-y-3">
@@ -1647,8 +1811,8 @@ export default function TroubleshootingPage() {
             </article>
 
             {/* Power Issues */}
-            <article id="power-issues" className="mb-6 py-3 sm:py-4">
-              <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+            <article className="mb-6 py-3 sm:py-4">
+              <h3 id="power-issues" className="text-lg sm:text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                 <span>🔌</span> Power & Battery Issues
               </h3>
               <div className="space-y-3">
