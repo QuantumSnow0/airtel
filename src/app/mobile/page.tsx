@@ -2071,12 +2071,8 @@ export default function TestMobilePage() {
       `,
         }}
       />
-      <motion.div
-        className="min-h-screen bg-neutral-950"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
+      {/* Removed opacity animation to avoid blocking LCP - content renders immediately */}
+      <div className="min-h-screen bg-neutral-950">
         {/* Floating Robot Guide - Appears on scroll */}
         {robotVisible && !isBottomSheetOpen && (
           <motion.div
@@ -4313,7 +4309,7 @@ export default function TestMobilePage() {
 
         {/* Spacer to ensure enough content for scrolling */}
         <div style={{ minHeight: "10vh" }}></div>
-      </motion.div>
+      </div>
 
       {/* Duplicate Warning Modal (ORANGE) */}
       {showDuplicateWarning && (
