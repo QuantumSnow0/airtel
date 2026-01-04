@@ -271,22 +271,6 @@ export default function ProductCarousel() {
                     }}
                   >
                     {carouselSlides[0].description}
-                    {carouselSlides[0].title === "What is it?" && (
-                      <span className="inline-block w-full" style={{ textAlign: "right" }}>
-                        <span className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-500/20 backdrop-blur-sm border border-neutral-500/40 rounded-full align-middle">
-                          <span
-                            className={`text-xs font-semibold text-neutral-300 ${poppins.variable}`}
-                            style={{
-                              fontFamily: "var(--font-poppins), sans-serif",
-                              letterSpacing: "0.05em",
-                              textShadow: "0 1px 3px rgba(0, 0, 0, 0.8)",
-                            }}
-                          >
-                            Coming Soon
-                          </span>
-                        </span>
-                      </span>
-                    )}
                   </p>
                 </div>
               </div>
@@ -446,8 +430,8 @@ export default function ProductCarousel() {
                         }}
                       >
                         {slide.description}
-                        {/* Badge - Learn More for slides with link, Coming Soon only for "What is it?" */}
-                        {slide.link ? (
+                        {/* Badge - Learn More for slides with link */}
+                        {slide.link && (
                           <>
                             <span className="inline-block w-full" style={{ textAlign: "right" }}>
                               <span className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-yellow-400/20 backdrop-blur-sm border border-yellow-400/40 rounded-full align-middle">
@@ -480,24 +464,7 @@ export default function ProductCarousel() {
                               </span>
                             </span>
                           </>
-                        ) : slide.title === "What is it?" ? (
-                          <>
-                            <span className="inline-block w-full" style={{ textAlign: "right" }}>
-                              <span className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-500/20 backdrop-blur-sm border border-neutral-500/40 rounded-full align-middle">
-                                <span
-                                  className={`text-xs font-semibold text-neutral-300 ${poppins.variable}`}
-                                  style={{
-                                    fontFamily: "var(--font-poppins), sans-serif",
-                                    letterSpacing: "0.05em",
-                                    textShadow: "0 1px 3px rgba(0, 0, 0, 0.8)",
-                                  }}
-                                >
-                                  Coming Soon
-                                </span>
-                              </span>
-                            </span>
-                          </>
-                        ) : null}
+                        )}
                       </p>
                     </div>
                   </div>
