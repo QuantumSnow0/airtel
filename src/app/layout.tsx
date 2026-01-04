@@ -5,6 +5,8 @@ import Script from "next/script";
 import Footer from "./components/Footer";
 import "./globals.css";
 
+// Trigger redeploy
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
