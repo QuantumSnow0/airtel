@@ -9,6 +9,7 @@ import {
   useCallback,
 } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import ProductCarousel from "./ProductCarousel";
 import PricingCards from "../components/PricingCards";
 import LocationMapPicker from "../components/LocationMapPicker";
@@ -2159,7 +2160,7 @@ export default function TestMobilePage() {
                   minHeight: "60px",
                 }}
               >
-                <img
+                <Image
                   src={
                     robotAnimationState === "speaking"
                       ? "/robot-speaking.png"
@@ -2168,6 +2169,8 @@ export default function TestMobilePage() {
                       : "/robot-idle.png"
                   }
                   alt="Guide Robot"
+                  width={70}
+                  height={70}
                   className="w-full h-full object-contain"
                   style={{
                     width: "70px",
@@ -2185,13 +2188,7 @@ export default function TestMobilePage() {
                     transition:
                       "transform 0.6s ease, filter 0.6s ease, opacity 0.6s ease",
                   }}
-                  onError={(e) => {
-                    // Fallback to default robot image if specific state image doesn't exist
-                    const target = e.target as HTMLImageElement;
-                    if (target.src !== "/robot.png") {
-                      target.src = "/robot.png";
-                    }
-                  }}
+                  loading="lazy"
                 />
 
                 {/* Mute/Unmute Toggle Button */}

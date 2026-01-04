@@ -6,6 +6,7 @@ import { Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
+import Image from "next/image";
 import "swiper/css";
 
 const poppins = Poppins({
@@ -16,7 +17,7 @@ const poppins = Poppins({
 
 const carouselSlides = [
   {
-    image: "/airtelcarousel1.jpeg ",
+    image: "/airtelcarousel1.jpeg",
     title: "What is it?",
     description:
       "Learn about the Airtel SmartConnect 5G router and its capabilities.",
@@ -100,18 +101,21 @@ export default function ProductCarousel() {
       >
         {/* Title on the left */}
           <div className="flex items-center gap-1">
-            <img
+            <Image
               src="/icon.png"
-            alt="Airtel"
-            className="h-8 w-8 object-contain"
+              alt="Airtel"
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
               style={{
-              filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))",
-              margin: 0,
-              padding: 0,
-              display: "block",
-              flexShrink: 0,
-              lineHeight: 0,
+                filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))",
+                margin: 0,
+                padding: 0,
+                display: "block",
+                flexShrink: 0,
+                lineHeight: 0,
               }}
+              priority
             />
             <span
               className="text-base font-bold"
@@ -264,19 +268,36 @@ export default function ProductCarousel() {
                 <div className="w-full h-full relative">
                   {/* Image Section */}
                   <div className="absolute inset-0 overflow-hidden">
-                    <img
-                      src={slide.image}
-                      alt={slide.title}
-                      className="w-full h-full object-cover sm:object-stretch"
-                      style={{
-                        objectPosition:
-                          index === 3
-                            ? "center"
-                            : index === 0
-                            ? "center"
-                            : "bottom",
-                      }}
-                    />
+                    {index === 0 ? (
+                      // First image (LCP) - use optimized img with fetchpriority for better performance
+                      <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-full object-cover sm:object-stretch"
+                        style={{
+                          objectPosition: "center",
+                        }}
+                        fetchPriority="high"
+                        loading="eager"
+                      />
+                    ) : (
+                      // Other images - use Next.js Image for optimization
+                      <Image
+                        src={slide.image}
+                        alt={slide.title}
+                        fill
+                        className="object-cover sm:object-stretch"
+                        style={{
+                          objectPosition:
+                            index === 3
+                              ? "center"
+                              : "bottom",
+                        }}
+                        loading="lazy"
+                        sizes="(max-width: 768px) 100vw, 1200px"
+                        quality={75}
+                      />
+                    )}
                     {/* Black Overlay */}
                     <div
                       className="absolute inset-0 pointer-events-none"
