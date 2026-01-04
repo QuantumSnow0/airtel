@@ -399,6 +399,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Google Analytics (GA4) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-V62ME124DH"
+          strategy="afterInteractive"
+        />
+        {/* Google Ads Conversion Tracking */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17792435351"
           strategy="afterInteractive"
@@ -407,6 +413,7 @@ export default function RootLayout({
           {`window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+  gtag('config', 'G-V62ME124DH');
   gtag('config', 'AW-17792435351');
   `}
         </Script>
