@@ -30,10 +30,8 @@ const LocationMapPicker = dynamic(
   }
 );
 
-// Dynamically import PricingCards since it's below the LCP element (carousel)
-const PricingCards = dynamic(() => import("../components/PricingCards"), {
-  ssr: true, // Keep SSR for SEO, but code-split the bundle
-});
+// Import PricingCards directly - no dynamic import to ensure it loads with other content
+import PricingCards from "../components/PricingCards";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -2274,13 +2272,8 @@ export default function TestMobilePage() {
         {/* ProductCarousel - No animation wrapper to avoid delaying LCP */}
         <ProductCarousel />
 
-        {/* How to Order Section - Below Carousel with border cut effect */}
-        <motion.div
-          className="relative px-3 pt-4 pb-2"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
+        {/* How to Order Section - Below Carousel with border cut effect - Renders immediately */}
+        <div className="relative px-3 pt-4 pb-2">
           <div className="relative rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 border-yellow-400/60 p-4">
             {/* Title with border cut effect */}
             <div
@@ -2432,16 +2425,10 @@ export default function TestMobilePage() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Step 1: Choose Your Package */}
-        <motion.section
-          className="px-3 py-2"
-          style={{ marginTop: "0" }}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
+        {/* Step 1: Choose Your Package - Renders immediately */}
+        <section className="px-3 py-2" style={{ marginTop: "0" }}>
           <div className="w-full">
             <div className="text-center mb-6">
               <h2
@@ -2459,16 +2446,13 @@ export default function TestMobilePage() {
             </div>
             <PricingCards />
           </div>
-        </motion.section>
+        </section>
 
-        {/* Step 2: Almost There */}
-        <motion.section
+        {/* Step 2: Almost There - Renders immediately */}
+        <section
           id="step-2"
           ref={step2Ref}
           className="px-3 py-2"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
         >
           <div className="w-full">
             <div className="text-center mb-6">
@@ -4305,7 +4289,7 @@ export default function TestMobilePage() {
             </div>
             </form>
           </div>
-        </motion.section>
+        </section>
 
         {/* Spacer to ensure enough content for scrolling */}
         <div style={{ minHeight: "10vh" }}></div>

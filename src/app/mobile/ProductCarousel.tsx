@@ -214,7 +214,7 @@ export default function ProductCarousel() {
                   priority
                   loading="eager"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
-                  quality={85}
+                  quality={75}
                 />
                 <div
                   className="absolute inset-0 pointer-events-none"
@@ -384,7 +384,7 @@ export default function ProductCarousel() {
                       priority={index === 0}
                       loading={index === 0 ? "eager" : "lazy"}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
-                      quality={index === 0 ? 85 : 75}
+                      quality={75}
                     />
                     {/* Black Overlay */}
                     <div

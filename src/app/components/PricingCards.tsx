@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
 
@@ -54,19 +53,14 @@ export default function PricingCards() {
       {/* Pricing Cards - Mobile Style for All Screens */}
       <div className={`${poppins.variable}`}>
         <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-2">
-          {/* Package 1 - Standard */}
-          <motion.div
+          {/* Package 1 - Standard - Renders immediately */}
+          <div
             className={`group relative rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
               selectedPackage === "standard"
                 ? "border-yellow-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)]"
                 : "border-neutral-800/50 hover:border-neutral-700"
             }`}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            whileHover={{ scale: 1.02, y: -2 }}
-            whileTap={{ scale: 0.98 }}
           >
             {/* Clickable Overlay - Covers entire card */}
             <div
@@ -209,20 +203,15 @@ export default function PricingCards() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Package 2 - Premium */}
-          <motion.div
+          {/* Package 2 - Premium - Renders immediately */}
+          <div
             className={`group relative rounded-lg bg-gradient-to-br from-neutral-900/90 to-neutral-950/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
               selectedPackage === "premium"
                 ? "border-yellow-400/80 shadow-[0_0_25px_rgba(251,191,36,0.4)]"
                 : "border-neutral-800/50 hover:border-neutral-700"
             }`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            whileHover={{ scale: 1.02, y: -2 }}
-            whileTap={{ scale: 0.98 }}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
           >
             {/* Clickable Overlay - Covers entire card */}
@@ -366,7 +355,7 @@ export default function PricingCards() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </>

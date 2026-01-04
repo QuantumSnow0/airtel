@@ -10,27 +10,21 @@ const TestDesktopPage = dynamic(() => import("./desktop/page"), {
 
 export default function Home() {
   const [isDesktop, setIsDesktop] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     // Check screen size immediately on client
     const checkScreenSize = () => {
       setIsDesktop(window.innerWidth >= 768); // md breakpoint
     };
 
-    // Set initial value immediately
+    // Set initial value immediately - no delay
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
 
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  // Render mobile first (SSR-friendly), then switch to desktop if needed after mount
-  // This maintains original behavior while improving performance
-  if (!mounted) {
-    return <TestMobilePage />;
-  }
-
+  // Render immediately - mobile first (SSR-friendly), then switch to desktop if needed
+  // Removed mounted check to eliminate render delay
   return isDesktop ? <TestDesktopPage /> : <TestMobilePage />;
 }
