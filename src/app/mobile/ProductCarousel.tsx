@@ -46,6 +46,7 @@ const carouselSlides = [
 export default function ProductCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
+  const [swiperReady, setSwiperReady] = useState(false);
   const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleSlideChange = (swiper: SwiperType) => {
@@ -199,8 +200,102 @@ export default function ProductCarousel() {
 
       {/* Swiper Carousel Container */}
       <div className="relative w-full h-full" style={{ zIndex: 1 }}>
+        {/* Static first slide for instant LCP - renders before Swiper loads */}
+        {!swiperReady && (
+          <div className="absolute inset-0 w-full h-full">
+            <div className="w-full h-full relative">
+              <div className="absolute inset-0 overflow-hidden">
+                <Image
+                  src={carouselSlides[0].image}
+                  alt={carouselSlides[0].title}
+                  fill
+                  className="object-cover sm:object-stretch"
+                  style={{ objectPosition: "center" }}
+                  priority
+                  loading="eager"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+                  quality={85}
+                />
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: "rgba(0, 0, 0, 0.1)",
+                    zIndex: 1,
+                  }}
+                />
+                <div
+                  className="absolute bottom-0 left-0 right-0 pointer-events-none"
+                  style={{
+                    height: "120px",
+                    background:
+                      "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9))",
+                    zIndex: 2,
+                  }}
+                />
+              </div>
+              <div
+                className="absolute bottom-0 left-0 right-0 pointer-events-none"
+                style={{ zIndex: 3 }}
+              >
+                <div className="relative px-4 pb-6 pt-10">
+                  <div 
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: "linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%)",
+                      backdropFilter: "blur(1px)",
+                      zIndex: -1,
+                      borderRadius: "0 0 12px 12px",
+                    }}
+                  />
+                  <h3
+                    className={`text-2xl mb-3 leading-tight font-bold text-yellow-400 ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                      letterSpacing: "0.01em",
+                      textShadow: "0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(251, 191, 36, 0.6)",
+                      filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))",
+                    }}
+                  >
+                    {carouselSlides[0].title}
+                  </h3>
+                  <p
+                    className={`text-base text-white font-medium leading-relaxed ${poppins.variable}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                      letterSpacing: "0.01em",
+                      lineHeight: "1.6",
+                      wordWrap: "break-word",
+                      hyphens: "auto",
+                      textShadow: "0 2px 8px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.8)",
+                      filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9))",
+                    }}
+                  >
+                    {carouselSlides[0].description}
+                    {carouselSlides[0].title === "What is it?" && (
+                      <span className="inline-block w-full" style={{ textAlign: "right" }}>
+                        <span className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-500/20 backdrop-blur-sm border border-neutral-500/40 rounded-full align-middle">
+                          <span
+                            className={`text-xs font-semibold text-neutral-300 ${poppins.variable}`}
+                            style={{
+                              fontFamily: "var(--font-poppins), sans-serif",
+                              letterSpacing: "0.05em",
+                              textShadow: "0 1px 3px rgba(0, 0, 0, 0.8)",
+                            }}
+                          >
+                            Coming Soon
+                          </span>
+                        </span>
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Navigation Arrows */}
-        {activeIndex > 0 && (
+        {activeIndex > 0 && swiperReady && (
           <button
             onClick={() => {
               handleTouchStart();
@@ -224,7 +319,7 @@ export default function ProductCarousel() {
             </svg>
           </button>
         )}
-        {activeIndex < carouselSlides.length - 1 && (
+        {activeIndex < carouselSlides.length - 1 && swiperReady && (
           <button
             onClick={() => {
               handleTouchStart();
@@ -257,11 +352,15 @@ export default function ProductCarousel() {
             delay: 5000,
             disableOnInteraction: false,
           }}
-          onSwiper={setSwiper}
+          onSwiper={(swiperInstance) => {
+            setSwiper(swiperInstance);
+            // Mark Swiper as ready after initialization
+            setSwiperReady(true);
+          }}
           onSlideChange={handleSlideChange}
           onTouchStart={handleTouchStart}
           className="h-full"
-          style={{ height: "100%" }}
+          style={{ height: "100%", opacity: swiperReady ? 1 : 0 }}
         >
           {carouselSlides.map((slide, index) => {
             const slideContent = (
