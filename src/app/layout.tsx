@@ -8,11 +8,13 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -379,6 +381,42 @@ export default function RootLayout({
           content="black-translucent"
         />
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        {/* Preload LCP image for faster loading */}
+        <link
+          rel="preload"
+          as="image"
+          href="/airtelcarousel1.jpeg"
+          fetchPriority="high"
+        />
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {/* Google Analytics (GA4) - Deferred to reduce blocking */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-V62ME124DH"
+          strategy="lazyOnload"
+        />
+        {/* Google Ads Conversion Tracking - Deferred to reduce blocking */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17792435351"
+          strategy="lazyOnload"
+        />
+        <Script id="google-analytics" strategy="lazyOnload">
+          {`window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-V62ME124DH');
+  gtag('config', 'AW-17792435351');
+  `}
+        </Script>
+        <PackageProvider>
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-grow relative">{children}</main>
+            <Footer />
+          </div>
+        </PackageProvider>
+        {/* Structured data moved to end of body to avoid blocking HTML parsing */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -395,34 +433,6 @@ export default function RootLayout({
             __html: JSON.stringify(productStructuredData),
           }}
         />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {/* Google Analytics (GA4) */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-V62ME124DH"
-          strategy="afterInteractive"
-        />
-        {/* Google Ads Conversion Tracking */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17792435351"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-V62ME124DH');
-  gtag('config', 'AW-17792435351');
-  `}
-        </Script>
-        <PackageProvider>
-          <div className="flex flex-col min-h-screen">
-            <main className="flex-grow relative">{children}</main>
-            <Footer />
-          </div>
-        </PackageProvider>
       </body>
     </html>
   );

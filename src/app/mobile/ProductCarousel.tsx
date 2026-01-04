@@ -13,6 +13,7 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-poppins",
+  display: "swap",
 });
 
 const carouselSlides = [
@@ -268,36 +269,24 @@ export default function ProductCarousel() {
                 <div className="w-full h-full relative">
                   {/* Image Section */}
                   <div className="absolute inset-0 overflow-hidden">
-                    {index === 0 ? (
-                      // First image (LCP) - use optimized img with fetchpriority for better performance
-                      <img
-                        src={slide.image}
-                        alt={slide.title}
-                        className="w-full h-full object-cover sm:object-stretch"
-                        style={{
-                          objectPosition: "center",
-                        }}
-                        fetchPriority="high"
-                        loading="eager"
-                      />
-                    ) : (
-                      // Other images - use Next.js Image for optimization
-                      <Image
-                        src={slide.image}
-                        alt={slide.title}
-                        fill
-                        className="object-cover sm:object-stretch"
-                        style={{
-                          objectPosition:
-                            index === 3
-                              ? "center"
-                              : "bottom",
-                        }}
-                        loading="lazy"
-                        sizes="(max-width: 768px) 100vw, 1200px"
-                        quality={75}
-                      />
-                    )}
+                    <Image
+                      src={slide.image}
+                      alt={slide.title}
+                      fill
+                      className="object-cover sm:object-stretch"
+                      style={{
+                        objectPosition:
+                          index === 3
+                            ? "center"
+                            : index === 0
+                            ? "center"
+                            : "bottom",
+                      }}
+                      priority={index === 0}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+                      quality={index === 0 ? 85 : 75}
+                    />
                     {/* Black Overlay */}
                     <div
                       className="absolute inset-0 pointer-events-none"

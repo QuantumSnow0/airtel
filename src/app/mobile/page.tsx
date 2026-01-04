@@ -11,17 +11,35 @@ import {
 import { motion } from "framer-motion";
 import Image from "next/image";
 import ProductCarousel from "./ProductCarousel";
-import PricingCards from "../components/PricingCards";
-import LocationMapPicker from "../components/LocationMapPicker";
+import dynamic from "next/dynamic";
 import PreviousSubmissionToast from "../components/PreviousSubmissionToast";
 import CustomerResubmitModal from "../components/CustomerResubmitModal";
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
 
+// Dynamically import LocationMapPicker to avoid loading Google Maps API on initial page load
+const LocationMapPicker = dynamic(
+  () => import("../components/LocationMapPicker"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-neutral-400">Loading map...</div>
+      </div>
+    ),
+  }
+);
+
+// Dynamically import PricingCards since it's below the LCP element (carousel)
+const PricingCards = dynamic(() => import("../components/PricingCards"), {
+  ssr: true, // Keep SSR for SEO, but code-split the bundle
+});
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-poppins",
+  display: "swap",
 });
 
 export default function TestMobilePage() {
@@ -2257,13 +2275,8 @@ export default function TestMobilePage() {
           </motion.div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <ProductCarousel />
-        </motion.div>
+        {/* ProductCarousel - No animation wrapper to avoid delaying LCP */}
+        <ProductCarousel />
 
         {/* How to Order Section - Below Carousel with border cut effect */}
         <motion.div
