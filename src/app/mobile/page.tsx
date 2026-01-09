@@ -12,8 +12,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import ProductCarousel from "./ProductCarousel";
 import dynamic from "next/dynamic";
-import PreviousSubmissionToast from "../components/PreviousSubmissionToast";
-import CustomerResubmitModal from "../components/CustomerResubmitModal";
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
 
@@ -92,62 +90,6 @@ export default function TestMobilePage() {
   const [customerAlternativeNumber, setCustomerAlternativeNumber] =
     useState("");
   const [customerEmail, setCustomerEmail] = useState("");
-
-  // Real-time previous submission detection
-  useEffect(() => {
-    // Clear any existing timeout
-    if (checkTimeoutRef.current) {
-      clearTimeout(checkTimeoutRef.current);
-    }
-
-    // Only check if we have email and at least one phone number
-    const hasEmail = customerEmail.trim().length > 0;
-    const hasPhone = customerPhone.trim().length > 0 || customerAlternativeNumber.trim().length > 0;
-    
-    if (!hasEmail || !hasPhone) {
-      setPreviousSubmissionFound({ found: false });
-      return;
-    }
-
-    // Debounce the check (wait 800ms after user stops typing)
-    checkTimeoutRef.current = setTimeout(async () => {
-      try {
-        const response = await fetch("/api/customer-resubmit/check", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: customerEmail.trim(),
-            airtelNumber: customerPhone.trim(),
-            alternateNumber: customerAlternativeNumber.trim(),
-          }),
-        });
-
-        const data = await response.json();
-
-        if (data.found && data.customerName) {
-          setPreviousSubmissionFound({
-            found: true,
-            customerName: data.customerName,
-            leadId: data.leadId,
-          });
-        } else {
-          setPreviousSubmissionFound({ found: false });
-        }
-      } catch (error) {
-        // Silently fail - don't interrupt user experience
-        console.error("Error checking for previous submission:", error);
-        setPreviousSubmissionFound({ found: false });
-      }
-    }, 800);
-
-    return () => {
-      if (checkTimeoutRef.current) {
-        clearTimeout(checkTimeoutRef.current);
-      }
-    };
-  }, [customerEmail, customerPhone, customerAlternativeNumber]);
   const [installationTown, setInstallationTown] = useState("");
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [installationLocation, setInstallationLocation] = useState("");
@@ -211,15 +153,6 @@ export default function TestMobilePage() {
   const [howToOrderSlide, setHowToOrderSlide] = useState(0);
   const howToOrderSliderRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
-  const [duplicateMatch, setDuplicateMatch] = useState<any>(null);
-  const [previousSubmissionFound, setPreviousSubmissionFound] = useState<{
-    found: boolean;
-    customerName?: string;
-    leadId?: string;
-  }>({ found: false });
-  const [showResubmitModal, setShowResubmitModal] = useState(false);
-  const checkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [submitStatus, setSubmitStatus] = useState<{
     state: "idle" | "success" | "error";
     message: string;
@@ -1998,25 +1931,6 @@ export default function TestMobilePage() {
 
   return (
     <>
-      {/* Previous Submission Toast */}
-      {previousSubmissionFound.found && previousSubmissionFound.customerName && (
-        <PreviousSubmissionToast
-          customerName={previousSubmissionFound.customerName}
-          onViewClick={() => {
-            setShowResubmitModal(true);
-            setPreviousSubmissionFound({ found: false });
-          }}
-          onDismiss={() => setPreviousSubmissionFound({ found: false })}
-        />
-      )}
-
-      {/* Customer Resubmit Modal */}
-      <CustomerResubmitModal
-        isOpen={showResubmitModal}
-        onClose={() => setShowResubmitModal(false)}
-        prefillEmail={customerEmail.trim()}
-      />
-
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -2449,11 +2363,7 @@ export default function TestMobilePage() {
         </section>
 
         {/* Step 2: Almost There - Renders immediately */}
-        <section
-          id="step-2"
-          ref={step2Ref}
-          className="px-3 py-2"
-        >
+        <section id="step-2" ref={step2Ref} className="px-3 py-2">
           <div className="w-full">
             <div className="text-center mb-6">
               <h2
@@ -2469,7 +2379,8 @@ export default function TestMobilePage() {
                 Step 2: Almost There
               </h2>
               <p className="text-xs text-neutral-400 mb-4">
-                Installation Request Form - Fill in your details to request Airtel 5G router installation
+                Installation Request Form - Fill in your details to request
+                Airtel 5G router installation
               </p>
             </div>
 
@@ -2480,681 +2391,19 @@ export default function TestMobilePage() {
               aria-label="Airtel 5G Router Installation Request Form"
               noValidate
             >
-            {/* Sample Form Field - Customer Name */}
-            <div className="mb-6 relative">
-              {/* Floating Label */}
-              <div
-                className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                  nameFocused || customerName
-                    ? "top-0 transform -translate-y-1/2"
-                    : "top-1/2 transform -translate-y-1/2"
-                }`}
-                style={{ zIndex: 30 }}
-              >
-                {/* Border cut background */}
-                {(nameFocused || customerName) && (
-                  <div
-                    className="absolute left-0"
-                    style={{
-                      top: "50%",
-                      background: "rgb(38, 38, 38)",
-                      height: "2px",
-                      width: "calc(100% + 4px)",
-                      marginLeft: "-4px",
-                      borderTopLeftRadius: "8px",
-                    }}
-                  />
-                )}
-                {/* Label text */}
-                <div className="px-1.5 relative">
-                  <span
-                    className={`text-xs font-medium transition-all duration-300 ${
-                      nameFocused || customerName
-                        ? "text-white/90"
-                        : "text-neutral-400"
-                    } ${poppins.variable}`}
-                    style={{
-                      fontFamily: "var(--font-poppins), sans-serif",
-                    }}
-                  >
-                    {nameFocused || customerName ? (
-                      <>
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                          1
-                        </span>
-                        Full Name <span className="text-yellow-400">*</span>
-                      </>
-                    ) : (
-                      "Enter your Full Name"
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="relative">
-                <input
-                  ref={nameInputRef}
-                  type="text"
-                  name="customer-name"
-                  id="customer-name"
-                  placeholder=""
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  onFocus={() => {
-                    setNameFocused(true);
-                    scrollToStep2();
-                  }}
-                  onBlur={() => {
-                    setNameFocused(false);
-                    setNameBlurred(true);
-                  }}
-                  autoComplete="name"
-                  aria-label="Full Name"
-                  aria-required="true"
-                  className={`w-full px-3 py-3.5 ${
-                    nameFocused || customerName ? "pt-5" : "pt-3.5"
-                  } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                    showNameCheck
-                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                      : "border-neutral-800/50"
-                  } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                    poppins.variable
-                  }`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                  }}
-                  onClick={scrollToStep2}
-                />
-                {showNameCheck && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-yellow-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Customer Phone (Airtel) */}
-            <div className="mb-6 relative">
-              {/* Floating Label */}
-              <div
-                className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                  phoneFocused || customerPhone
-                    ? "top-0 transform -translate-y-1/2"
-                    : "top-1/2 transform -translate-y-1/2"
-                }`}
-                style={{ zIndex: 30 }}
-              >
-                {/* Border cut background */}
-                {(phoneFocused || customerPhone) && (
-                  <div
-                    className="absolute left-0"
-                    style={{
-                      top: "50%",
-                      background: "rgb(38, 38, 38)",
-                      height: "2px",
-                      width: "calc(100% + 4px)",
-                      marginLeft: "-4px",
-                      borderTopLeftRadius: "8px",
-                    }}
-                  />
-                )}
-                {/* Label text */}
-                <div className="px-1.5 relative">
-                  <span
-                    className={`text-xs font-medium transition-all duration-300 ${
-                      phoneFocused || customerPhone
-                        ? "text-white/90"
-                        : "text-neutral-400"
-                    } ${poppins.variable}`}
-                    style={{
-                      fontFamily: "var(--font-poppins), sans-serif",
-                    }}
-                  >
-                    {phoneFocused || customerPhone ? (
-                      <>
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                          2
-                        </span>
-                        Airtel Number <span className="text-yellow-400">*</span>
-                      </>
-                    ) : (
-                      "Enter your Airtel Number"
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="relative">
-                <input
-                  ref={phoneInputRef}
-                  type="tel"
-                  name="customer-phone"
-                  id="customer-phone"
-                  placeholder=""
-                  value={customerPhone}
-                  onChange={(e) => setCustomerPhone(e.target.value)}
-                  onFocus={() => {
-                    setPhoneFocused(true);
-                    scrollToStep2();
-                  }}
-                  onBlur={() => {
-                    setPhoneFocused(false);
-                    setPhoneBlurred(true);
-                  }}
-                  autoComplete="tel"
-                  aria-label="Airtel Phone Number"
-                  aria-required="true"
-                  className={`w-full px-3 py-3.5 ${
-                    phoneFocused || customerPhone ? "pt-5" : "pt-3.5"
-                  } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                    showPhoneCheck
-                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                      : "border-neutral-800/50"
-                  } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                    poppins.variable
-                  }`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                  }}
-                  onClick={scrollToStep2}
-                />
-                {showPhoneCheck && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-yellow-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Customer Alternative Number */}
-            <div className="mb-6 relative">
-              {/* Floating Label */}
-              <div
-                className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                  alternativeFocused || customerAlternativeNumber
-                    ? "top-0 transform -translate-y-1/2"
-                    : "top-1/2 transform -translate-y-1/2"
-                }`}
-                style={{ zIndex: 30 }}
-              >
-                {/* Border cut background */}
-                {(alternativeFocused || customerAlternativeNumber) && (
-                  <div
-                    className="absolute left-0"
-                    style={{
-                      top: "50%",
-                      background: "rgb(38, 38, 38)",
-                      height: "2px",
-                      width: "calc(100% + 4px)",
-                      marginLeft: "-4px",
-                      borderTopLeftRadius: "8px",
-                    }}
-                  />
-                )}
-                {/* Label text */}
-                <div className="px-1.5 relative">
-                  <span
-                    className={`text-xs font-medium transition-all duration-300 ${
-                      alternativeFocused || customerAlternativeNumber
-                        ? "text-white/90"
-                        : "text-neutral-400"
-                    } ${poppins.variable}`}
-                    style={{
-                      fontFamily: "var(--font-poppins), sans-serif",
-                    }}
-                  >
-                    {alternativeFocused || customerAlternativeNumber ? (
-                      <>
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                          3
-                        </span>
-                        Alternative Number{" "}
-                        <span className="text-yellow-400">*</span>
-                      </>
-                    ) : (
-                      "Enter your Alternative Number"
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="relative">
-                <input
-                  ref={alternativeInputRef}
-                  type="tel"
-                  name="customer-alternative-phone"
-                  id="customer-alternative-phone"
-                  placeholder=""
-                  value={customerAlternativeNumber}
-                  onChange={(e) => setCustomerAlternativeNumber(e.target.value)}
-                  onFocus={() => {
-                    setAlternativeFocused(true);
-                    scrollToStep2();
-                  }}
-                  onBlur={() => {
-                    setAlternativeFocused(false);
-                    setAlternativeBlurred(true);
-                  }}
-                  autoComplete="tel-national"
-                  aria-label="Alternative Phone Number"
-                  aria-required="true"
-                  className={`w-full px-3 py-3.5 ${
-                    alternativeFocused || customerAlternativeNumber
-                      ? "pt-5"
-                      : "pt-3.5"
-                  } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                    showAlternativeCheck
-                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                      : "border-neutral-800/50"
-                  } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                    poppins.variable
-                  }`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                  }}
-                  onClick={scrollToStep2}
-                />
-                {showAlternativeCheck && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-yellow-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Customer Email Address */}
-            <div className="mb-6 relative">
-              {/* Floating Label */}
-              <div
-                className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                  emailFocused || customerEmail
-                    ? "top-0 transform -translate-y-1/2"
-                    : "top-1/2 transform -translate-y-1/2"
-                }`}
-                style={{ zIndex: 30 }}
-              >
-                {/* Border cut background */}
-                {(emailFocused || customerEmail) && (
-                  <div
-                    className="absolute left-0"
-                    style={{
-                      top: "50%",
-                      background: "rgb(38, 38, 38)",
-                      height: "2px",
-                      width: "calc(100% + 4px)",
-                      marginLeft: "-4px",
-                      borderTopLeftRadius: "8px",
-                    }}
-                  />
-                )}
-                {/* Label text */}
-                <div className="px-1.5 relative">
-                  <span
-                    className={`text-xs font-medium transition-all duration-300 ${
-                      emailFocused || customerEmail
-                        ? "text-white/90"
-                        : "text-neutral-400"
-                    } ${poppins.variable}`}
-                    style={{
-                      fontFamily: "var(--font-poppins), sans-serif",
-                    }}
-                  >
-                    {emailFocused || customerEmail ? (
-                      <>
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                          4
-                        </span>
-                        Email Address <span className="text-yellow-400">*</span>
-                      </>
-                    ) : (
-                      "Enter your Email Address"
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="relative">
-                <input
-                  ref={emailInputRef}
-                  type="email"
-                  name="customer-email"
-                  id="customer-email"
-                  placeholder=""
-                  value={customerEmail}
-                  onChange={(e) => setCustomerEmail(e.target.value)}
-                  onFocus={() => {
-                    setEmailFocused(true);
-                    scrollToStep2();
-                  }}
-                  onBlur={() => {
-                    setEmailFocused(false);
-                    setEmailBlurred(true);
-                  }}
-                  autoComplete="email"
-                  aria-label="Email Address"
-                  className={`w-full px-3 py-3.5 ${
-                    emailFocused || customerEmail ? "pt-5" : "pt-3.5"
-                  } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                    emailBlurred && isEmailValid
-                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                      : "border-neutral-800/50"
-                  } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                    poppins.variable
-                  }`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                    WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
-                    WebkitTextFillColor: "#ffffff",
-                    caretColor: "#ffffff",
-                  }}
-                  onClick={scrollToStep2}
-                  spellCheck={false}
-                />
-                {emailBlurred && isEmailValid && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-yellow-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Location Entry Fields */}
-            {/* Customer Installation Town */}
-            <div className="mb-6 relative">
-              {/* Floating Label */}
-              <div
-                className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                  townFocused || showTownDropdown || installationTown
-                    ? "top-0 transform -translate-y-1/2"
-                    : "top-1/2 transform -translate-y-1/2"
-                }`}
-                style={{ zIndex: 30 }}
-              >
-                {/* Border cut background */}
-                {(townFocused || showTownDropdown || installationTown) && (
-                  <div
-                    className="absolute left-0"
-                    style={{
-                      top: "50%",
-                      background: "rgb(38, 38, 38)",
-                      height: "2px",
-                      width: "calc(100% + 4px)",
-                      marginLeft: "-4px",
-                      borderTopLeftRadius: "8px",
-                    }}
-                  />
-                )}
-                {/* Label text */}
-                <div className="px-1.5 relative">
-                  <span
-                    className={`text-xs font-medium transition-all duration-300 ${
-                      townFocused || showTownDropdown || installationTown
-                        ? "text-white/90"
-                        : "text-neutral-400"
-                    } ${poppins.variable}`}
-                    style={{
-                      fontFamily: "var(--font-poppins), sans-serif",
-                    }}
-                  >
-                    {townFocused || showTownDropdown || installationTown ? (
-                      <>
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                          5
-                        </span>
-                        Installation Town{" "}
-                        <span className="text-yellow-400">*</span>
-                      </>
-                    ) : (
-                      "Enter your Installation Town"
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="relative">
-                <button
-                  ref={townButtonRef}
-                  type="button"
-                  onClick={() => {
-                    setShowTownDropdown(!showTownDropdown);
-                    setTownFocused(true);
-                    scrollToStep2();
-                  }}
-                  onFocus={() => {
-                    setTownFocused(true);
-                  }}
-                  onBlur={() => {
-                    setTownFocused(false);
-                    setTimeout(() => setTownBlurred(true), 200);
-                  }}
-                  className={`w-full px-3 py-3.5 ${
-                    townFocused || showTownDropdown || installationTown
-                      ? "pt-5"
-                      : "pt-3.5"
-                  } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                    townBlurred && isTownValid
-                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                      : "border-neutral-800/50"
-                  } text-left text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                    poppins.variable
-                  } ${!installationTown ? "text-neutral-300" : ""}`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                    minHeight:
-                      townFocused || showTownDropdown || installationTown
-                        ? "56px"
-                        : "48px",
-                  }}
-                >
-                  <span className="block truncate">
-                    {installationTown || ""}
-                  </span>
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center justify-center">
-                    {/* GPS Location Icon - Show when town is not selected */}
-                    {!installationTown && (
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowMapPicker(true);
-                          scrollToStep2();
-                        }}
-                        className="relative p-1.5 rounded-full hover:bg-yellow-400/10 transition-colors animate-subtle-glow group flex items-center justify-center cursor-pointer"
-                        role="button"
-                        tabIndex={0}
-                        aria-label="Use current location"
-                        title="Tap to use your current location"
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setShowMapPicker(true);
-                            scrollToStep2();
-                          }
-                        }}
-                      >
-                        {/* Pulsing ring effect */}
-                        <div className="absolute inset-0 rounded-full border-2 border-yellow-400/40 animate-pulse-ring"></div>
-                        {/* GPS icon */}
-                        <svg
-                          className="w-5 h-5 text-yellow-400 relative z-10"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
-                      </div>
-                    )}
-                    {/* Check icon - Show when valid */}
-                    {townBlurred && isTownValid && (
-                      <svg
-                        className="w-5 h-5 text-yellow-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    )}
-                    {/* Dropdown arrow - Show when town is selected but not blurred yet */}
-                    {installationTown && !townBlurred && (
-                      <svg
-                        className="w-5 h-5 text-neutral-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                </button>
-                {showTownDropdown && (
-                  <div
-                    ref={townDropdownRef}
-                    className="absolute z-50 w-full bottom-full mb-1 bg-neutral-900/95 backdrop-blur-sm border-2 border-neutral-800/50 rounded-lg shadow-lg max-h-60 overflow-auto"
-                    style={{
-                      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
-                    }}
-                  >
-                    {townOptions.map((option, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        onClick={() => {
-                          setInstallationTown(option);
-                          setInstallationLocation(""); // Reset installation location when town changes
-                          setIsInstallationLocationOther(false);
-                          setShowTownDropdown(false);
-                          setTownBlurred(true);
-                        }}
-                        className={`w-full px-4 py-3 text-left text-white hover:bg-neutral-800/50 transition-colors ${
-                          poppins.variable
-                        } ${
-                          installationTown === option
-                            ? "bg-neutral-800/70 text-yellow-400"
-                            : ""
-                        }`}
-                        style={{
-                          fontFamily: "var(--font-poppins), sans-serif",
-                        }}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span>{option}</span>
-                          {installationTown === option && (
-                            <svg
-                              className="w-5 h-5 text-yellow-400"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Installation Location - Only show after town is selected */}
-            {installationTown && (
+              {/* Sample Form Field - Customer Name */}
               <div className="mb-6 relative">
-                {/* Connecting line from Installation Town */}
-                <div
-                  className="absolute left-3 top-0 w-0.5 bg-yellow-400/60"
-                  style={{
-                    height: "20px",
-                    transform: "translateY(-20px)",
-                    zIndex: 0,
-                  }}
-                />
                 {/* Floating Label */}
                 <div
                   className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                    installationLocationFocused ||
-                    showInstallationLocationDropdown ||
-                    installationLocation
+                    nameFocused || customerName
                       ? "top-0 transform -translate-y-1/2"
                       : "top-1/2 transform -translate-y-1/2"
                   }`}
                   style={{ zIndex: 30 }}
                 >
                   {/* Border cut background */}
-                  {(installationLocationFocused ||
-                    showInstallationLocationDropdown ||
-                    installationLocation) && (
+                  {(nameFocused || customerName) && (
                     <div
                       className="absolute left-0"
                       style={{
@@ -3171,9 +2420,7 @@ export default function TestMobilePage() {
                   <div className="px-1.5 relative">
                     <span
                       className={`text-xs font-medium transition-all duration-300 ${
-                        installationLocationFocused ||
-                        showInstallationLocationDropdown ||
-                        installationLocation
+                        nameFocused || customerName
                           ? "text-white/90"
                           : "text-neutral-400"
                       } ${poppins.variable}`}
@@ -3181,40 +2428,966 @@ export default function TestMobilePage() {
                         fontFamily: "var(--font-poppins), sans-serif",
                       }}
                     >
-                      {installationLocationFocused ||
-                      showInstallationLocationDropdown ||
-                      installationLocation ? (
+                      {nameFocused || customerName ? (
                         <>
                           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                            6
+                            1
                           </span>
-                          Installation Location{" "}
-                          <span className="text-yellow-400">*</span>
+                          Full Name <span className="text-yellow-400">*</span>
                         </>
                       ) : (
-                        "Select Installation Location"
+                        "Enter your Full Name"
                       )}
                     </span>
                   </div>
                 </div>
+                <div className="relative">
+                  <input
+                    ref={nameInputRef}
+                    type="text"
+                    name="customer-name"
+                    id="customer-name"
+                    placeholder=""
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    onFocus={() => {
+                      setNameFocused(true);
+                      scrollToStep2();
+                    }}
+                    onBlur={() => {
+                      setNameFocused(false);
+                      setNameBlurred(true);
+                    }}
+                    autoComplete="name"
+                    aria-label="Full Name"
+                    aria-required="true"
+                    className={`w-full px-3 py-3.5 ${
+                      nameFocused || customerName ? "pt-5" : "pt-3.5"
+                    } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                      showNameCheck
+                        ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                        : "border-neutral-800/50"
+                    } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                      poppins.variable
+                    }`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                    onClick={scrollToStep2}
+                  />
+                  {showNameCheck && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-5 h-5 text-yellow-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Customer Phone (Airtel) */}
+              <div className="mb-6 relative">
+                {/* Floating Label */}
                 <div
-                  className="relative"
-                  style={{
-                    zIndex: showInstallationLocationDropdown ? 1000 : 1,
-                  }}
+                  className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                    phoneFocused || customerPhone
+                      ? "top-0 transform -translate-y-1/2"
+                      : "top-1/2 transform -translate-y-1/2"
+                  }`}
+                  style={{ zIndex: 30 }}
                 >
+                  {/* Border cut background */}
+                  {(phoneFocused || customerPhone) && (
+                    <div
+                      className="absolute left-0"
+                      style={{
+                        top: "50%",
+                        background: "rgb(38, 38, 38)",
+                        height: "2px",
+                        width: "calc(100% + 4px)",
+                        marginLeft: "-4px",
+                        borderTopLeftRadius: "8px",
+                      }}
+                    />
+                  )}
+                  {/* Label text */}
+                  <div className="px-1.5 relative">
+                    <span
+                      className={`text-xs font-medium transition-all duration-300 ${
+                        phoneFocused || customerPhone
+                          ? "text-white/90"
+                          : "text-neutral-400"
+                      } ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      {phoneFocused || customerPhone ? (
+                        <>
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                            2
+                          </span>
+                          Airtel Number{" "}
+                          <span className="text-yellow-400">*</span>
+                        </>
+                      ) : (
+                        "Enter your Airtel Number"
+                      )}
+                    </span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    ref={phoneInputRef}
+                    type="tel"
+                    name="customer-phone"
+                    id="customer-phone"
+                    placeholder=""
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                    onFocus={() => {
+                      setPhoneFocused(true);
+                      scrollToStep2();
+                    }}
+                    onBlur={() => {
+                      setPhoneFocused(false);
+                      setPhoneBlurred(true);
+                    }}
+                    autoComplete="tel"
+                    aria-label="Airtel Phone Number"
+                    aria-required="true"
+                    className={`w-full px-3 py-3.5 ${
+                      phoneFocused || customerPhone ? "pt-5" : "pt-3.5"
+                    } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                      showPhoneCheck
+                        ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                        : "border-neutral-800/50"
+                    } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                      poppins.variable
+                    }`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                    onClick={scrollToStep2}
+                  />
+                  {showPhoneCheck && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-5 h-5 text-yellow-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Customer Alternative Number */}
+              <div className="mb-6 relative">
+                {/* Floating Label */}
+                <div
+                  className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                    alternativeFocused || customerAlternativeNumber
+                      ? "top-0 transform -translate-y-1/2"
+                      : "top-1/2 transform -translate-y-1/2"
+                  }`}
+                  style={{ zIndex: 30 }}
+                >
+                  {/* Border cut background */}
+                  {(alternativeFocused || customerAlternativeNumber) && (
+                    <div
+                      className="absolute left-0"
+                      style={{
+                        top: "50%",
+                        background: "rgb(38, 38, 38)",
+                        height: "2px",
+                        width: "calc(100% + 4px)",
+                        marginLeft: "-4px",
+                        borderTopLeftRadius: "8px",
+                      }}
+                    />
+                  )}
+                  {/* Label text */}
+                  <div className="px-1.5 relative">
+                    <span
+                      className={`text-xs font-medium transition-all duration-300 ${
+                        alternativeFocused || customerAlternativeNumber
+                          ? "text-white/90"
+                          : "text-neutral-400"
+                      } ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      {alternativeFocused || customerAlternativeNumber ? (
+                        <>
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                            3
+                          </span>
+                          Alternative Number{" "}
+                          <span className="text-yellow-400">*</span>
+                        </>
+                      ) : (
+                        "Enter your Alternative Number"
+                      )}
+                    </span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    ref={alternativeInputRef}
+                    type="tel"
+                    name="customer-alternative-phone"
+                    id="customer-alternative-phone"
+                    placeholder=""
+                    value={customerAlternativeNumber}
+                    onChange={(e) =>
+                      setCustomerAlternativeNumber(e.target.value)
+                    }
+                    onFocus={() => {
+                      setAlternativeFocused(true);
+                      scrollToStep2();
+                    }}
+                    onBlur={() => {
+                      setAlternativeFocused(false);
+                      setAlternativeBlurred(true);
+                    }}
+                    autoComplete="tel-national"
+                    aria-label="Alternative Phone Number"
+                    aria-required="true"
+                    className={`w-full px-3 py-3.5 ${
+                      alternativeFocused || customerAlternativeNumber
+                        ? "pt-5"
+                        : "pt-3.5"
+                    } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                      showAlternativeCheck
+                        ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                        : "border-neutral-800/50"
+                    } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                      poppins.variable
+                    }`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                    }}
+                    onClick={scrollToStep2}
+                  />
+                  {showAlternativeCheck && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-5 h-5 text-yellow-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Customer Email Address */}
+              <div className="mb-6 relative">
+                {/* Floating Label */}
+                <div
+                  className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                    emailFocused || customerEmail
+                      ? "top-0 transform -translate-y-1/2"
+                      : "top-1/2 transform -translate-y-1/2"
+                  }`}
+                  style={{ zIndex: 30 }}
+                >
+                  {/* Border cut background */}
+                  {(emailFocused || customerEmail) && (
+                    <div
+                      className="absolute left-0"
+                      style={{
+                        top: "50%",
+                        background: "rgb(38, 38, 38)",
+                        height: "2px",
+                        width: "calc(100% + 4px)",
+                        marginLeft: "-4px",
+                        borderTopLeftRadius: "8px",
+                      }}
+                    />
+                  )}
+                  {/* Label text */}
+                  <div className="px-1.5 relative">
+                    <span
+                      className={`text-xs font-medium transition-all duration-300 ${
+                        emailFocused || customerEmail
+                          ? "text-white/90"
+                          : "text-neutral-400"
+                      } ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      {emailFocused || customerEmail ? (
+                        <>
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                            4
+                          </span>
+                          Email Address{" "}
+                          <span className="text-yellow-400">*</span>
+                        </>
+                      ) : (
+                        "Enter your Email Address"
+                      )}
+                    </span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    ref={emailInputRef}
+                    type="email"
+                    name="customer-email"
+                    id="customer-email"
+                    placeholder=""
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    onFocus={() => {
+                      setEmailFocused(true);
+                      scrollToStep2();
+                    }}
+                    onBlur={() => {
+                      setEmailFocused(false);
+                      setEmailBlurred(true);
+                    }}
+                    autoComplete="email"
+                    aria-label="Email Address"
+                    className={`w-full px-3 py-3.5 ${
+                      emailFocused || customerEmail ? "pt-5" : "pt-3.5"
+                    } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                      emailBlurred && isEmailValid
+                        ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                        : "border-neutral-800/50"
+                    } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                      poppins.variable
+                    }`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                      WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
+                      WebkitTextFillColor: "#ffffff",
+                      caretColor: "#ffffff",
+                    }}
+                    onClick={scrollToStep2}
+                    spellCheck={false}
+                  />
+                  {emailBlurred && isEmailValid && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-5 h-5 text-yellow-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Location Entry Fields */}
+              {/* Customer Installation Town */}
+              <div className="mb-6 relative">
+                {/* Floating Label */}
+                <div
+                  className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                    townFocused || showTownDropdown || installationTown
+                      ? "top-0 transform -translate-y-1/2"
+                      : "top-1/2 transform -translate-y-1/2"
+                  }`}
+                  style={{ zIndex: 30 }}
+                >
+                  {/* Border cut background */}
+                  {(townFocused || showTownDropdown || installationTown) && (
+                    <div
+                      className="absolute left-0"
+                      style={{
+                        top: "50%",
+                        background: "rgb(38, 38, 38)",
+                        height: "2px",
+                        width: "calc(100% + 4px)",
+                        marginLeft: "-4px",
+                        borderTopLeftRadius: "8px",
+                      }}
+                    />
+                  )}
+                  {/* Label text */}
+                  <div className="px-1.5 relative">
+                    <span
+                      className={`text-xs font-medium transition-all duration-300 ${
+                        townFocused || showTownDropdown || installationTown
+                          ? "text-white/90"
+                          : "text-neutral-400"
+                      } ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      {townFocused || showTownDropdown || installationTown ? (
+                        <>
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                            5
+                          </span>
+                          Installation Town{" "}
+                          <span className="text-yellow-400">*</span>
+                        </>
+                      ) : (
+                        "Enter your Installation Town"
+                      )}
+                    </span>
+                  </div>
+                </div>
+                <div className="relative">
                   <button
-                    ref={installationLocationButtonRef}
+                    ref={townButtonRef}
                     type="button"
                     onClick={() => {
-                      setShowInstallationLocationDropdown(
-                        !showInstallationLocationDropdown
-                      );
-                      setInstallationLocationFocused(true);
+                      setShowTownDropdown(!showTownDropdown);
+                      setTownFocused(true);
                       scrollToStep2();
                     }}
                     onFocus={() => {
+                      setTownFocused(true);
+                    }}
+                    onBlur={() => {
+                      setTownFocused(false);
+                      setTimeout(() => setTownBlurred(true), 200);
+                    }}
+                    className={`w-full px-3 py-3.5 ${
+                      townFocused || showTownDropdown || installationTown
+                        ? "pt-5"
+                        : "pt-3.5"
+                    } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                      townBlurred && isTownValid
+                        ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                        : "border-neutral-800/50"
+                    } text-left text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                      poppins.variable
+                    } ${!installationTown ? "text-neutral-300" : ""}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                      minHeight:
+                        townFocused || showTownDropdown || installationTown
+                          ? "56px"
+                          : "48px",
+                    }}
+                  >
+                    <span className="block truncate">
+                      {installationTown || ""}
+                    </span>
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center justify-center">
+                      {/* GPS Location Icon - Show when town is not selected */}
+                      {!installationTown && (
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowMapPicker(true);
+                            scrollToStep2();
+                          }}
+                          className="relative p-1.5 rounded-full hover:bg-yellow-400/10 transition-colors animate-subtle-glow group flex items-center justify-center cursor-pointer"
+                          role="button"
+                          tabIndex={0}
+                          aria-label="Use current location"
+                          title="Tap to use your current location"
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setShowMapPicker(true);
+                              scrollToStep2();
+                            }
+                          }}
+                        >
+                          {/* Pulsing ring effect */}
+                          <div className="absolute inset-0 rounded-full border-2 border-yellow-400/40 animate-pulse-ring"></div>
+                          {/* GPS icon */}
+                          <svg
+                            className="w-5 h-5 text-yellow-400 relative z-10"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                      {/* Check icon - Show when valid */}
+                      {townBlurred && isTownValid && (
+                        <svg
+                          className="w-5 h-5 text-yellow-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                      {/* Dropdown arrow - Show when town is selected but not blurred yet */}
+                      {installationTown && !townBlurred && (
+                        <svg
+                          className="w-5 h-5 text-neutral-300"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                  </button>
+                  {showTownDropdown && (
+                    <div
+                      ref={townDropdownRef}
+                      className="absolute z-50 w-full bottom-full mb-1 bg-neutral-900/95 backdrop-blur-sm border-2 border-neutral-800/50 rounded-lg shadow-lg max-h-60 overflow-auto"
+                      style={{
+                        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+                      }}
+                    >
+                      {townOptions.map((option, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => {
+                            setInstallationTown(option);
+                            setInstallationLocation(""); // Reset installation location when town changes
+                            setIsInstallationLocationOther(false);
+                            setShowTownDropdown(false);
+                            setTownBlurred(true);
+                          }}
+                          className={`w-full px-4 py-3 text-left text-white hover:bg-neutral-800/50 transition-colors ${
+                            poppins.variable
+                          } ${
+                            installationTown === option
+                              ? "bg-neutral-800/70 text-yellow-400"
+                              : ""
+                          }`}
+                          style={{
+                            fontFamily: "var(--font-poppins), sans-serif",
+                          }}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span>{option}</span>
+                            {installationTown === option && (
+                              <svg
+                                className="w-5 h-5 text-yellow-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Installation Location - Only show after town is selected */}
+              {installationTown && (
+                <div className="mb-6 relative">
+                  {/* Connecting line from Installation Town */}
+                  <div
+                    className="absolute left-3 top-0 w-0.5 bg-yellow-400/60"
+                    style={{
+                      height: "20px",
+                      transform: "translateY(-20px)",
+                      zIndex: 0,
+                    }}
+                  />
+                  {/* Floating Label */}
+                  <div
+                    className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                      installationLocationFocused ||
+                      showInstallationLocationDropdown ||
+                      installationLocation
+                        ? "top-0 transform -translate-y-1/2"
+                        : "top-1/2 transform -translate-y-1/2"
+                    }`}
+                    style={{ zIndex: 30 }}
+                  >
+                    {/* Border cut background */}
+                    {(installationLocationFocused ||
+                      showInstallationLocationDropdown ||
+                      installationLocation) && (
+                      <div
+                        className="absolute left-0"
+                        style={{
+                          top: "50%",
+                          background: "rgb(38, 38, 38)",
+                          height: "2px",
+                          width: "calc(100% + 4px)",
+                          marginLeft: "-4px",
+                          borderTopLeftRadius: "8px",
+                        }}
+                      />
+                    )}
+                    {/* Label text */}
+                    <div className="px-1.5 relative">
+                      <span
+                        className={`text-xs font-medium transition-all duration-300 ${
+                          installationLocationFocused ||
+                          showInstallationLocationDropdown ||
+                          installationLocation
+                            ? "text-white/90"
+                            : "text-neutral-400"
+                        } ${poppins.variable}`}
+                        style={{
+                          fontFamily: "var(--font-poppins), sans-serif",
+                        }}
+                      >
+                        {installationLocationFocused ||
+                        showInstallationLocationDropdown ||
+                        installationLocation ? (
+                          <>
+                            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                              6
+                            </span>
+                            Installation Location{" "}
+                            <span className="text-yellow-400">*</span>
+                          </>
+                        ) : (
+                          "Select Installation Location"
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    className="relative"
+                    style={{
+                      zIndex: showInstallationLocationDropdown ? 1000 : 1,
+                    }}
+                  >
+                    <button
+                      ref={installationLocationButtonRef}
+                      type="button"
+                      onClick={() => {
+                        setShowInstallationLocationDropdown(
+                          !showInstallationLocationDropdown
+                        );
+                        setInstallationLocationFocused(true);
+                        scrollToStep2();
+                      }}
+                      onFocus={() => {
+                        setInstallationLocationFocused(true);
+                      }}
+                      onBlur={() => {
+                        setInstallationLocationFocused(false);
+                        setTimeout(
+                          () => setInstallationLocationBlurred(true),
+                          200
+                        );
+                      }}
+                      className={`w-full px-3 py-3.5 ${
+                        installationLocationFocused ||
+                        showInstallationLocationDropdown ||
+                        installationLocation
+                          ? "pt-5"
+                          : "pt-3.5"
+                      } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                        installationLocationBlurred &&
+                        isInstallationLocationValid
+                          ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                          : "border-neutral-800/50"
+                      } text-left text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                        poppins.variable
+                      } ${!installationLocation ? "text-neutral-300" : ""}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                        minHeight:
+                          installationLocationFocused ||
+                          showInstallationLocationDropdown ||
+                          installationLocation
+                            ? "56px"
+                            : "48px",
+                      }}
+                    >
+                      <span className="block truncate">
+                        {installationLocationFocused ||
+                        showInstallationLocationDropdown ||
+                        installationLocation
+                          ? installationLocation || ""
+                          : ""}
+                      </span>
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                        {installationLocationBlurred &&
+                        isInstallationLocationValid ? (
+                          <svg
+                            className="w-5 h-5 text-yellow-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            className="w-5 h-5 text-neutral-300"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                    {showInstallationLocationDropdown &&
+                      installationLocationOptions.length > 0 && (
+                        <div
+                          ref={installationLocationDropdownRef}
+                          className="installation-location-dropdown-opaque absolute w-full bottom-full mb-1 rounded-lg max-h-60 overflow-hidden"
+                          style={{
+                            backgroundColor: "rgb(23, 23, 23)",
+                            opacity: 1,
+                            boxShadow: "0 4px 20px rgba(0, 0, 0, 1)",
+                            backdropFilter: "none",
+                            WebkitBackdropFilter: "none",
+                            border: "2px solid rgb(64, 64, 64)",
+                            isolation: "isolate",
+                            position: "absolute",
+                            willChange: "transform",
+                            zIndex: 1001,
+                          }}
+                        >
+                          <div
+                            className="overflow-auto max-h-60"
+                            style={{
+                              backgroundColor: "rgb(23, 23, 23)",
+                            }}
+                          >
+                            {installationLocationOptions.map(
+                              (option, index) => (
+                                <button
+                                  key={index}
+                                  type="button"
+                                  onClick={() => {
+                                    if (option === "Other") {
+                                      setInstallationLocation("");
+                                      setIsInstallationLocationOther(true);
+                                      setInstallationLocationBlurred(false);
+                                      setShowInstallationLocationDropdown(
+                                        false
+                                      );
+                                      // Set robot message
+                                      setRobotMessage(
+                                        "We apologise, your location was not listed. Please tell us where you are from. 📍"
+                                      );
+                                      // Auto-focus the custom input after a delay to open keyboard
+                                      // Delay ensures the input is rendered and robot message is set
+                                      setTimeout(() => {
+                                        installationLocationCustomInputRef.current?.focus();
+                                      }, 300);
+                                    } else {
+                                      setInstallationLocation(option);
+                                      setIsInstallationLocationOther(false);
+                                      setInstallationLocationBlurred(true);
+                                      setShowInstallationLocationDropdown(
+                                        false
+                                      );
+                                    }
+                                  }}
+                                  className={`w-full px-4 py-3 text-left text-white transition-colors ${
+                                    poppins.variable
+                                  } ${
+                                    installationLocation === option
+                                      ? "text-yellow-400"
+                                      : ""
+                                  }`}
+                                  style={{
+                                    fontFamily:
+                                      "var(--font-poppins), sans-serif",
+                                    backgroundColor:
+                                      installationLocation === option
+                                        ? "rgb(38, 38, 38)"
+                                        : "rgb(23, 23, 23)",
+                                    opacity: "1",
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    if (installationLocation !== option) {
+                                      e.currentTarget.style.backgroundColor =
+                                        "rgb(38, 38, 38)";
+                                    }
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    if (installationLocation !== option) {
+                                      e.currentTarget.style.backgroundColor =
+                                        "rgb(23, 23, 23)";
+                                      e.currentTarget.style.opacity = "1";
+                                    }
+                                  }}
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <span>{option}</span>
+                                    {installationLocation === option && (
+                                      <svg
+                                        className="w-5 h-5 text-yellow-400"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M5 13l4 4L19 7"
+                                        />
+                                      </svg>
+                                    )}
+                                  </div>
+                                </button>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      )}
+                  </div>
+                </div>
+              )}
+
+              {/* Installation Location Custom Input - Show when "Other" is selected */}
+              {isInstallationLocationOther && (
+                <div className="mb-6 relative">
+                  {/* Connecting line from Installation Location dropdown */}
+                  <div
+                    className="absolute left-3 top-0 w-0.5 bg-yellow-400/60"
+                    style={{
+                      height: "20px",
+                      transform: "translateY(-20px)",
+                      zIndex: 0,
+                    }}
+                  />
+                  {/* Floating Label */}
+                  <div
+                    className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                      installationLocationFocused || installationLocation
+                        ? "top-0 transform -translate-y-1/2"
+                        : "top-1/2 transform -translate-y-1/2"
+                    }`}
+                    style={{ zIndex: 30 }}
+                  >
+                    {/* Border cut background */}
+                    {(installationLocationFocused || installationLocation) && (
+                      <div
+                        className="absolute left-0"
+                        style={{
+                          top: "50%",
+                          background: "rgb(38, 38, 38)",
+                          height: "2px",
+                          width: "calc(100% + 4px)",
+                          marginLeft: "-4px",
+                          borderTopLeftRadius: "8px",
+                        }}
+                      />
+                    )}
+                    {/* Label text */}
+                    <div className="px-1.5 relative">
+                      <span
+                        className={`text-xs font-medium transition-all duration-300 ${
+                          installationLocationFocused || installationLocation
+                            ? "text-white/90"
+                            : "text-neutral-400"
+                        } ${poppins.variable}`}
+                        style={{
+                          fontFamily: "var(--font-poppins), sans-serif",
+                        }}
+                      >
+                        {installationLocationFocused || installationLocation ? (
+                          <>
+                            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                              6
+                            </span>
+                            Installation Location (Custom){" "}
+                            <span className="text-yellow-400">*</span>
+                          </>
+                        ) : (
+                          "Enter Installation Location"
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                  <input
+                    ref={installationLocationCustomInputRef}
+                    type="text"
+                    placeholder=""
+                    value={installationLocation}
+                    onChange={(e) => {
+                      setInstallationLocation(e.target.value);
+                    }}
+                    onFocus={() => {
                       setInstallationLocationFocused(true);
+                      setInstallationLocationBlurred(false);
+                      scrollToStep2();
                     }}
                     onBlur={() => {
                       setInstallationLocationFocused(false);
@@ -3225,8 +3398,7 @@ export default function TestMobilePage() {
                     }}
                     className={`w-full px-3 py-3.5 ${
                       installationLocationFocused ||
-                      showInstallationLocationDropdown ||
-                      installationLocation
+                      (installationLocation && installationLocation !== "Other")
                         ? "pt-5"
                         : "pt-3.5"
                     } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
@@ -3235,27 +3407,448 @@ export default function TestMobilePage() {
                         : "border-neutral-800/50"
                     } text-left text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
                       poppins.variable
-                    } ${!installationLocation ? "text-neutral-300" : ""}`}
+                    } ${
+                      !installationLocation || installationLocation === "Other"
+                        ? "text-neutral-300"
+                        : ""
+                    }`}
                     style={{
                       fontFamily: "var(--font-poppins), sans-serif",
                       minHeight:
                         installationLocationFocused ||
-                        showInstallationLocationDropdown ||
-                        installationLocation
+                        (installationLocation &&
+                          installationLocation !== "Other")
+                          ? "56px"
+                          : "48px",
+                      WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
+                      WebkitTextFillColor: "#ffffff",
+                      caretColor: "#ffffff",
+                    }}
+                    spellCheck={false}
+                    autoComplete="off"
+                  />
+                  {installationLocationBlurred &&
+                    isInstallationLocationValid && (
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                        <svg
+                          className="w-5 h-5 text-yellow-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                </div>
+              )}
+
+              {/* Specific Delivery Location (Nearest Landmark) */}
+              <div className="mb-6 relative">
+                {/* Floating Label */}
+                <div
+                  className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                    deliveryLocationFocused || deliveryLocation
+                      ? "top-0 transform -translate-y-1/2"
+                      : "top-1/2 transform -translate-y-1/2"
+                  }`}
+                  style={{ zIndex: 30 }}
+                >
+                  {/* Border cut background */}
+                  {(deliveryLocationFocused || deliveryLocation) && (
+                    <div
+                      className="absolute left-0"
+                      style={{
+                        top: "50%",
+                        background: "rgb(38, 38, 38)",
+                        height: "2px",
+                        width: "calc(100% + 4px)",
+                        marginLeft: "-4px",
+                        borderTopLeftRadius: "8px",
+                      }}
+                    />
+                  )}
+                  {/* Label text */}
+                  <div className="px-1.5 relative">
+                    <span
+                      className={`text-xs font-medium transition-all duration-300 ${
+                        deliveryLocationFocused || deliveryLocation
+                          ? "text-white/90"
+                          : "text-neutral-400"
+                      } ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      {deliveryLocationFocused || deliveryLocation ? (
+                        <>
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                            7
+                          </span>
+                          Delivery Location (Nearest Landmark){" "}
+                          <span className="text-yellow-400">*</span>
+                        </>
+                      ) : (
+                        "Enter your Nearest landmark"
+                      )}
+                    </span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    ref={deliveryLocationInputRef}
+                    type="text"
+                    placeholder=""
+                    value={deliveryLocation}
+                    onChange={(e) => setDeliveryLocation(e.target.value)}
+                    onFocus={() => {
+                      setDeliveryLocationFocused(true);
+                      scrollToStep2();
+                    }}
+                    onBlur={() => {
+                      setDeliveryLocationFocused(false);
+                      setDeliveryLocationBlurred(true);
+                    }}
+                    className={`w-full px-3 py-3.5 ${
+                      deliveryLocationFocused || deliveryLocation
+                        ? "pt-5"
+                        : "pt-3.5"
+                    } ${
+                      showDeliveryLocationCheck ? "pr-20" : "pr-20"
+                    } rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                      showDeliveryLocationCheck
+                        ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                        : "border-neutral-800/50"
+                    } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                      poppins.variable
+                    }`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                      WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
+                      WebkitTextFillColor: "#ffffff",
+                      caretColor: "#ffffff",
+                    }}
+                    onClick={scrollToStep2}
+                    spellCheck={false}
+                    autoComplete="off"
+                  />
+                  {/* Check icon - Show when valid */}
+                  {showDeliveryLocationCheck && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-5 h-5 text-yellow-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Map Picker - Bottom Sheet Overlay */}
+              {showMapPicker && (
+                <div className="fixed inset-0 z-50">
+                  <div
+                    className="absolute inset-0 bg-black/50"
+                    onClick={() => setShowMapPicker(false)}
+                  ></div>
+                  <div className="absolute bottom-0 left-0 right-0 bg-neutral-900 rounded-t-3xl shadow-2xl max-h-[90vh] overflow-hidden">
+                    <div className="px-5 pt-4 pb-5">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3
+                          className={`text-lg font-semibold text-white ${poppins.variable}`}
+                          style={{
+                            fontFamily: "var(--font-poppins), sans-serif",
+                          }}
+                        >
+                          Select Location
+                        </h3>
+                        <button
+                          onClick={() => setShowMapPicker(false)}
+                          className="p-2 rounded-full hover:bg-neutral-800 transition-colors"
+                        >
+                          <svg
+                            className="w-5 h-5 text-neutral-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <LocationMapPicker
+                        locationMode="current"
+                        onLocationSelect={handleMapLocationSelect}
+                        onError={(message) => setRobotMessage(message)}
+                        townOptions={townOptions}
+                        onUseManualEntry={() => setShowMapPicker(false)}
+                        value={
+                          installationTown && deliveryLocation
+                            ? `${installationTown} - ${deliveryLocation}`
+                            : installationTown || ""
+                        }
+                        onBottomSheetChange={(isOpen) =>
+                          setIsBottomSheetOpen(isOpen)
+                        }
+                        onLocationConfirmed={(data) => {
+                          setTownBlurred(true);
+                          setDeliveryLocationBlurred(true);
+                          setInstallationLocationBlurred(true);
+                          setShowMapPicker(false);
+                          const firstName =
+                            customerName.trim().split(" ")[0] || "there";
+                          const locationSuccess = [
+                            `Perfect ${firstName}! We've got your location! 📍`,
+                            `Excellent ${firstName}! We know where to find you! 🏠`,
+                            `Great ${firstName}! Your location is set! 🗺️`,
+                          ];
+                          const randomMessage =
+                            locationSuccess[
+                              Math.floor(Math.random() * locationSuccess.length)
+                            ];
+                          setRobotMessage(randomMessage);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Preferred Date of Visit/Installation */}
+              <div className="mb-6 relative">
+                {/* Floating Label */}
+                <div
+                  className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                    dateFocused || preferredDate
+                      ? "top-0 transform -translate-y-1/2"
+                      : "top-1/2 transform -translate-y-1/2"
+                  }`}
+                  style={{ zIndex: 30 }}
+                >
+                  {/* Border cut background */}
+                  {(dateFocused || preferredDate) && (
+                    <div
+                      className="absolute left-0"
+                      style={{
+                        top: "50%",
+                        background: "rgb(38, 38, 38)",
+                        height: "2px",
+                        width: "calc(100% + 4px)",
+                        marginLeft: "-4px",
+                        borderTopLeftRadius: "8px",
+                      }}
+                    />
+                  )}
+                  {/* Label text */}
+                  <div className="px-1.5 relative">
+                    <span
+                      className={`text-xs font-medium transition-all duration-300 ${
+                        dateFocused || preferredDate
+                          ? "text-white/90"
+                          : "text-neutral-400"
+                      } ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      {dateFocused || preferredDate ? (
+                        <>
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                            7
+                          </span>
+                          Preferred Date{" "}
+                          <span className="text-yellow-400">*</span>
+                        </>
+                      ) : (
+                        "Enter your Preferred Date"
+                      )}
+                    </span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    ref={dateInputRef}
+                    type="date"
+                    value={preferredDate}
+                    onChange={(e) => setPreferredDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]}
+                    onFocus={() => {
+                      setDateFocused(true);
+                      scrollToStep2();
+                    }}
+                    onBlur={() => {
+                      setDateFocused(false);
+                      setPreferredDateBlurred(true);
+                    }}
+                    className={`w-full px-3 py-3.5 ${
+                      dateFocused || preferredDate ? "pt-5" : "pt-3.5"
+                    } pr-12 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                      showPreferredDateCheck
+                        ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                        : "border-neutral-800/50"
+                    } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 date-input-custom ${
+                      poppins.variable
+                    } ${!preferredDate ? "date-placeholder" : ""}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                      WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
+                      WebkitTextFillColor: preferredDate
+                        ? "#ffffff"
+                        : "transparent",
+                      caretColor: "#ffffff",
+                      colorScheme: "dark",
+                    }}
+                    onClick={scrollToStep2}
+                  />
+                  {/* Calendar icon indicator - shown when no date is selected */}
+                  {!preferredDate && !showPreferredDateCheck && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-5 h-5 text-yellow-400/70"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                  {showPreferredDateCheck && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-5 h-5 text-yellow-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Preferred Time of Visit/Installation */}
+              <div className="mb-6 relative">
+                {/* Floating Label */}
+                <div
+                  className={`absolute left-3 pointer-events-none transition-all duration-300 ${
+                    timeFocused || showTimeDropdown || preferredTime
+                      ? "top-0 transform -translate-y-1/2"
+                      : "top-1/2 transform -translate-y-1/2"
+                  }`}
+                  style={{ zIndex: 30 }}
+                >
+                  {/* Border cut background */}
+                  {(timeFocused || showTimeDropdown || preferredTime) && (
+                    <div
+                      className="absolute left-0"
+                      style={{
+                        top: "50%",
+                        background: "rgb(38, 38, 38)",
+                        height: "2px",
+                        width: "calc(100% + 4px)",
+                        marginLeft: "-4px",
+                        borderTopLeftRadius: "8px",
+                      }}
+                    />
+                  )}
+                  {/* Label text */}
+                  <div className="px-1.5 relative">
+                    <span
+                      className={`text-xs font-medium transition-all duration-300 ${
+                        timeFocused || showTimeDropdown || preferredTime
+                          ? "text-white/90"
+                          : "text-neutral-400"
+                      } ${poppins.variable}`}
+                      style={{
+                        fontFamily: "var(--font-poppins), sans-serif",
+                      }}
+                    >
+                      {timeFocused || showTimeDropdown || preferredTime ? (
+                        <>
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
+                            9
+                          </span>
+                          Preferred Time{" "}
+                          <span className="text-yellow-400">*</span>
+                        </>
+                      ) : (
+                        "Enter your Preferred Time"
+                      )}
+                    </span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <button
+                    ref={timeButtonRef}
+                    type="button"
+                    onClick={() => {
+                      setShowTimeDropdown(!showTimeDropdown);
+                      setTimeFocused(true);
+                      scrollToStep2();
+                    }}
+                    onFocus={() => {
+                      setTimeFocused(true);
+                    }}
+                    onBlur={() => {
+                      setTimeFocused(false);
+                      // Delay to allow option click
+                      setTimeout(() => setPreferredTimeBlurred(true), 200);
+                    }}
+                    className={`w-full px-3 py-3.5 ${
+                      timeFocused || showTimeDropdown || preferredTime
+                        ? "pt-5"
+                        : "pt-3.5"
+                    } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
+                      showPreferredTimeCheck
+                        ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                        : "border-neutral-800/50"
+                    } text-left text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
+                      poppins.variable
+                    } ${!preferredTime ? "text-neutral-300" : ""}`}
+                    style={{
+                      fontFamily: "var(--font-poppins), sans-serif",
+                      minHeight:
+                        timeFocused || showTimeDropdown || preferredTime
                           ? "56px"
                           : "48px",
                     }}
                   >
                     <span className="block truncate">
-                      {installationLocationFocused ||
-                      showInstallationLocationDropdown ||
-                      installationLocation
-                        ? installationLocation || ""
-                        : ""}
+                      {preferredTime || ""}
                     </span>
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                      {installationLocationBlurred &&
-                      isInstallationLocationValid ? (
+                      {showPreferredTimeCheck ? (
                         <svg
                           className="w-5 h-5 text-yellow-400"
                           fill="none"
@@ -3286,757 +3879,229 @@ export default function TestMobilePage() {
                       )}
                     </div>
                   </button>
-                  {showInstallationLocationDropdown &&
-                    installationLocationOptions.length > 0 && (
-                      <div
-                        ref={installationLocationDropdownRef}
-                        className="installation-location-dropdown-opaque absolute w-full bottom-full mb-1 rounded-lg max-h-60 overflow-hidden"
-                        style={{
-                          backgroundColor: "rgb(23, 23, 23)",
-                          opacity: 1,
-                          boxShadow: "0 4px 20px rgba(0, 0, 0, 1)",
-                          backdropFilter: "none",
-                          WebkitBackdropFilter: "none",
-                          border: "2px solid rgb(64, 64, 64)",
-                          isolation: "isolate",
-                          position: "absolute",
-                          willChange: "transform",
-                          zIndex: 1001,
-                        }}
-                      >
-                        <div
-                          className="overflow-auto max-h-60"
+                  {showTimeDropdown && (
+                    <div
+                      ref={timeDropdownRef}
+                      className="absolute z-50 w-full bottom-full mb-1 bg-neutral-900/95 backdrop-blur-sm border-2 border-neutral-800/50 rounded-lg shadow-lg max-h-60 overflow-auto"
+                      style={{
+                        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+                      }}
+                    >
+                      {timeOptions.map((option, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => {
+                            setPreferredTime(option);
+                            setShowTimeDropdown(false);
+                            setPreferredTimeBlurred(true);
+                          }}
+                          className={`w-full px-4 py-3 text-left text-white hover:bg-neutral-800/50 transition-colors ${
+                            poppins.variable
+                          } ${
+                            preferredTime === option
+                              ? "bg-neutral-800/70 text-yellow-400"
+                              : ""
+                          }`}
                           style={{
-                            backgroundColor: "rgb(23, 23, 23)",
+                            fontFamily: "var(--font-poppins), sans-serif",
                           }}
                         >
-                          {installationLocationOptions.map((option, index) => (
-                            <button
-                              key={index}
-                              type="button"
-                              onClick={() => {
-                                if (option === "Other") {
-                                  setInstallationLocation("");
-                                  setIsInstallationLocationOther(true);
-                                  setInstallationLocationBlurred(false);
-                                  setShowInstallationLocationDropdown(false);
-                                  // Set robot message
-                                  setRobotMessage(
-                                    "We apologise, your location was not listed. Please tell us where you are from. 📍"
-                                  );
-                                  // Auto-focus the custom input after a delay to open keyboard
-                                  // Delay ensures the input is rendered and robot message is set
-                                  setTimeout(() => {
-                                    installationLocationCustomInputRef.current?.focus();
-                                  }, 300);
-                                } else {
-                                  setInstallationLocation(option);
-                                  setIsInstallationLocationOther(false);
-                                  setInstallationLocationBlurred(true);
-                                  setShowInstallationLocationDropdown(false);
-                                }
-                              }}
-                              className={`w-full px-4 py-3 text-left text-white transition-colors ${
-                                poppins.variable
-                              } ${
-                                installationLocation === option
-                                  ? "text-yellow-400"
-                                  : ""
-                              }`}
-                              style={{
-                                fontFamily: "var(--font-poppins), sans-serif",
-                                backgroundColor:
-                                  installationLocation === option
-                                    ? "rgb(38, 38, 38)"
-                                    : "rgb(23, 23, 23)",
-                                opacity: "1",
-                              }}
-                              onMouseEnter={(e) => {
-                                if (installationLocation !== option) {
-                                  e.currentTarget.style.backgroundColor =
-                                    "rgb(38, 38, 38)";
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                if (installationLocation !== option) {
-                                  e.currentTarget.style.backgroundColor =
-                                    "rgb(23, 23, 23)";
-                                  e.currentTarget.style.opacity = "1";
-                                }
-                              }}
-                            >
-                              <div className="flex items-center justify-between">
-                                <span>{option}</span>
-                                {installationLocation === option && (
-                                  <svg
-                                    className="w-5 h-5 text-yellow-400"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M5 13l4 4L19 7"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                </div>
-              </div>
-            )}
-
-            {/* Installation Location Custom Input - Show when "Other" is selected */}
-            {isInstallationLocationOther && (
-              <div className="mb-6 relative">
-                {/* Connecting line from Installation Location dropdown */}
-                <div
-                  className="absolute left-3 top-0 w-0.5 bg-yellow-400/60"
-                  style={{
-                    height: "20px",
-                    transform: "translateY(-20px)",
-                    zIndex: 0,
-                  }}
-                />
-                {/* Floating Label */}
-                <div
-                  className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                    installationLocationFocused || installationLocation
-                      ? "top-0 transform -translate-y-1/2"
-                      : "top-1/2 transform -translate-y-1/2"
-                  }`}
-                  style={{ zIndex: 30 }}
-                >
-                  {/* Border cut background */}
-                  {(installationLocationFocused || installationLocation) && (
-                    <div
-                      className="absolute left-0"
-                      style={{
-                        top: "50%",
-                        background: "rgb(38, 38, 38)",
-                        height: "2px",
-                        width: "calc(100% + 4px)",
-                        marginLeft: "-4px",
-                        borderTopLeftRadius: "8px",
-                      }}
-                    />
-                  )}
-                  {/* Label text */}
-                  <div className="px-1.5 relative">
-                    <span
-                      className={`text-xs font-medium transition-all duration-300 ${
-                        installationLocationFocused || installationLocation
-                          ? "text-white/90"
-                          : "text-neutral-400"
-                      } ${poppins.variable}`}
-                      style={{
-                        fontFamily: "var(--font-poppins), sans-serif",
-                      }}
-                    >
-                      {installationLocationFocused || installationLocation ? (
-                        <>
-                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                            6
-                          </span>
-                          Installation Location (Custom){" "}
-                          <span className="text-yellow-400">*</span>
-                        </>
-                      ) : (
-                        "Enter Installation Location"
-                      )}
-                    </span>
-                  </div>
-                </div>
-                <input
-                  ref={installationLocationCustomInputRef}
-                  type="text"
-                  placeholder=""
-                  value={installationLocation}
-                  onChange={(e) => {
-                    setInstallationLocation(e.target.value);
-                  }}
-                  onFocus={() => {
-                    setInstallationLocationFocused(true);
-                    setInstallationLocationBlurred(false);
-                    scrollToStep2();
-                  }}
-                  onBlur={() => {
-                    setInstallationLocationFocused(false);
-                    setTimeout(() => setInstallationLocationBlurred(true), 200);
-                  }}
-                  className={`w-full px-3 py-3.5 ${
-                    installationLocationFocused ||
-                    (installationLocation && installationLocation !== "Other")
-                      ? "pt-5"
-                      : "pt-3.5"
-                  } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                    installationLocationBlurred && isInstallationLocationValid
-                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                      : "border-neutral-800/50"
-                  } text-left text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                    poppins.variable
-                  } ${
-                    !installationLocation || installationLocation === "Other"
-                      ? "text-neutral-300"
-                      : ""
-                  }`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                    minHeight:
-                      installationLocationFocused ||
-                      (installationLocation && installationLocation !== "Other")
-                        ? "56px"
-                        : "48px",
-                    WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
-                    WebkitTextFillColor: "#ffffff",
-                    caretColor: "#ffffff",
-                  }}
-                  spellCheck={false}
-                  autoComplete="off"
-                />
-                {installationLocationBlurred && isInstallationLocationValid && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-yellow-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Specific Delivery Location (Nearest Landmark) */}
-            <div className="mb-6 relative">
-              {/* Floating Label */}
-              <div
-                className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                  deliveryLocationFocused || deliveryLocation
-                    ? "top-0 transform -translate-y-1/2"
-                    : "top-1/2 transform -translate-y-1/2"
-                }`}
-                style={{ zIndex: 30 }}
-              >
-                {/* Border cut background */}
-                {(deliveryLocationFocused || deliveryLocation) && (
-                  <div
-                    className="absolute left-0"
-                    style={{
-                      top: "50%",
-                      background: "rgb(38, 38, 38)",
-                      height: "2px",
-                      width: "calc(100% + 4px)",
-                      marginLeft: "-4px",
-                      borderTopLeftRadius: "8px",
-                    }}
-                  />
-                )}
-                {/* Label text */}
-                <div className="px-1.5 relative">
-                  <span
-                    className={`text-xs font-medium transition-all duration-300 ${
-                      deliveryLocationFocused || deliveryLocation
-                        ? "text-white/90"
-                        : "text-neutral-400"
-                    } ${poppins.variable}`}
-                    style={{
-                      fontFamily: "var(--font-poppins), sans-serif",
-                    }}
-                  >
-                    {deliveryLocationFocused || deliveryLocation ? (
-                      <>
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                          7
-                        </span>
-                        Delivery Location (Nearest Landmark){" "}
-                        <span className="text-yellow-400">*</span>
-                      </>
-                    ) : (
-                      "Enter your Nearest landmark"
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="relative">
-                <input
-                  ref={deliveryLocationInputRef}
-                  type="text"
-                  placeholder=""
-                  value={deliveryLocation}
-                  onChange={(e) => setDeliveryLocation(e.target.value)}
-                  onFocus={() => {
-                    setDeliveryLocationFocused(true);
-                    scrollToStep2();
-                  }}
-                  onBlur={() => {
-                    setDeliveryLocationFocused(false);
-                    setDeliveryLocationBlurred(true);
-                  }}
-                  className={`w-full px-3 py-3.5 ${
-                    deliveryLocationFocused || deliveryLocation
-                      ? "pt-5"
-                      : "pt-3.5"
-                  } ${
-                    showDeliveryLocationCheck ? "pr-20" : "pr-20"
-                  } rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                    showDeliveryLocationCheck
-                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                      : "border-neutral-800/50"
-                  } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                    poppins.variable
-                  }`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                    WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
-                    WebkitTextFillColor: "#ffffff",
-                    caretColor: "#ffffff",
-                  }}
-                  onClick={scrollToStep2}
-                  spellCheck={false}
-                  autoComplete="off"
-                />
-                {/* Check icon - Show when valid */}
-                {showDeliveryLocationCheck && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-yellow-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Map Picker - Bottom Sheet Overlay */}
-            {showMapPicker && (
-              <div className="fixed inset-0 z-50">
-                <div
-                  className="absolute inset-0 bg-black/50"
-                  onClick={() => setShowMapPicker(false)}
-                ></div>
-                <div className="absolute bottom-0 left-0 right-0 bg-neutral-900 rounded-t-3xl shadow-2xl max-h-[90vh] overflow-hidden">
-                  <div className="px-5 pt-4 pb-5">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3
-                        className={`text-lg font-semibold text-white ${poppins.variable}`}
-                        style={{
-                          fontFamily: "var(--font-poppins), sans-serif",
-                        }}
-                      >
-                        Select Location
-                      </h3>
-                      <button
-                        onClick={() => setShowMapPicker(false)}
-                        className="p-2 rounded-full hover:bg-neutral-800 transition-colors"
-                      >
-                        <svg
-                          className="w-5 h-5 text-neutral-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
+                          <div className="flex items-center justify-between">
+                            <span>{option}</span>
+                            {preferredTime === option && (
+                              <svg
+                                className="w-5 h-5 text-yellow-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            )}
+                          </div>
+                        </button>
+                      ))}
                     </div>
-                    <LocationMapPicker
-                      locationMode="current"
-                      onLocationSelect={handleMapLocationSelect}
-                      onError={(message) => setRobotMessage(message)}
-                      townOptions={townOptions}
-                      onUseManualEntry={() => setShowMapPicker(false)}
-                      value={
-                        installationTown && deliveryLocation
-                          ? `${installationTown} - ${deliveryLocation}`
-                          : installationTown || ""
-                      }
-                      onBottomSheetChange={(isOpen) =>
-                        setIsBottomSheetOpen(isOpen)
-                      }
-                      onLocationConfirmed={(data) => {
-                        setTownBlurred(true);
-                        setDeliveryLocationBlurred(true);
-                        setInstallationLocationBlurred(true);
-                        setShowMapPicker(false);
-                        const firstName =
-                          customerName.trim().split(" ")[0] || "there";
-                        const locationSuccess = [
-                          `Perfect ${firstName}! We've got your location! 📍`,
-                          `Excellent ${firstName}! We know where to find you! 🏠`,
-                          `Great ${firstName}! Your location is set! 🗺️`,
-                        ];
-                        const randomMessage =
-                          locationSuccess[
-                            Math.floor(Math.random() * locationSuccess.length)
-                          ];
-                        setRobotMessage(randomMessage);
-                      }}
-                    />
-                  </div>
+                  )}
                 </div>
               </div>
-            )}
 
-            {/* Preferred Date of Visit/Installation */}
-            <div className="mb-6 relative">
-              {/* Floating Label */}
-              <div
-                className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                  dateFocused || preferredDate
-                    ? "top-0 transform -translate-y-1/2"
-                    : "top-1/2 transform -translate-y-1/2"
-                }`}
-                style={{ zIndex: 30 }}
-              >
-                {/* Border cut background */}
-                {(dateFocused || preferredDate) && (
-                  <div
-                    className="absolute left-0"
-                    style={{
-                      top: "50%",
-                      background: "rgb(38, 38, 38)",
-                      height: "2px",
-                      width: "calc(100% + 4px)",
-                      marginLeft: "-4px",
-                      borderTopLeftRadius: "8px",
-                    }}
-                  />
-                )}
-                {/* Label text */}
-                <div className="px-1.5 relative">
-                  <span
-                    className={`text-xs font-medium transition-all duration-300 ${
-                      dateFocused || preferredDate
-                        ? "text-white/90"
-                        : "text-neutral-400"
-                    } ${poppins.variable}`}
-                    style={{
-                      fontFamily: "var(--font-poppins), sans-serif",
-                    }}
-                  >
-                    {dateFocused || preferredDate ? (
-                      <>
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                          7
-                        </span>
-                        Preferred Date{" "}
-                        <span className="text-yellow-400">*</span>
-                      </>
-                    ) : (
-                      "Enter your Preferred Date"
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="relative">
-                <input
-                  ref={dateInputRef}
-                  type="date"
-                  value={preferredDate}
-                  onChange={(e) => setPreferredDate(e.target.value)}
-                  min={new Date().toISOString().split("T")[0]}
-                  onFocus={() => {
-                    setDateFocused(true);
-                    scrollToStep2();
-                  }}
-                  onBlur={() => {
-                    setDateFocused(false);
-                    setPreferredDateBlurred(true);
-                  }}
-                  className={`w-full px-3 py-3.5 ${
-                    dateFocused || preferredDate ? "pt-5" : "pt-3.5"
-                  } pr-12 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                    showPreferredDateCheck
-                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                      : "border-neutral-800/50"
-                  } text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 date-input-custom ${
-                    poppins.variable
-                  } ${!preferredDate ? "date-placeholder" : ""}`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                    WebkitBoxShadow: "0 0 0 1000px rgb(38, 38, 38) inset",
-                    WebkitTextFillColor: preferredDate
-                      ? "#ffffff"
-                      : "transparent",
-                    caretColor: "#ffffff",
-                    colorScheme: "dark",
-                  }}
-                  onClick={scrollToStep2}
-                />
-                {/* Calendar icon indicator - shown when no date is selected */}
-                {!preferredDate && !showPreferredDateCheck && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-yellow-400/70"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
+              {/* Submit Button */}
+              <div className="mb-4 mt-6">
+                {submitStatus.state === "error" && (
+                  <div className="mb-4 rounded-lg bg-rose-900/50 border border-rose-500/50 p-3">
+                    <p className="text-sm font-medium text-rose-200">
+                      {submitStatus.message}
+                    </p>
                   </div>
                 )}
-                {showPreferredDateCheck && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-yellow-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                {submitStatus.state === "success" && (
+                  <div className="mb-4 rounded-lg bg-emerald-900/50 border border-emerald-500/50 p-3">
+                    <p className="text-sm font-medium text-emerald-200">
+                      ✓ {submitStatus.message}
+                    </p>
                   </div>
                 )}
-              </div>
-            </div>
 
-            {/* Preferred Time of Visit/Installation */}
-            <div className="mb-6 relative">
-              {/* Floating Label */}
-              <div
-                className={`absolute left-3 pointer-events-none transition-all duration-300 ${
-                  timeFocused || showTimeDropdown || preferredTime
-                    ? "top-0 transform -translate-y-1/2"
-                    : "top-1/2 transform -translate-y-1/2"
-                }`}
-                style={{ zIndex: 30 }}
-              >
-                {/* Border cut background */}
-                {(timeFocused || showTimeDropdown || preferredTime) && (
-                  <div
-                    className="absolute left-0"
-                    style={{
-                      top: "50%",
-                      background: "rgb(38, 38, 38)",
-                      height: "2px",
-                      width: "calc(100% + 4px)",
-                      marginLeft: "-4px",
-                      borderTopLeftRadius: "8px",
-                    }}
-                  />
-                )}
-                {/* Label text */}
-                <div className="px-1.5 relative">
-                  <span
-                    className={`text-xs font-medium transition-all duration-300 ${
-                      timeFocused || showTimeDropdown || preferredTime
-                        ? "text-white/90"
-                        : "text-neutral-400"
-                    } ${poppins.variable}`}
-                    style={{
-                      fontFamily: "var(--font-poppins), sans-serif",
-                    }}
-                  >
-                    {timeFocused || showTimeDropdown || preferredTime ? (
-                      <>
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
-                          9
-                        </span>
-                        Preferred Time{" "}
-                        <span className="text-yellow-400">*</span>
-                      </>
-                    ) : (
-                      "Enter your Preferred Time"
-                    )}
-                  </span>
+                {/* Payment Disclaimer */}
+                <div className="mb-4 rounded-lg bg-neutral-800/60 border border-neutral-700/50 p-3">
+                  <p className="text-xs text-neutral-300 text-center leading-relaxed">
+                    <span className="text-yellow-400">💳</span> Payment is only
+                    required after delivery and installation is complete. No
+                    upfront charges.
+                  </p>
                 </div>
-              </div>
-              <div className="relative">
-                <button
-                  ref={timeButtonRef}
+
+                <motion.button
                   type="button"
-                  onClick={() => {
-                    setShowTimeDropdown(!showTimeDropdown);
-                    setTimeFocused(true);
-                    scrollToStep2();
-                  }}
-                  onFocus={() => {
-                    setTimeFocused(true);
-                  }}
-                  onBlur={() => {
-                    setTimeFocused(false);
-                    // Delay to allow option click
-                    setTimeout(() => setPreferredTimeBlurred(true), 200);
-                  }}
-                  className={`w-full px-3 py-3.5 ${
-                    timeFocused || showTimeDropdown || preferredTime
-                      ? "pt-5"
-                      : "pt-3.5"
-                  } pr-10 rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 text-sm ${
-                    showPreferredTimeCheck
-                      ? "border-yellow-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)]"
-                      : "border-neutral-800/50"
-                  } text-left text-white placeholder:text-neutral-300 focus:outline-none focus:border-yellow-400/60 focus:shadow-[0_0_15px_rgba(251,191,36,0.2)] transition-all duration-300 ${
-                    poppins.variable
-                  } ${!preferredTime ? "text-neutral-300" : ""}`}
-                  style={{
-                    fontFamily: "var(--font-poppins), sans-serif",
-                    minHeight:
-                      timeFocused || showTimeDropdown || preferredTime
-                        ? "56px"
-                        : "48px",
-                  }}
-                >
-                  <span className="block truncate">{preferredTime || ""}</span>
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    {showPreferredTimeCheck ? (
-                      <svg
-                        className="w-5 h-5 text-yellow-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        className="w-5 h-5 text-neutral-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                </button>
-                {showTimeDropdown && (
-                  <div
-                    ref={timeDropdownRef}
-                    className="absolute z-50 w-full bottom-full mb-1 bg-neutral-900/95 backdrop-blur-sm border-2 border-neutral-800/50 rounded-lg shadow-lg max-h-60 overflow-auto"
-                    style={{
-                      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
-                    }}
-                  >
-                    {timeOptions.map((option, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        onClick={() => {
-                          setPreferredTime(option);
-                          setShowTimeDropdown(false);
-                          setPreferredTimeBlurred(true);
-                        }}
-                        className={`w-full px-4 py-3 text-left text-white hover:bg-neutral-800/50 transition-colors ${
-                          poppins.variable
-                        } ${
-                          preferredTime === option
-                            ? "bg-neutral-800/70 text-yellow-400"
-                            : ""
-                        }`}
-                        style={{
-                          fontFamily: "var(--font-poppins), sans-serif",
-                        }}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span>{option}</span>
-                          {preferredTime === option && (
-                            <svg
-                              className="w-5 h-5 text-yellow-400"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.5 }}
+                  onClick={async () => {
+                    if (
+                      !(nameBlurred && isNameValid) ||
+                      !(phoneBlurred && isPhoneValid) ||
+                      !(alternativeBlurred && isAlternativeValid) ||
+                      !(emailBlurred && isEmailValid) ||
+                      !(townBlurred && isTownValid) ||
+                      !(deliveryLocationBlurred && isDeliveryLocationValid) ||
+                      !(preferredDateBlurred && isPreferredDateValid) ||
+                      !(preferredTimeBlurred && isPreferredTimeValid) ||
+                      !selectedPackage
+                    ) {
+                      return;
+                    }
 
-            {/* Submit Button */}
-            <div className="mb-4 mt-6">
-              {submitStatus.state === "error" && (
-                <div className="mb-4 rounded-lg bg-rose-900/50 border border-rose-500/50 p-3">
-                  <p className="text-sm font-medium text-rose-200">
-                    {submitStatus.message}
-                  </p>
-                </div>
-              )}
-              {submitStatus.state === "success" && (
-                <div className="mb-4 rounded-lg bg-emerald-900/50 border border-emerald-500/50 p-3">
-                  <p className="text-sm font-medium text-emerald-200">
-                    ✓ {submitStatus.message}
-                  </p>
-                </div>
-              )}
+                    setIsSubmitting(true);
+                    setSubmitStatus({ state: "idle", message: "" });
 
-              {/* Payment Disclaimer */}
-              <div className="mb-4 rounded-lg bg-neutral-800/60 border border-neutral-700/50 p-3">
-                <p className="text-xs text-neutral-300 text-center leading-relaxed">
-                  <span className="text-yellow-400">💳</span> Payment is only
-                  required after delivery and installation is complete. No
-                  upfront charges.
-                </p>
-              </div>
+                    try {
+                      // Submit directly without duplicate checks
+                      const response = await fetch("/api/submit", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          customerName: customerName.trim(),
+                          airtelNumber: customerPhone,
+                          alternateNumber: customerAlternativeNumber,
+                          email: customerEmail.trim(),
+                          preferredPackage: selectedPackage,
+                          installationTown: installationTown,
+                          deliveryLandmark: deliveryLocation.trim(),
+                          installationLocation: installationLocation,
+                          visitDate: preferredDate,
+                          visitTime: preferredTime,
+                        }),
+                      });
 
-              <motion.button
-                type="button"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.5 }}
-                onClick={async () => {
-                  if (
+                      const data = await response.json();
+
+                      if (!response.ok) {
+                        // If data was saved to database but Microsoft Forms failed
+                        if (data.savedToDatabase) {
+                          const errorMsg = `Your information was saved, but there was an issue submitting to our system. Our team will process it manually. Reference: ${
+                            data.leadId || "saved"
+                          }`;
+                          setSubmitStatus({
+                            state: "error",
+                            message: errorMsg,
+                          });
+                          setRobotMessage(
+                            "✅ Your info was saved! Our team will process it manually."
+                          );
+                          // Reset form since data is saved
+                          setCustomerName("");
+                          setCustomerPhone("");
+                          setCustomerAlternativeNumber("");
+                          setCustomerEmail("");
+                          setInstallationTown("");
+                          setDeliveryLocation("");
+                          setInstallationLocation("");
+                          setIsInstallationLocationOther(false);
+                          setPreferredDate("");
+                          setPreferredTime("");
+                          setNameBlurred(false);
+                          setPhoneBlurred(false);
+                          setAlternativeBlurred(false);
+                          setEmailBlurred(false);
+                          setTownBlurred(false);
+                          setDeliveryLocationBlurred(false);
+                          setPreferredDateBlurred(false);
+                          setPreferredTimeBlurred(false);
+                          setIsSubmitting(false);
+                          return;
+                        }
+                        // Otherwise, throw the error
+                        throw new Error(
+                          data.error || data.details || "Failed to submit form"
+                        );
+                      }
+
+                      setSubmitStatus({
+                        state: "success",
+                        message:
+                          "Form submitted successfully! We'll contact you soon.",
+                      });
+                      setRobotMessage(
+                        "🎉 Success! Your request has been submitted! We'll contact you soon!"
+                      );
+
+                      // Save customer name for thank-you page
+                      if (typeof window !== "undefined") {
+                        const nameToSave = customerName.trim() || "there";
+                        localStorage.setItem("customerName", nameToSave);
+                      }
+
+                      // Redirect to thank-you page
+                      setTimeout(() => {
+                        window.location.href = "/thank-you";
+                      }, 1000);
+
+                      // Reset form after successful submission
+                      setCustomerName("");
+                      setCustomerPhone("");
+                      setCustomerAlternativeNumber("");
+                      setCustomerEmail("");
+                      setInstallationTown("");
+                      setDeliveryLocation("");
+                      setPreferredDate("");
+                      setPreferredTime("");
+                      setNameBlurred(false);
+                      setPhoneBlurred(false);
+                      setAlternativeBlurred(false);
+                      setEmailBlurred(false);
+                      setTownBlurred(false);
+                      setDeliveryLocationBlurred(false);
+                      setPreferredDateBlurred(false);
+                      setPreferredTimeBlurred(false);
+                    } catch (error) {
+                      const errorMessage =
+                        error instanceof Error
+                          ? error.message
+                          : "An error occurred. Please try again.";
+                      setSubmitStatus({
+                        state: "error",
+                        message: errorMessage,
+                      });
+                      setRobotMessage(
+                        "❌ Something went wrong. Please try again."
+                      );
+                    } finally {
+                      setIsSubmitting(false);
+                    }
+                  }}
+                  disabled={
+                    isSubmitting ||
                     !(nameBlurred && isNameValid) ||
                     !(phoneBlurred && isPhoneValid) ||
                     !(alternativeBlurred && isAlternativeValid) ||
@@ -4046,247 +4111,66 @@ export default function TestMobilePage() {
                     !(preferredDateBlurred && isPreferredDateValid) ||
                     !(preferredTimeBlurred && isPreferredTimeValid) ||
                     !selectedPackage
-                  ) {
-                    return;
                   }
-
-                  setIsSubmitting(true);
-                  setSubmitStatus({ state: "idle", message: "" });
-
-                  try {
-                    // First, check for duplicates
-                    const duplicateCheck = await fetch("/api/check-duplicate", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        customerName: customerName.trim(),
-                        airtelNumber: customerPhone,
-                        alternateNumber: customerAlternativeNumber,
-                        email: customerEmail.trim(),
-                        preferredPackage: selectedPackage,
-                        installationTown: installationTown,
-                        deliveryLandmark: deliveryLocation.trim(),
-                      }),
-                    });
-
-                    const duplicateResult = await duplicateCheck.json();
-
-                    // Handle RED (absolute duplicate - redirect)
-                    if (duplicateResult.status === "RED") {
-                      setIsSubmitting(false);
-                      // Save duplicate data for the duplicate page
-                      if (typeof window !== "undefined") {
-                        localStorage.setItem(
-                          "duplicateSubmissionData",
-                          JSON.stringify(duplicateResult.match)
-                        );
-                      }
-                      // Redirect immediately - robot will speak on the duplicate page
-                      window.location.href = "/duplicate-submission";
-                      return;
-                    }
-
-                    // Handle ORANGE (potential duplicate - show warning)
-                    if (duplicateResult.status === "ORANGE") {
-                      setIsSubmitting(false);
-                      setDuplicateMatch(duplicateResult.match);
-                      setShowDuplicateWarning(true);
-                      // Set robot message for warning
-                      setRobotMessage(
-                        "⚠️ I noticed this looks similar to a previous submission. Please review the details and decide if you want to continue or edit your information."
-                      );
-                      return;
-                    }
-
-                    // NONE - proceed with submission
-                    const response = await fetch("/api/submit", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        customerName: customerName.trim(),
-                        airtelNumber: customerPhone,
-                        alternateNumber: customerAlternativeNumber,
-                        email: customerEmail.trim(),
-                        preferredPackage: selectedPackage,
-                        installationTown: installationTown,
-                        deliveryLandmark: deliveryLocation.trim(),
-                        installationLocation: installationLocation,
-                        visitDate: preferredDate,
-                        visitTime: preferredTime,
-                      }),
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                      // If data was saved to database but Microsoft Forms failed
-                      if (data.savedToDatabase) {
-                        const errorMsg = `Your information was saved, but there was an issue submitting to our system. Our team will process it manually. Reference: ${
-                          data.leadId || "saved"
-                        }`;
-                        setSubmitStatus({
-                          state: "error",
-                          message: errorMsg,
-                        });
-                        setRobotMessage(
-                          "✅ Your info was saved! Our team will process it manually."
-                        );
-                        // Reset form since data is saved
-                        setCustomerName("");
-                        setCustomerPhone("");
-                        setCustomerAlternativeNumber("");
-                        setCustomerEmail("");
-                        setInstallationTown("");
-                        setDeliveryLocation("");
-                        setInstallationLocation("");
-                        setIsInstallationLocationOther(false);
-                        setPreferredDate("");
-                        setPreferredTime("");
-                        setNameBlurred(false);
-                        setPhoneBlurred(false);
-                        setAlternativeBlurred(false);
-                        setEmailBlurred(false);
-                        setTownBlurred(false);
-                        setDeliveryLocationBlurred(false);
-                        setPreferredDateBlurred(false);
-                        setPreferredTimeBlurred(false);
-                        setIsSubmitting(false);
-                        return;
-                      }
-                      // Otherwise, throw the error
-                      throw new Error(
-                        data.error || data.details || "Failed to submit form"
-                      );
-                    }
-
-                    setSubmitStatus({
-                      state: "success",
-                      message:
-                        "Form submitted successfully! We'll contact you soon.",
-                    });
-                    setRobotMessage(
-                      "🎉 Success! Your request has been submitted! We'll contact you soon!"
-                    );
-
-                    // Save customer name for thank-you page
-                    if (typeof window !== "undefined") {
-                      const nameToSave = customerName.trim() || "there";
-                      localStorage.setItem("customerName", nameToSave);
-                    }
-
-                    // Redirect to thank-you page
-                    setTimeout(() => {
-                      window.location.href = "/thank-you";
-                    }, 1000);
-
-                    // Reset form after successful submission
-                    setCustomerName("");
-                    setCustomerPhone("");
-                    setCustomerAlternativeNumber("");
-                    setCustomerEmail("");
-                    setInstallationTown("");
-                    setDeliveryLocation("");
-                    setPreferredDate("");
-                    setPreferredTime("");
-                    setNameBlurred(false);
-                    setPhoneBlurred(false);
-                    setAlternativeBlurred(false);
-                    setEmailBlurred(false);
-                    setTownBlurred(false);
-                    setDeliveryLocationBlurred(false);
-                    setPreferredDateBlurred(false);
-                    setPreferredTimeBlurred(false);
-                  } catch (error) {
-                    const errorMessage =
-                      error instanceof Error
-                        ? error.message
-                        : "An error occurred. Please try again.";
-                    setSubmitStatus({
-                      state: "error",
-                      message: errorMessage,
-                    });
-                    setRobotMessage(
-                      "❌ Something went wrong. Please try again."
-                    );
-                  } finally {
-                    setIsSubmitting(false);
-                  }
-                }}
-                disabled={
-                  isSubmitting ||
-                  !(nameBlurred && isNameValid) ||
-                  !(phoneBlurred && isPhoneValid) ||
-                  !(alternativeBlurred && isAlternativeValid) ||
-                  !(emailBlurred && isEmailValid) ||
-                  !(townBlurred && isTownValid) ||
-                  !(deliveryLocationBlurred && isDeliveryLocationValid) ||
-                  !(preferredDateBlurred && isPreferredDateValid) ||
-                  !(preferredTimeBlurred && isPreferredTimeValid) ||
-                  !selectedPackage
-                }
-                className={`w-full py-4 px-6 rounded-lg font-semibold text-base transition-all duration-300 ${
-                  poppins.variable
-                } ${
-                  !isSubmitting &&
-                  nameBlurred &&
-                  isNameValid &&
-                  phoneBlurred &&
-                  isPhoneValid &&
-                  alternativeBlurred &&
-                  isAlternativeValid &&
-                  emailBlurred &&
-                  isEmailValid &&
-                  townBlurred &&
-                  isTownValid &&
-                  deliveryLocationBlurred &&
-                  isDeliveryLocationValid &&
-                  installationLocationBlurred &&
-                  isInstallationLocationValid &&
-                  preferredDateBlurred &&
-                  isPreferredDateValid &&
-                  preferredTimeBlurred &&
-                  isPreferredTimeValid &&
-                  selectedPackage
-                    ? "bg-yellow-400 hover:bg-yellow-500 text-neutral-50 shadow-[0_0_20px_rgba(251,191,36,0.4)] active:scale-95"
-                    : "bg-neutral-800 text-neutral-300 cursor-not-allowed opacity-50"
-                }`}
-                style={{
-                  fontFamily: "var(--font-poppins), sans-serif",
-                }}
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <svg
-                      className="animate-spin h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Submitting...
-                  </span>
-                ) : (
-                  "Submit"
-                )}
-              </motion.button>
-            </div>
+                  className={`w-full py-4 px-6 rounded-lg font-semibold text-base transition-all duration-300 ${
+                    poppins.variable
+                  } ${
+                    !isSubmitting &&
+                    nameBlurred &&
+                    isNameValid &&
+                    phoneBlurred &&
+                    isPhoneValid &&
+                    alternativeBlurred &&
+                    isAlternativeValid &&
+                    emailBlurred &&
+                    isEmailValid &&
+                    townBlurred &&
+                    isTownValid &&
+                    deliveryLocationBlurred &&
+                    isDeliveryLocationValid &&
+                    installationLocationBlurred &&
+                    isInstallationLocationValid &&
+                    preferredDateBlurred &&
+                    isPreferredDateValid &&
+                    preferredTimeBlurred &&
+                    isPreferredTimeValid &&
+                    selectedPackage
+                      ? "bg-yellow-400 hover:bg-yellow-500 text-neutral-50 shadow-[0_0_20px_rgba(251,191,36,0.4)] active:scale-95"
+                      : "bg-neutral-800 text-neutral-300 cursor-not-allowed opacity-50"
+                  }`}
+                  style={{
+                    fontFamily: "var(--font-poppins), sans-serif",
+                  }}
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg
+                        className="animate-spin h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Submitting...
+                    </span>
+                  ) : (
+                    "Submit"
+                  )}
+                </motion.button>
+              </div>
             </form>
           </div>
         </section>
@@ -4294,199 +4178,6 @@ export default function TestMobilePage() {
         {/* Spacer to ensure enough content for scrolling */}
         <div style={{ minHeight: "10vh" }}></div>
       </div>
-
-      {/* Duplicate Warning Modal (ORANGE) */}
-      {showDuplicateWarning && (
-        <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-          style={{ pointerEvents: "auto" }}
-          onClick={(e) => {
-            // Close modal if clicking on backdrop
-            if (e.target === e.currentTarget) {
-              setShowDuplicateWarning(false);
-              setDuplicateMatch(null);
-            }
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-neutral-800 rounded-2xl p-6 md:p-8 max-w-md w-full border border-orange-400/30 shadow-[0_0_40px_rgba(251,146,60,0.3)] relative z-[10000]"
-            style={{ pointerEvents: "auto" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-orange-400/20 flex items-center justify-center flex-shrink-0">
-                <svg
-                  className="w-6 h-6 text-orange-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl md:text-2xl font-bold text-orange-400">
-                Potential Duplicate Submission
-              </h3>
-            </div>
-
-            <p className="text-neutral-300 mb-4 leading-relaxed">
-              We found a previous submission with similar information. This
-              might be a duplicate. Would you like to:
-            </p>
-
-            {duplicateMatch && (
-              <div className="bg-neutral-900/50 rounded-lg p-4 mb-4 border border-orange-400/20">
-                <p className="text-sm text-orange-400 font-medium mb-2">
-                  Previous Submission:
-                </p>
-                <div className="text-sm text-neutral-400 space-y-1">
-                  {duplicateMatch.customer_name && (
-                    <div>
-                      <span className="text-neutral-500">Name:</span>{" "}
-                      {duplicateMatch.customer_name}
-                    </div>
-                  )}
-                  {duplicateMatch.airtel_number && (
-                    <div>
-                      <span className="text-neutral-500">Airtel Number:</span>{" "}
-                      {maskPhoneNumber(duplicateMatch.airtel_number)}
-                    </div>
-                  )}
-                  {duplicateMatch.alternate_number && (
-                    <div>
-                      <span className="text-neutral-500">
-                        Alternate Number:
-                      </span>{" "}
-                      {maskPhoneNumber(duplicateMatch.alternate_number)}
-                    </div>
-                  )}
-                  {duplicateMatch.email && (
-                    <div>
-                      <span className="text-neutral-500">Email:</span>{" "}
-                      {duplicateMatch.email}
-                    </div>
-                  )}
-                  {duplicateMatch.created_at && (
-                    <div>
-                      <span className="text-neutral-500">Date:</span>{" "}
-                      {new Date(duplicateMatch.created_at).toLocaleDateString()}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div className="flex flex-col gap-3">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={async () => {
-                  // User wants to proceed anyway
-                  setShowDuplicateWarning(false);
-                  setIsSubmitting(true);
-
-                  try {
-                    const response = await fetch("/api/submit", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        customerName: customerName.trim(),
-                        airtelNumber: customerPhone,
-                        alternateNumber: customerAlternativeNumber,
-                        email: customerEmail.trim(),
-                        preferredPackage: selectedPackage,
-                        installationTown: installationTown,
-                        deliveryLandmark: deliveryLocation.trim(),
-                        installationLocation: installationLocation,
-                        visitDate: preferredDate,
-                        visitTime: preferredTime,
-                      }),
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                      if (data.savedToDatabase) {
-                        const errorMsg = `Your information was saved, but there was an issue submitting to our system. Our team will process it manually. Reference: ${
-                          data.leadId || "saved"
-                        }`;
-                        setSubmitStatus({
-                          state: "error",
-                          message: errorMsg,
-                        });
-                        setRobotMessage(
-                          "✅ Your info was saved! Our team will process it manually."
-                        );
-                        setIsSubmitting(false);
-                        return;
-                      }
-                      throw new Error(
-                        data.error || data.details || "Failed to submit form"
-                      );
-                    }
-
-                    setSubmitStatus({
-                      state: "success",
-                      message:
-                        "Form submitted successfully! We'll contact you soon.",
-                    });
-                    setRobotMessage(
-                      "🎉 Success! Your request has been submitted! We'll contact you soon!"
-                    );
-
-                    if (typeof window !== "undefined") {
-                      const nameToSave = customerName.trim() || "there";
-                      localStorage.setItem("customerName", nameToSave);
-                    }
-
-                    setTimeout(() => {
-                      window.location.href = "/thank-you";
-                    }, 1000);
-                  } catch (error: any) {
-                    console.error("Submission error:", error);
-                    setSubmitStatus({
-                      state: "error",
-                      message:
-                        error.message ||
-                        "Failed to submit form. Please try again.",
-                    });
-                    setRobotMessage(
-                      "❌ There was an error submitting your form. Please try again."
-                    );
-                    setIsSubmitting(false);
-                  }
-                }}
-                className="w-full py-3 px-6 bg-gradient-to-r from-orange-400 to-orange-600 text-neutral-900 font-semibold rounded-lg hover:from-orange-500 hover:to-orange-700 transition-all"
-              >
-                Continue Anyway
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  setShowDuplicateWarning(false);
-                  setDuplicateMatch(null);
-                  // Allow user to edit the form
-                }}
-                className="w-full py-3 px-6 bg-neutral-700 text-neutral-300 font-semibold rounded-lg hover:bg-neutral-600 transition-all border border-neutral-600"
-              >
-                Edit Form
-              </motion.button>
-            </div>
-          </motion.div>
-        </div>
-      )}
     </>
   );
 }
