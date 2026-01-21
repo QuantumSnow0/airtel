@@ -581,25 +581,20 @@ export default function TestDesktopPage() {
 
   // Town options for dropdown (matching locations.md, removed Lamu)
   const townOptions = [
-    "Nairobi",
-    "Mombasa",
-    "Kisumu",
-    "Nakuru",
+    "Bungoma",
     "Eldoret",
-    "Thika",
-    "Malindi",
-    "Kitale",
     "Garissa",
     "Kakamega",
-    "Nyeri",
-    "Meru",
-    "Machakos",
-    "Embu",
-    "Kericho",
-    "Bungoma",
-    "Busia",
-    "Homa Bay",
+    "Kilifi",
     "Kisii",
+    "Kisumu",
+    "Kitale",
+    "Machakos",
+    "Meru",
+    "Migori",
+    "Mombasa",
+    "Nairobi",
+    "Nakuru",
   ];
 
   // Time options (1 hour apart)

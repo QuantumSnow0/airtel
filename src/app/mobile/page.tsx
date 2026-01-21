@@ -663,61 +663,23 @@ export default function TestMobilePage() {
     []
   );
 
-  // Town options for dropdown (matching locations.md, removed Lamu)
+  // Town options for dropdown (reduced to 14 towns)
   const townOptions = useMemo(
     () => [
-      "Nairobi",
-      "Mombasa",
-      "Kisumu",
-      "Nakuru",
+      "Bungoma",
       "Eldoret",
-      "Thika",
-      "Malindi",
-      "Kitale",
       "Garissa",
       "Kakamega",
-      "Nyeri",
-      "Meru",
-      "Machakos",
-      "Embu",
-      "Kericho",
-      "Bungoma",
-      "Busia",
-      "Homa Bay",
-      "Kisii",
-      "Bomet",
-      "Chuka",
-      "Isiolo",
-      "Iten",
-      "Kabarnet",
-      "Kapenguria",
-      "Kapsabet",
-      "Kerugoya",
       "Kilifi",
-      "Kitengela",
-      "Kitui",
-      "Lodwar",
-      "Luanda",
-      "Mandera",
-      "Maralal",
-      "Marsabit",
-      "Maua",
+      "Kisii",
+      "Kisumu",
+      "Kitale",
+      "Machakos",
+      "Meru",
       "Migori",
-      "Murang'a",
-      "Naivasha",
-      "Nanyuki",
-      "Narok",
-      "Nyahururu",
-      "Nyamira",
-      "Ruiru",
-      "Siaya",
-      "Voi",
-      "Wajir",
-      "Webuye",
-      "Wote",
-      "Olkalou",
-      "Magumu",
-      "Mwea",
+      "Mombasa",
+      "Nairobi",
+      "Nakuru",
     ],
     []
   );
@@ -2908,52 +2870,6 @@ export default function TestMobilePage() {
                       {installationTown || ""}
                     </span>
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center justify-center">
-                      {/* GPS Location Icon - Show when town is not selected */}
-                      {!installationTown && (
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setShowMapPicker(true);
-                            scrollToStep2();
-                          }}
-                          className="relative p-1.5 rounded-full hover:bg-yellow-400/10 transition-colors animate-subtle-glow group flex items-center justify-center cursor-pointer"
-                          role="button"
-                          tabIndex={0}
-                          aria-label="Use current location"
-                          title="Tap to use your current location"
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setShowMapPicker(true);
-                              scrollToStep2();
-                            }
-                          }}
-                        >
-                          {/* Pulsing ring effect */}
-                          <div className="absolute inset-0 rounded-full border-2 border-yellow-400/40 animate-pulse-ring"></div>
-                          {/* GPS icon */}
-                          <svg
-                            className="w-5 h-5 text-yellow-400 relative z-10"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
-                          </svg>
-                        </div>
-                      )}
                       {/* Check icon - Show when valid */}
                       {townBlurred && isTownValid && (
                         <svg
