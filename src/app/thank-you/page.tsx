@@ -36,7 +36,7 @@ export default function ThankYouPage() {
   useEffect(() => {
     if (!mounted || isMuted) return;
 
-    const thankYouMessage = `Thank you ${customerName}! Your request has been submitted successfully. Our qualified technician will contact you within 24 to 48 hours to confirm your installation details.`;
+    const thankYouMessage = `Thank you ${customerName}! Your request has been submitted successfully. Our qualified technician will call you from 0733 100 000 within 24 to 48 hours to confirm your installation details. Please answer the call! If you miss it or want to call back, please call 0733 100 500.`;
 
     const speakText = async (text: string) => {
       try {
@@ -315,51 +315,161 @@ export default function ThankYouPage() {
                 </p>
               </motion.div>
 
-              {/* Simple Message */}
+              {/* Urgency Message */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-center mb-6"
               >
-                <p className="text-base md:text-lg text-neutral-400 leading-relaxed max-w-md mx-auto">
+                <div className="bg-gradient-to-r from-yellow-400/20 via-yellow-500/20 to-yellow-400/20 border-2 border-yellow-400/40 rounded-xl p-4 md:p-6 mb-4 max-w-2xl mx-auto">
+                  <div className="flex items-start gap-3 mb-3">
+                    <svg
+                      className="w-6 h-6 md:w-7 md:h-7 text-yellow-400 flex-shrink-0 mt-0.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <div className="text-left">
+                      <h3 className="text-yellow-400 font-bold text-base md:text-lg mb-2">
+                        ⚠️ Important: Answer Our Call!
+                      </h3>
+                      <p className="text-white text-sm md:text-base leading-relaxed mb-2">
+                        Our technician will{" "}
+                        <span className="font-bold text-yellow-400">
+                          call you from 0733 100 000
+                        </span>{" "}
+                        within 24-48 hours to schedule your installation.
+                      </p>
+                      <p className="text-yellow-400 font-semibold text-sm md:text-base mb-1">
+                        📞 Note: 0733 100 000 is one-way only (you can't call it back)
+                      </p>
+                      <p className="text-white font-semibold text-sm md:text-base">
+                        ✅ If you miss the call or want to call back, use{" "}
+                        <span className="text-yellow-400">0733 100 500</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-base md:text-lg text-neutral-300 leading-relaxed max-w-md mx-auto mb-4">
                   {customerName.charAt(0).toUpperCase() + customerName.slice(1)}
                   , our qualified technician will contact you within 24-48 hours
                   to confirm your installation details.
                 </p>
               </motion.div>
 
-              {/* Enquiries Section */}
+              {/* Phone Number Section - Prominent */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
                 className="text-center mb-8"
               >
-                <p className="text-sm md:text-base text-neutral-500 mb-3">
-                  For enquiries, contact us:
-                </p>
-                <a
-                  href="tel:+254733100500"
-                  className="inline-flex items-center gap-2 text-yellow-400 hover:text-yellow-500 transition-colors"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                  <span className="text-lg md:text-xl font-medium">
-                    0733 100 500
-                  </span>
-                </a>
+                <div className="bg-gradient-to-r from-yellow-400/10 via-yellow-500/10 to-yellow-400/10 border-2 border-yellow-400/50 rounded-xl p-4 md:p-6 max-w-md mx-auto">
+                  <div className="mb-3">
+                    <p className="text-xs md:text-sm text-neutral-400 mb-1">
+                      We'll call you from:
+                    </p>
+                    <p className="text-base md:text-lg text-neutral-300 font-medium">
+                      0733 100 000
+                    </p>
+                    <p className="text-xs md:text-sm text-yellow-400 mt-1">
+                      (One-way number - you can't call this back)
+                    </p>
+                  </div>
+                  
+                  <div className="border-t border-yellow-400/30 pt-3 mt-3">
+                    <p className="text-sm md:text-base text-neutral-300 mb-2 font-medium">
+                      If you miss our call or want to call back:
+                    </p>
+                    <a
+                      href="tel:+254733100500"
+                      className="inline-flex items-center gap-3 text-yellow-400 hover:text-yellow-300 transition-all group"
+                    >
+                      <div className="bg-yellow-400/20 rounded-full p-2 group-hover:bg-yellow-400/30 transition-colors">
+                        <svg
+                          className="w-6 h-6 md:w-7 md:h-7"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                          />
+                        </svg>
+                      </div>
+                      <span className="text-xl md:text-2xl font-bold">
+                        0733 100 500
+                      </span>
+                    </a>
+                    <p className="text-xs md:text-sm text-yellow-400 mt-2 font-medium">
+                      ✅ Use this number to call us back
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Urgency & Benefits Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="mb-8 max-w-2xl mx-auto"
+              >
+                <div className="bg-gradient-to-br from-yellow-500/10 via-yellow-400/5 to-transparent border border-yellow-400/30 rounded-xl p-5 md:p-6">
+                  <h3 className="text-yellow-400 font-bold text-lg md:text-xl mb-3 text-center">
+                    🚀 Get Connected Fast - Limited Availability!
+                  </h3>
+                  <div className="space-y-3 text-sm md:text-base text-neutral-300">
+                    <div className="flex items-start gap-3">
+                      <span className="text-yellow-400 text-xl">⚡</span>
+                      <p>
+                        <span className="font-semibold text-yellow-400">
+                          Ultra-fast 5G speeds
+                        </span>{" "}
+                        - Stream, work, and game without lag
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-yellow-400 text-xl">🏠</span>
+                      <p>
+                        <span className="font-semibold text-yellow-400">
+                          Professional installation
+                        </span>{" "}
+                        - Our expert technicians set everything up for you
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-yellow-400 text-xl">📦</span>
+                      <p>
+                        <span className="font-semibold text-yellow-400">
+                          Complete kit included
+                        </span>{" "}
+                        - Everything you need in one package
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-yellow-400 text-xl">⏰</span>
+                      <p>
+                        <span className="font-semibold text-yellow-400">
+                          First-come, first-served
+                        </span>{" "}
+                        - Answer our call quickly to secure your installation slot!
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             </div>
 
