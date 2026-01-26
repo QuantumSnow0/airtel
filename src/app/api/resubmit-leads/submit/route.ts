@@ -4,13 +4,14 @@ import { randomUUID } from "crypto";
 
 const MS_FORMS_FORM_ID =
   process.env.MS_FORMS_FORM_ID ||
-  "JzfHFpyXgk2zp-tqL93-V1fdJne7SIlMnh7yZpkW8f5UQjc4M0wwWU9HRTJPRjMxWlc5QjRLOUhaMC4u";
+  "JzfHFpyXgk2zp-tqL93-V1fdJne7SIlMnh7yZpkW8f5UNE5JMkcyMEtYSDhZUEdZUVoyUDZBSlA1Wi4u";
 const MS_FORMS_TENANT_ID =
   process.env.MS_FORMS_TENANT_ID || "16c73727-979c-4d82-b3a7-eb6a2fddfe57";
 const MS_FORMS_USER_ID =
   process.env.MS_FORMS_USER_ID || "7726dd57-48bb-4c89-9e1e-f2669916f1fe";
 const MS_FORMS_RESPONSE_PAGE_URL =
-  process.env.MS_FORMS_RESPONSE_PAGE_URL || "https://forms.cloud.microsoft/";
+  process.env.MS_FORMS_RESPONSE_PAGE_URL ||
+  `https://forms.office.com/pages/responsepage.aspx?id=${MS_FORMS_FORM_ID}&route=shorturl`;
 
 // Question IDs from Microsoft Forms
 const QUESTION_IDS = {
@@ -93,6 +94,22 @@ export async function POST(request: NextRequest) {
       visit_date,
       visit_time,
     } = resubmitLead;
+
+    // Format visit date to YYYY-MM-DD format (required by MS Forms)
+    const formatVisitDate = (dateStr: string): string => {
+      // If already in YYYY-MM-DD format, return as-is
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+        return dateStr;
+      }
+      // Convert from M/d/yyyy to YYYY-MM-DD
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) {
+        // If date parsing fails, return original
+        return dateStr;
+      }
+      return date.toISOString().split("T")[0];
+    };
+    const formattedVisitDate = formatVisitDate(visit_date);
 
     // Normalize town name for MS Forms (remove spaces, convert to uppercase)
     const normalizeTownForMSForms = (town: string): string => {
@@ -294,7 +311,7 @@ export async function POST(request: NextRequest) {
       },
       {
         questionId: QUESTION_IDS.visitDate,
-        answer1: visit_date,
+        answer1: formattedVisitDate,
       },
       {
         questionId: QUESTION_IDS.visitTime,
@@ -326,7 +343,7 @@ export async function POST(request: NextRequest) {
 
     // Step 5: Submit to Microsoft Forms
     const encodedFormId = encodeURIComponent(MS_FORMS_FORM_ID);
-    const msFormsUrl = `https://forms.guest.usercontent.microsoft/formapi/api/${tenantId}/users/${userId}/forms(%27${encodedFormId}%27)/responses`;
+    const msFormsUrl = `https://forms.office.com/formapi/api/${tenantId}/users/${userId}/forms(%27${encodedFormId}%27)/responses`;
 
     let msFormsResponseId: number | null = null;
 
@@ -341,20 +358,20 @@ export async function POST(request: NextRequest) {
           authorization: "",
           Connection: "keep-alive",
           "Content-Type": "application/json",
-          Host: "forms.guest.usercontent.microsoft",
+          Host: "forms.office.com",
           "odata-maxverion": "4.0",
           "odata-version": "4.0",
-          Origin: "https://forms.cloud.microsoft",
-          Referer: "https://forms.cloud.microsoft/",
+          Origin: "https://forms.office.com",
+          Referer: `https://forms.office.com/pages/responsepage.aspx?id=${MS_FORMS_FORM_ID}&route=shorturl`,
           "sec-ch-ua":
-            '"Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"',
+            '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
           "sec-ch-ua-mobile": "?0",
           "sec-ch-ua-platform": '"Windows"',
           "Sec-Fetch-Dest": "empty",
           "Sec-Fetch-Mode": "cors",
-          "Sec-Fetch-Site": "cross-site",
+          "Sec-Fetch-Site": "same-origin",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
           "x-correlationid": correlationId,
           "x-ms-form-muid": muid || "",
           "x-ms-form-request-ring": "business",

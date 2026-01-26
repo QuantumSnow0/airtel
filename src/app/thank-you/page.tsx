@@ -315,17 +315,17 @@ export default function ThankYouPage() {
                 </p>
               </motion.div>
 
-              {/* Urgency Message */}
+              {/* What Happens Next Section */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-center mb-6"
+                className="mb-8 max-w-2xl mx-auto"
               >
-                <div className="bg-gradient-to-r from-yellow-400/20 via-yellow-500/20 to-yellow-400/20 border-2 border-yellow-400/40 rounded-xl p-4 md:p-6 mb-4 max-w-2xl mx-auto">
-                  <div className="flex items-start gap-3 mb-3">
+                <div className="bg-gradient-to-br from-blue-500/10 via-blue-400/5 to-transparent border border-blue-400/30 rounded-xl p-5 md:p-6">
+                  <h3 className="text-blue-400 font-bold text-lg md:text-xl mb-4 text-center flex items-center justify-center gap-2">
                     <svg
-                      className="w-6 h-6 md:w-7 md:h-7 text-yellow-400 flex-shrink-0 mt-0.5"
+                      className="w-5 h-5 md:w-6 md:h-6"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -334,93 +334,141 @@ export default function ThankYouPage() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
                       />
                     </svg>
-                    <div className="text-left">
-                      <h3 className="text-yellow-400 font-bold text-base md:text-lg mb-2">
-                        ⚠️ Important: Answer Our Call!
-                      </h3>
-                      <p className="text-white text-sm md:text-base leading-relaxed mb-2">
-                        Our technician will{" "}
-                        <span className="font-bold text-yellow-400">
-                          call you from 0733 100 000
-                        </span>{" "}
-                        within 24-48 hours to schedule your installation.
-                      </p>
-                      <p className="text-yellow-400 font-semibold text-sm md:text-base mb-1">
-                        📞 Note: 0733 100 000 is one-way only (you can't call it back)
-                      </p>
-                      <p className="text-white font-semibold text-sm md:text-base">
-                        ✅ If you miss the call or want to call back, use{" "}
-                        <span className="text-yellow-400">0733 100 500</span>
-                      </p>
-                    </div>
-                  </div>
+                    What Happens Next?
+                  </h3>
+                  <p className="text-neutral-300 text-sm md:text-base leading-relaxed text-center">
+                    Our qualified technician will contact you within{" "}
+                    <span className="font-semibold text-blue-400">
+                      24-48 hours
+                    </span>{" "}
+                    to confirm your installation details and schedule a convenient
+                    time for setup.
+                  </p>
                 </div>
-
-                <p className="text-base md:text-lg text-neutral-300 leading-relaxed max-w-md mx-auto mb-4">
-                  {customerName.charAt(0).toUpperCase() + customerName.slice(1)}
-                  , our qualified technician will contact you within 24-48 hours
-                  to confirm your installation details.
-                </p>
               </motion.div>
 
-              {/* Phone Number Section - Prominent */}
+              {/* Contact Information - Prominent */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                className="text-center mb-8"
+                className="mb-8 max-w-2xl mx-auto"
               >
-                <div className="bg-gradient-to-r from-yellow-400/10 via-yellow-500/10 to-yellow-400/10 border-2 border-yellow-400/50 rounded-xl p-4 md:p-6 max-w-md mx-auto">
-                  <div className="mb-3">
-                    <p className="text-xs md:text-sm text-neutral-400 mb-1">
-                      We'll call you from:
-                    </p>
-                    <p className="text-base md:text-lg text-neutral-300 font-medium">
-                      0733 100 000
-                    </p>
-                    <p className="text-xs md:text-sm text-yellow-400 mt-1">
-                      (One-way number - you can't call this back)
-                    </p>
-                  </div>
-                  
-                  <div className="border-t border-yellow-400/30 pt-3 mt-3">
-                    <p className="text-sm md:text-base text-neutral-300 mb-2 font-medium">
-                      If you miss our call or want to call back:
-                    </p>
-                    <a
-                      href="tel:+254733100500"
-                      className="inline-flex items-center gap-3 text-yellow-400 hover:text-yellow-300 transition-all group"
+                <div className="bg-gradient-to-r from-yellow-400/20 via-yellow-500/20 to-yellow-400/20 border-2 border-yellow-400/50 rounded-xl p-5 md:p-6">
+                  <h3 className="text-yellow-400 font-bold text-lg md:text-xl mb-4 text-center flex items-center justify-center gap-2">
+                    <svg
+                      className="w-5 h-5 md:w-6 md:h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      <div className="bg-yellow-400/20 rounded-full p-2 group-hover:bg-yellow-400/30 transition-colors">
-                        <svg
-                          className="w-6 h-6 md:w-7 md:h-7"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                          />
-                        </svg>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                      />
+                    </svg>
+                    Contact Information
+                  </h3>
+
+                  <div className="space-y-4">
+                    {/* Incoming Call Number */}
+                    <div className="bg-neutral-900/50 rounded-lg p-4 border border-yellow-400/30">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="bg-yellow-400/20 rounded-full p-2">
+                          <svg
+                            className="w-5 h-5 text-yellow-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                            />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs md:text-sm text-neutral-400 mb-1">
+                            We'll call you from:
+                          </p>
+                          <p className="text-xl md:text-2xl font-bold text-yellow-400">
+                            0733 100 000
+                          </p>
+                          <p className="text-xs md:text-sm text-yellow-400/80 mt-1">
+                            ⚠️ One-way number (you can't call this back)
+                          </p>
+                        </div>
                       </div>
-                      <span className="text-xl md:text-2xl font-bold">
-                        0733 100 500
-                      </span>
-                    </a>
-                    <p className="text-xs md:text-sm text-yellow-400 mt-2 font-medium">
-                      ✅ Use this number to call us back
+                    </div>
+
+                    {/* Call Back Number */}
+                    <div className="bg-neutral-900/50 rounded-lg p-4 border border-yellow-400/30">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="bg-yellow-400/20 rounded-full p-2">
+                          <svg
+                            className="w-5 h-5 text-yellow-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                            />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs md:text-sm text-neutral-400 mb-1">
+                            If you miss our call or want to call back:
+                          </p>
+                          <a
+                            href="tel:+254733100500"
+                            className="inline-flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-all group"
+                          >
+                            <span className="text-xl md:text-2xl font-bold">
+                              0733 100 500
+                            </span>
+                            <svg
+                              className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </a>
+                          <p className="text-xs md:text-sm text-green-400 mt-1">
+                            ✅ Tap to call us back
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 p-3 bg-yellow-400/10 rounded-lg border border-yellow-400/30">
+                    <p className="text-yellow-400 text-xs md:text-sm text-center font-medium">
+                      ⚠️ Please answer calls from 0733 100 000 to secure your
+                      installation slot!
                     </p>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Urgency & Benefits Section */}
+              {/* Why Answer the Call - Urgency & Benefits Combined */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -428,10 +476,10 @@ export default function ThankYouPage() {
                 className="mb-8 max-w-2xl mx-auto"
               >
                 <div className="bg-gradient-to-br from-yellow-500/10 via-yellow-400/5 to-transparent border border-yellow-400/30 rounded-xl p-5 md:p-6">
-                  <h3 className="text-yellow-400 font-bold text-lg md:text-xl mb-3 text-center">
-                    🚀 Get Connected Fast - Limited Availability!
+                  <h3 className="text-yellow-400 font-bold text-lg md:text-xl mb-4 text-center">
+                    🚀 Why Answer Our Call? Limited Availability!
                   </h3>
-                  <div className="space-y-3 text-sm md:text-base text-neutral-300">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm md:text-base text-neutral-300">
                     <div className="flex items-start gap-3">
                       <span className="text-yellow-400 text-xl">⚡</span>
                       <p>
@@ -447,7 +495,7 @@ export default function ThankYouPage() {
                         <span className="font-semibold text-yellow-400">
                           Professional installation
                         </span>{" "}
-                        - Our expert technicians set everything up for you
+                        - Expert technicians set everything up
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
@@ -465,7 +513,7 @@ export default function ThankYouPage() {
                         <span className="font-semibold text-yellow-400">
                           First-come, first-served
                         </span>{" "}
-                        - Answer our call quickly to secure your installation slot!
+                        - Answer quickly to secure your slot!
                       </p>
                     </div>
                   </div>
@@ -473,210 +521,162 @@ export default function ThankYouPage() {
               </motion.div>
             </div>
 
-            {/* Gadget Details Section */}
+            {/* What You're Getting - Gadget Details Section */}
             <div className="max-w-5xl mx-auto">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
                 className="mt-8"
               >
-                <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                  5G SmartConnect Kit
-                </h2>
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                    What You're Getting
+                  </h2>
+                  <p className="text-neutral-400 text-sm md:text-base">
+                    Complete 5G SmartConnect Kit - Everything included
+                  </p>
+                </div>
 
-                {/* Three Parts - Each with its own card */}
-                <div className="space-y-3 md:space-y-4">
+                {/* Grid Layout for Gadgets */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                   {/* Antenna Card */}
-                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-3 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
-                    <div className="flex items-center gap-3 md:gap-4">
-                      {/* Image on Left */}
-                      <div className="flex-shrink-0">
-                        <div className="w-24 h-24 md:w-32 md:h-32">
-                          <img
-                            src="/antenna.png"
-                            alt="5G Antenna"
-                            className="w-full h-full object-contain drop-shadow-lg"
-                          />
-                        </div>
+                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-5 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] hover:border-yellow-400/40 transition-colors">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-20 h-20 md:w-24 md:h-24 mb-3">
+                        <img
+                          src="/antenna.png"
+                          alt="5G Antenna"
+                          className="w-full h-full object-contain drop-shadow-lg"
+                        />
                       </div>
-
-                      {/* Info on Right */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-white font-semibold text-sm md:text-xl mb-1 md:mb-2">
-                          5G Antenna
-                        </h3>
-                        <p className="text-neutral-400 text-xs md:text-base leading-relaxed">
-                          High-gain directional antenna designed to capture the
-                          strongest 5G signal for optimal performance and
-                          coverage.
-                        </p>
-                      </div>
+                      <h3 className="text-white font-semibold text-base md:text-lg mb-2">
+                        5G Antenna
+                      </h3>
+                      <p className="text-neutral-400 text-xs md:text-sm leading-relaxed">
+                        High-gain directional antenna for optimal 5G signal
+                        capture and coverage.
+                      </p>
                     </div>
                   </div>
 
                   {/* Router Card */}
-                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-3 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
-                    <div className="flex items-center gap-3 md:gap-4">
-                      {/* Image on Left */}
-                      <div className="flex-shrink-0">
-                        <div className="w-24 h-24 md:w-32 md:h-32">
-                          <img
-                            src="/5grouter.png"
-                            alt="5G Router"
-                            className="w-full h-full object-contain drop-shadow-lg"
-                            onError={(e) => {
-                              e.currentTarget.src =
-                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='12'%3ERouter%3C/text%3E%3C/svg%3E";
-                            }}
-                          />
-                        </div>
+                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-5 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] hover:border-yellow-400/40 transition-colors">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-20 h-20 md:w-24 md:h-24 mb-3">
+                        <img
+                          src="/5grouter.png"
+                          alt="5G Router"
+                          className="w-full h-full object-contain drop-shadow-lg"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='12'%3ERouter%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
                       </div>
-
-                      {/* Info on Right */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-white font-semibold text-sm md:text-xl mb-1 md:mb-2">
-                          5G Router
-                        </h3>
-                        <p className="text-neutral-400 text-xs md:text-base leading-relaxed">
-                          Advanced router with dual-band WiFi, multiple Ethernet
-                          ports, and intelligent signal management for seamless
-                          connectivity.
-                        </p>
-                      </div>
+                      <h3 className="text-white font-semibold text-base md:text-lg mb-2">
+                        5G Router
+                      </h3>
+                      <p className="text-neutral-400 text-xs md:text-sm leading-relaxed">
+                        Advanced router with dual-band WiFi and intelligent signal
+                        management.
+                      </p>
                     </div>
                   </div>
 
                   {/* White Ethernet Cable Card */}
-                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-3 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
-                    <div className="flex items-center gap-3 md:gap-4">
-                      {/* Image on Left */}
-                      <div className="flex-shrink-0">
-                        <div className="w-24 h-24 md:w-32 md:h-32">
-                          <img
-                            src="/ethernet-white.png"
-                            alt="Outdoor White Ethernet Cable"
-                            className="w-full h-full object-contain drop-shadow-lg"
-                            onError={(e) => {
-                              e.currentTarget.src =
-                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3EEthernet%3C/text%3E%3C/svg%3E";
-                            }}
-                          />
-                        </div>
+                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-5 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] hover:border-yellow-400/40 transition-colors">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-20 h-20 md:w-24 md:h-24 mb-3">
+                        <img
+                          src="/ethernet-white.png"
+                          alt="Outdoor White Ethernet Cable"
+                          className="w-full h-full object-contain drop-shadow-lg"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3EEthernet%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
                       </div>
-
-                      {/* Info on Right */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-white font-semibold text-sm md:text-xl mb-1 md:mb-2">
-                          Outdoor White Ethernet Cable
-                        </h3>
-                        <p className="text-neutral-400 text-xs md:text-base leading-relaxed">
-                          Long outdoor-rated white Ethernet cable designed to
-                          connect your router to the 5G antenna.
-                          Weather-resistant and built for reliable signal
-                          transmission over extended distances, ensuring optimal
-                          connectivity between your indoor router and outdoor
-                          antenna.
-                        </p>
-                      </div>
+                      <h3 className="text-white font-semibold text-base md:text-lg mb-2">
+                        Outdoor White Ethernet Cable
+                      </h3>
+                      <p className="text-neutral-400 text-xs md:text-sm leading-relaxed">
+                        Weather-resistant cable connecting router to antenna for
+                        reliable signal transmission.
+                      </p>
                     </div>
                   </div>
 
                   {/* Power Bank Card */}
-                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-3 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
-                    <div className="flex items-center gap-3 md:gap-4">
-                      {/* Image on Left */}
-                      <div className="flex-shrink-0">
-                        <div className="w-28 h-28 md:w-40 md:h-40">
-                          <img
-                            src="/powerbank.png"
-                            alt="Power Bank"
-                            className="w-full h-full object-cover drop-shadow-lg"
-                            onError={(e) => {
-                              e.currentTarget.src =
-                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3EPower Bank%3C/text%3E%3C/svg%3E";
-                            }}
-                          />
-                        </div>
+                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-5 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] hover:border-yellow-400/40 transition-colors">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-20 h-20 md:w-24 md:h-24 mb-3">
+                        <img
+                          src="/powerbank.png"
+                          alt="Power Bank"
+                          className="w-full h-full object-cover drop-shadow-lg rounded-lg"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3EPower Bank%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
                       </div>
-
-                      {/* Info on Right */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-white font-semibold text-sm md:text-xl mb-1 md:mb-2">
-                          Power Bank
-                        </h3>
-                        <p className="text-neutral-400 text-xs md:text-base leading-relaxed">
-                          High-capacity backup power supply ensuring your
-                          connection stays active even during power outages,
-                          keeping you connected 24/7.
-                        </p>
-                      </div>
+                      <h3 className="text-white font-semibold text-base md:text-lg mb-2">
+                        Power Bank
+                      </h3>
+                      <p className="text-neutral-400 text-xs md:text-sm leading-relaxed">
+                        High-capacity backup power to keep you connected 24/7,
+                        even during outages.
+                      </p>
                     </div>
                   </div>
 
                   {/* Yellow Ethernet Cable Card */}
-                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-3 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
-                    <div className="flex items-center gap-3 md:gap-4">
-                      {/* Image on Left */}
-                      <div className="flex-shrink-0">
-                        <div className="w-24 h-24 md:w-32 md:h-32">
-                          <img
-                            src="/ethernet-yellow.png"
-                            alt="Yellow Ethernet Cable"
-                            className="w-full h-full object-contain drop-shadow-lg"
-                            onError={(e) => {
-                              e.currentTarget.src =
-                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3EEthernet%3C/text%3E%3C/svg%3E";
-                            }}
-                          />
-                        </div>
+                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-5 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] hover:border-yellow-400/40 transition-colors">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-20 h-20 md:w-24 md:h-24 mb-3">
+                        <img
+                          src="/ethernet-yellow.png"
+                          alt="Yellow Ethernet Cable"
+                          className="w-full h-full object-contain drop-shadow-lg"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3EEthernet%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
                       </div>
-
-                      {/* Info on Right */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-white font-semibold text-sm md:text-xl mb-1 md:mb-2">
-                          Yellow Ethernet Cable
-                        </h3>
-                        <p className="text-neutral-400 text-xs md:text-base leading-relaxed">
-                          High-quality yellow Ethernet cable with RJ45
-                          connectors for reliable wired connections between your
-                          router and devices, ensuring stable and fast data
-                          transfer for all your connected equipment.
-                        </p>
-                      </div>
+                      <h3 className="text-white font-semibold text-base md:text-lg mb-2">
+                        Yellow Ethernet Cable
+                      </h3>
+                      <p className="text-neutral-400 text-xs md:text-sm leading-relaxed">
+                        High-quality cable with RJ45 connectors for reliable wired
+                        connections to your devices.
+                      </p>
                     </div>
                   </div>
 
                   {/* Power Supply/Charger Card */}
-                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-3 md:p-6 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] overflow-visible">
-                    <div className="flex items-center gap-3 md:gap-4">
-                      {/* Image on Left */}
-                      <div className="flex-shrink-0">
-                        <div className="w-24 h-24 md:w-32 md:h-32">
-                          <img
-                            src="/charger.png"
-                            alt="Power Supply/Charger"
-                            className="w-full h-full object-contain drop-shadow-lg"
-                            onError={(e) => {
-                              e.currentTarget.src =
-                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3ECharger%3C/text%3E%3C/svg%3E";
-                            }}
-                          />
-                        </div>
+                  <div className="relative bg-neutral-800/50 backdrop-blur-sm rounded-xl p-4 md:p-5 border border-yellow-400/20 shadow-[0_0_30px_rgba(251,191,36,0.1)] hover:border-yellow-400/40 transition-colors">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-20 h-20 md:w-24 md:h-24 mb-3">
+                        <img
+                          src="/charger.png"
+                          alt="Power Supply/Charger"
+                          className="w-full h-full object-contain drop-shadow-lg"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23fbbf24' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='10'%3ECharger%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
                       </div>
-
-                      {/* Info on Right */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-white font-semibold text-sm md:text-xl mb-1 md:mb-2">
-                          Power Supply/Charger
-                        </h3>
-                        <p className="text-neutral-400 text-xs md:text-base leading-relaxed">
-                          Universal power adapter with UK plug, providing 12V DC
-                          output for your router and other devices. Certified
-                          and safe, ensuring reliable power delivery for your 5G
-                          SmartConnect kit.
-                        </p>
-                      </div>
+                      <h3 className="text-white font-semibold text-base md:text-lg mb-2">
+                        Power Supply/Charger
+                      </h3>
+                      <p className="text-neutral-400 text-xs md:text-sm leading-relaxed">
+                        Universal power adapter with UK plug, providing reliable
+                        12V DC power for your devices.
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -10,6 +10,7 @@ import {
 } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import ProductCarousel from "./ProductCarousel";
 import dynamic from "next/dynamic";
 import { usePackage } from "../contexts/PackageContext";
