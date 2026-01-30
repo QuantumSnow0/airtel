@@ -355,6 +355,46 @@ export default function PricingCards() {
                 </div>
               </div>
             </div>
+
+            {/* Recommended - Center of bottom border (same style as price) */}
+            <div
+              className="absolute inset-x-0 bottom-0 flex justify-center pointer-events-none"
+              style={{ zIndex: 30 }}
+            >
+              <div
+                className="relative flex flex-col items-center"
+                style={{ marginBottom: "-2px" }}
+              >
+                <div
+                  className="absolute left-1/2 -translate-x-1/2"
+                  style={{
+                    bottom: "0px",
+                    background: "rgb(38, 38, 38)",
+                    height: "2px",
+                    width: "calc(100% + 16px)",
+                    minWidth: "80px",
+                    borderBottomLeftRadius: "8px",
+                    borderBottomRightRadius: "8px",
+                  }}
+                />
+                <div
+                  className="relative flex justify-center"
+                  style={{ transform: "translateY(50%)" }}
+                >
+                  <span
+                    className="text-xs font-extrabold leading-tight whitespace-nowrap"
+                    style={{
+                      background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    Recommended
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

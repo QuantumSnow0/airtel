@@ -82,6 +82,22 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/product/overview"
+                  className="text-neutral-400 hover:text-yellow-400 transition-colors"
+                >
+                  Product Overview
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/product/troubleshooting"
+                  className="text-neutral-400 hover:text-yellow-400 transition-colors"
+                >
+                  Troubleshooting
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/privacy-policy"
                   className="text-neutral-400 hover:text-yellow-400 transition-colors"
                 >

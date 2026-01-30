@@ -75,7 +75,7 @@ export const metadata: Metadata = {
       {
         url: "https://www.airtel5grouter.co.ke/airtel.png",
         width: 1200,
-        height: 630,
+        height: 900,
         alt: "Airtel 5G Smart Connect Outdoor Unit",
       },
     ],
