@@ -1,6 +1,12 @@
 "use client";
+declare global {
+  interface Window {
+    fbq?: (...args: unknown[]) => void;
+  }
+}
 
 import { Poppins } from "next/font/google";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 
@@ -31,6 +37,12 @@ export default function ThankYouPage() {
       }
     }
   }, []);
+// 🔥 Track Meta conversion
+useEffect(() => {
+  if (typeof window !== "undefined" && window.fbq) {
+    window.fbq("track", "CompleteRegistration");
+  }
+}, []);
 
   // Speak thank you message
   useEffect(() => {
@@ -162,7 +174,7 @@ export default function ThankYouPage() {
         transition={{ duration: 0.4 }}
         className="absolute top-6 left-4 md:top-8 md:left-8 z-50"
       >
-        <a
+        <Link
           href="/"
           className="group flex items-center gap-2 px-4 py-2.5 md:px-5 md:py-3 rounded-full bg-neutral-800/80 backdrop-blur-md border border-yellow-400/30 hover:bg-neutral-800/90 hover:border-yellow-400/50 hover:shadow-[0_0_20px_rgba(251,191,36,0.3)] transition-all duration-300"
         >
@@ -182,7 +194,7 @@ export default function ThankYouPage() {
           <span className="text-sm md:text-base font-medium text-yellow-400 group-hover:text-yellow-300 transition-colors duration-300">
             Back
           </span>
-        </a>
+        </Link>
       </motion.div>
 
       <div className="px-4 py-8 md:py-12">
