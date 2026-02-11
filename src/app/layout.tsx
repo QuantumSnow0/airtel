@@ -412,6 +412,22 @@ export default function RootLayout({
   gtag('config', 'AW-17792435351');
   `}
         </Script>
+        {/* Facebook Pixel */}
+        <Script
+          strategy="afterInteractive"
+          src="https://connect.facebook.net/en_US/fbevents.js"
+        />
+        <Script
+          id="fb-pixel"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.fbq = window.fbq || function(){(fbq.q=fbq.q||[]).push(arguments)};
+              fbq('init', '1569731931119518');
+              fbq('track', 'PageView');
+            `,
+          }}
+        />
         <PackageProvider>
           <div className="flex flex-col min-h-screen">
             <main className="flex-grow relative">{children}</main>
