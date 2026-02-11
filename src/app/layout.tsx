@@ -7,6 +7,11 @@ import "./globals.css";
 
 // Trigger redeploy
 
+/** Stable date for schema.org priceValidUntil (1 year from module load) */
+const PRICE_VALID_UNTIL = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+  .toISOString()
+  .split("T")[0];
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -233,7 +238,7 @@ export default function RootLayout({
         priceCurrency: "KES",
         availability: "https://schema.org/InStock",
         url: "https://www.airtel5grouter.co.ke",
-        priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+        priceValidUntil: PRICE_VALID_UNTIL,
         seller: {
           "@type": "Organization",
           name: "Airtel Kenya",
@@ -287,7 +292,7 @@ export default function RootLayout({
         priceCurrency: "KES",
         availability: "https://schema.org/InStock",
         url: "https://www.airtel5grouter.co.ke",
-        priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+        priceValidUntil: PRICE_VALID_UNTIL,
         seller: {
           "@type": "Organization",
           name: "Airtel Kenya",
@@ -412,22 +417,35 @@ export default function RootLayout({
   gtag('config', 'AW-17792435351');
   `}
         </Script>
-        {/* Facebook Pixel */}
+        {/* Meta Pixel Code */}
         <Script
-          strategy="afterInteractive"
-          src="https://connect.facebook.net/en_US/fbevents.js"
-        />
-        <Script
-          id="fb-pixel"
+          id="meta-pixel"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              window.fbq = window.fbq || function(){(fbq.q=fbq.q||[]).push(arguments)};
-              fbq('init', '1569731931119518');
-              fbq('track', 'PageView');
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '754820643976855');
+fbq('track', 'PageView');
             `,
           }}
         />
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://www.facebook.com/tr?id=754820643976855&ev=PageView&noscript=1"
+            alt=""
+          />
+        </noscript>
+        {/* End Meta Pixel Code */}
         <PackageProvider>
           <div className="flex flex-col min-h-screen">
             <main className="flex-grow relative">{children}</main>
