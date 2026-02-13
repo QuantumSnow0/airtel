@@ -2341,7 +2341,7 @@ export default function TestMobilePage() {
           <div className="w-full">
             {VALENTINE_MODE && (
               <p className="text-center text-sm font-medium text-rose-300/90 mb-4" style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
-                Happy Valentine&apos;s 💕
+                💕 Stay Connected This Valentine&apos;s
               </p>
             )}
             <div className="text-center mb-6">
