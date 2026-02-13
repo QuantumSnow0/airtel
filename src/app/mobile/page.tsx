@@ -1,5 +1,8 @@
 "use client";
 
+/** Set to false to remove Valentine mood from whole page instantly. */
+const VALENTINE_MODE = true;
+
 import {
   useState,
   useRef,
@@ -1940,14 +1943,43 @@ export default function TestMobilePage() {
             box-shadow: 0 0 8px 2px rgba(251, 191, 36, 0.3);
           }
         }
+        @keyframes subtle-glow-valentine {
+          0%, 100% {
+            box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 8px 2px rgba(236, 72, 153, 0.3);
+          }
+        }
         .animate-subtle-glow {
           animation: subtle-glow 2s ease-in-out infinite;
         }
+        .valentine-theme .animate-subtle-glow {
+          animation: subtle-glow-valentine 2s ease-in-out infinite;
+        }
+        /* Valentine theme overrides - yellow/amber -> rose/pink */
+        .valentine-theme .text-yellow-400 { color: #ec4899 !important; }
+        .valentine-theme .text-yellow-300 { color: #f472b6 !important; }
+        .valentine-theme .border-yellow-400\\/60 { border-color: rgba(236,72,153,0.6) !important; }
+        .valentine-theme .border-yellow-400\\/50 { border-color: rgba(236,72,153,0.5) !important; }
+        .valentine-theme .border-yellow-400\\/40 { border-color: rgba(236,72,153,0.4) !important; }
+        .valentine-theme .border-yellow-400\\/30 { border-color: rgba(236,72,153,0.3) !important; }
+        .valentine-theme .bg-yellow-400 { background-color: #ec4899 !important; }
+        .valentine-theme .bg-yellow-400\\/30 { background-color: rgba(236,72,153,0.3) !important; }
+        .valentine-theme .bg-yellow-400\\/20 { background-color: rgba(236,72,153,0.2) !important; }
+        .valentine-theme .bg-yellow-400\\/10 { background-color: rgba(236,72,153,0.1) !important; }
+        .valentine-theme [class*="from-yellow"], .valentine-theme [class*="to-yellow"] { --tw-gradient-from: #ec4899; --tw-gradient-to: rgba(236,72,153,0); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+        .valentine-theme .focus\\:border-yellow-400\\/60:focus { border-color: rgba(236,72,153,0.6) !important; }
+        .valentine-theme .focus\\:shadow-\\[0_0_15px_rgba\\(251\\,191\\,36\\,0\\.2\\)\\]:focus { box-shadow: 0 0 15px rgba(236,72,153,0.2) !important; }
+        .valentine-theme .shadow-\\[0_0_15px_rgba\\(251\\,191\\,36\\,0\\.2\\)\\] { box-shadow: 0 0 15px rgba(236,72,153,0.2) !important; }
+        .valentine-theme .shadow-\\[0_0_20px_rgba\\(251\\,191\\,36\\,0\\.3\\)\\] { box-shadow: 0 0 20px rgba(236,72,153,0.3) !important; }
+        .valentine-theme input:focus, .valentine-theme button:focus { --tw-ring-color: rgba(236,72,153,0.2); }
+        .valentine-theme .hover\\:border-yellow-400\\/50:hover { border-color: rgba(236,72,153,0.5) !important; }
       `,
         }}
       />
       {/* Removed opacity animation to avoid blocking LCP - content renders immediately */}
-      <div className="min-h-screen bg-neutral-950">
+      <div className={`min-h-screen bg-neutral-950 ${VALENTINE_MODE ? "valentine-theme" : ""}`}>
         {/* Floating Robot Guide - Appears on scroll */}
         {robotVisible && !isBottomSheetOpen && (
           <motion.div
@@ -2178,7 +2210,7 @@ export default function TestMobilePage() {
                   className={`text-sm font-semibold ${poppins.variable}`}
                   style={{
                     fontFamily: "var(--font-poppins), sans-serif",
-                    background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                    background: VALENTINE_MODE ? "linear-gradient(135deg, #ffffff, #ec4899)" : "linear-gradient(135deg, #ffffff, #fbbf24)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -2307,12 +2339,17 @@ export default function TestMobilePage() {
         {/* Step 1: Choose Your Package - Renders immediately */}
         <section className="px-3 py-2" style={{ marginTop: "0" }}>
           <div className="w-full">
+            {VALENTINE_MODE && (
+              <p className="text-center text-sm font-medium text-rose-300/90 mb-4" style={{ fontFamily: "var(--font-poppins), sans-serif" }}>
+                Happy Valentine&apos;s 💕
+              </p>
+            )}
             <div className="text-center mb-6">
               <h2
                 className={`text-lg font-semibold text-white mb-2 ${poppins.variable}`}
                 style={{
                   fontFamily: "var(--font-poppins), sans-serif",
-                  background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                  background: VALENTINE_MODE ? "linear-gradient(135deg, #ffffff, #ec4899)" : "linear-gradient(135deg, #ffffff, #fbbf24)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -2333,7 +2370,7 @@ export default function TestMobilePage() {
                 className={`text-lg font-semibold text-white mb-2 ${poppins.variable}`}
                 style={{
                   fontFamily: "var(--font-poppins), sans-serif",
-                  background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                  background: VALENTINE_MODE ? "linear-gradient(135deg, #ffffff, #ec4899)" : "linear-gradient(135deg, #ffffff, #fbbf24)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",

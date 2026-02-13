@@ -3,6 +3,9 @@
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
 
+/** Set to false to remove Valentine decorations instantly. */
+const VALENTINE_MODE = true;
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -57,7 +60,11 @@ export default function PricingCards() {
           <div
             className={`group relative rounded-lg bg-neutral-900/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
               selectedPackage === "standard"
-                ? "border-yellow-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)]"
+                ? VALENTINE_MODE
+                  ? "border-rose-400/60 shadow-[0_0_20px_rgba(236,72,153,0.35)]"
+                  : "border-yellow-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)]"
+                : VALENTINE_MODE
+                ? "border-neutral-800/50 hover:border-rose-900/60"
                 : "border-neutral-800/50 hover:border-neutral-700"
             }`}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
@@ -94,7 +101,7 @@ export default function PricingCards() {
                 <div
                   className="text-lg font-extrabold leading-tight"
                   style={{
-                    background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                    background: VALENTINE_MODE ? "linear-gradient(135deg, #ffffff, #ec4899)" : "linear-gradient(135deg, #ffffff, #fbbf24)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -110,15 +117,23 @@ export default function PricingCards() {
               <div
                 className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center transition-all ${
                   selectedPackage === "standard"
-                    ? "border-yellow-400 bg-yellow-400/20"
+                    ? VALENTINE_MODE
+                      ? "border-rose-400 bg-rose-400/20"
+                      : "border-yellow-400 bg-yellow-400/20"
                     : "border-neutral-600"
                 }`}
               >
                 {selectedPackage === "standard" && (
-                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                  <div className={`w-1.5 h-1.5 rounded-full ${VALENTINE_MODE ? "bg-rose-400" : "bg-yellow-400"}`}></div>
                 )}
               </div>
             </div>
+
+            {VALENTINE_MODE && (
+              <span className="absolute top-2 left-1/2 -translate-x-1/2 text-xs opacity-70 pointer-events-none z-30" aria-hidden="true">
+                💕
+              </span>
+            )}
 
             {/* Content */}
             <div className="p-2.5 pt-4 relative z-10 pointer-events-none">
@@ -141,7 +156,9 @@ export default function PricingCards() {
                       style={{
                         background:
                           selectedPackage === "standard"
-                            ? "linear-gradient(135deg, #ffffff, #fbbf24)"
+                            ? VALENTINE_MODE
+                              ? "linear-gradient(135deg, #ffffff, #ec4899)"
+                              : "linear-gradient(135deg, #ffffff, #fbbf24)"
                             : "none",
                         WebkitBackgroundClip:
                           selectedPackage === "standard" ? "text" : "unset",
@@ -209,7 +226,11 @@ export default function PricingCards() {
           <div
             className={`group relative rounded-lg bg-gradient-to-br from-neutral-900/90 to-neutral-950/90 backdrop-blur-sm border-2 transition-all duration-300 w-full ${
               selectedPackage === "premium"
-                ? "border-yellow-400/80 shadow-[0_0_25px_rgba(251,191,36,0.4)]"
+                ? VALENTINE_MODE
+                  ? "border-rose-400/70 shadow-[0_0_25px_rgba(236,72,153,0.4)]"
+                  : "border-yellow-400/80 shadow-[0_0_25px_rgba(251,191,36,0.4)]"
+                : VALENTINE_MODE
+                ? "border-neutral-800/50 hover:border-rose-900/60"
                 : "border-neutral-800/50 hover:border-neutral-700"
             }`}
             style={{ fontFamily: "var(--font-poppins), sans-serif" }}
@@ -246,7 +267,7 @@ export default function PricingCards() {
                 <div
                   className="text-lg font-extrabold leading-tight"
                   style={{
-                    background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                    background: VALENTINE_MODE ? "linear-gradient(135deg, #ffffff, #ec4899)" : "linear-gradient(135deg, #ffffff, #fbbf24)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -262,15 +283,23 @@ export default function PricingCards() {
               <div
                 className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center transition-all ${
                   selectedPackage === "premium"
-                    ? "border-yellow-400 bg-yellow-400/20"
+                    ? VALENTINE_MODE
+                      ? "border-rose-400 bg-rose-400/20"
+                      : "border-yellow-400 bg-yellow-400/20"
                     : "border-neutral-600"
                 }`}
               >
                 {selectedPackage === "premium" && (
-                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                  <div className={`w-1.5 h-1.5 rounded-full ${VALENTINE_MODE ? "bg-rose-400" : "bg-yellow-400"}`}></div>
                 )}
               </div>
             </div>
+
+            {VALENTINE_MODE && (
+              <span className="absolute top-2 left-1/2 -translate-x-1/2 text-xs opacity-70 pointer-events-none z-30" aria-hidden="true">
+                💕
+              </span>
+            )}
 
             {/* Content */}
             <div className="p-2.5 pt-4 relative z-10 pointer-events-none">
@@ -293,7 +322,9 @@ export default function PricingCards() {
                       style={{
                         background:
                           selectedPackage === "premium"
-                            ? "linear-gradient(135deg, #ffffff, #fbbf24)"
+                            ? VALENTINE_MODE
+                              ? "linear-gradient(135deg, #ffffff, #ec4899)"
+                              : "linear-gradient(135deg, #ffffff, #fbbf24)"
                             : "none",
                         WebkitBackgroundClip:
                           selectedPackage === "premium" ? "text" : "unset",

@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+
+/** Set to false to remove Valentine mood from carousel instantly. */
+const VALENTINE_MODE = true;
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
@@ -110,7 +113,7 @@ export default function ProductCarousel() {
               height={32}
               className="h-8 w-8 object-contain"
               style={{
-                filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))",
+                filter: VALENTINE_MODE ? "drop-shadow(0 0 4px rgba(236, 72, 153, 0.5))" : "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))",
                 margin: 0,
                 padding: 0,
                 display: "block",
@@ -122,11 +125,11 @@ export default function ProductCarousel() {
             <span
               className="text-base font-bold"
               style={{
-                background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+                background: VALENTINE_MODE ? "linear-gradient(135deg, #ffffff, #ec4899)" : "linear-gradient(135deg, #ffffff, #fbbf24)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
-                textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+                textShadow: VALENTINE_MODE ? "0 0 20px rgba(236, 72, 153, 0.3)" : "0 0 20px rgba(251, 191, 36, 0.3)",
               }}
             >
             Airtel
@@ -135,12 +138,12 @@ export default function ProductCarousel() {
           <span
             className="text-sm font-bold tracking-wide"
             style={{
-              background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+              background: VALENTINE_MODE ? "linear-gradient(135deg, #ffffff, #ec4899)" : "linear-gradient(135deg, #ffffff, #fbbf24)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
               letterSpacing: "0.05em",
-              textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+              textShadow: VALENTINE_MODE ? "0 0 20px rgba(236, 72, 153, 0.3)" : "0 0 20px rgba(251, 191, 36, 0.3)",
             }}
           >
             SmartConnect
@@ -160,7 +163,7 @@ export default function ProductCarousel() {
             fill="none"
             viewBox="0 0 24 24"
             style={{
-              filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))",
+              filter: VALENTINE_MODE ? "drop-shadow(0 0 4px rgba(236, 72, 153, 0.5))" : "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))",
             }}
           >
             <defs>
@@ -172,7 +175,7 @@ export default function ProductCarousel() {
                 y2="100%"
               >
                 <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="100%" stopColor="#fbbf24" />
+                <stop offset="100%" stopColor={VALENTINE_MODE ? "#ec4899" : "#fbbf24"} />
               </linearGradient>
             </defs>
             <path
@@ -186,11 +189,11 @@ export default function ProductCarousel() {
           <span
             className="text-sm font-semibold"
             style={{
-              background: "linear-gradient(135deg, #ffffff, #fbbf24)",
+              background: VALENTINE_MODE ? "linear-gradient(135deg, #ffffff, #ec4899)" : "linear-gradient(135deg, #ffffff, #fbbf24)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-              textShadow: "0 0 20px rgba(251, 191, 36, 0.3)",
+              textShadow: VALENTINE_MODE ? "0 0 20px rgba(236, 72, 153, 0.3)" : "0 0 20px rgba(251, 191, 36, 0.3)",
             }}
           >
             0789457580
@@ -227,8 +230,9 @@ export default function ProductCarousel() {
                   className="absolute bottom-0 left-0 right-0 pointer-events-none"
                   style={{
                     height: "70px",
-                    background:
-                      "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85))",
+                    background: VALENTINE_MODE
+                      ? "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85))"
+                      : "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85))",
                     zIndex: 2,
                   }}
                 />
@@ -247,11 +251,11 @@ export default function ProductCarousel() {
                     }}
                   />
                   <h3
-                    className={`text-2xl mb-3 leading-tight font-bold text-yellow-400 ${poppins.variable}`}
+                    className={`text-2xl mb-3 leading-tight font-bold ${VALENTINE_MODE ? "text-rose-400" : "text-yellow-400"} ${poppins.variable}`}
                     style={{
                       fontFamily: "var(--font-poppins), sans-serif",
                       letterSpacing: "0.01em",
-                      textShadow: "0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(251, 191, 36, 0.6)",
+                      textShadow: VALENTINE_MODE ? "0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(236, 72, 153, 0.6)" : "0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(251, 191, 36, 0.6)",
                       filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))",
                     }}
                   >
@@ -382,8 +386,9 @@ export default function ProductCarousel() {
                       className="absolute bottom-0 left-0 right-0 pointer-events-none"
                       style={{
                         height: "70px",
-                        background:
-                          "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85))",
+                    background: VALENTINE_MODE
+                      ? "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85))"
+                      : "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85))",
                         zIndex: 2,
                       }}
                     />
@@ -405,11 +410,11 @@ export default function ProductCarousel() {
                         }}
                       />
                       <h3
-                        className={`text-2xl mb-3 leading-tight font-bold text-yellow-400 ${poppins.variable}`}
+                        className={`text-2xl mb-3 leading-tight font-bold ${VALENTINE_MODE ? "text-rose-400" : "text-yellow-400"} ${poppins.variable}`}
                         style={{
                           fontFamily: "var(--font-poppins), sans-serif",
                           letterSpacing: "0.01em",
-                          textShadow: "0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(251, 191, 36, 0.6)",
+                          textShadow: VALENTINE_MODE ? "0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(236, 72, 153, 0.6)" : "0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(251, 191, 36, 0.6)",
                           filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))",
                         }}
                       >
@@ -432,9 +437,9 @@ export default function ProductCarousel() {
                         {slide.link && (
                           <>
                             <span className="inline-block w-full" style={{ textAlign: "right" }}>
-                              <span className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-yellow-400/20 backdrop-blur-sm border border-yellow-400/40 rounded-full align-middle">
+                              <span className={`ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 backdrop-blur-sm rounded-full align-middle ${VALENTINE_MODE ? "bg-rose-400/20 border border-rose-400/40" : "bg-yellow-400/20 border border-yellow-400/40"}`}>
                                 <span
-                                  className={`text-xs font-semibold text-yellow-400 ${poppins.variable}`}
+                                  className={`text-xs font-semibold ${VALENTINE_MODE ? "text-rose-400" : "text-yellow-400"} ${poppins.variable}`}
                                   style={{
                                     fontFamily: "var(--font-poppins), sans-serif",
                                     letterSpacing: "0.05em",
@@ -444,7 +449,7 @@ export default function ProductCarousel() {
                                   Learn More
                                 </span>
                                 <svg
-                                  className="w-3.5 h-3.5 text-yellow-400"
+                                  className={`w-3.5 h-3.5 ${VALENTINE_MODE ? "text-rose-400" : "text-yellow-400"}`}
                                   fill="none"
                                   stroke="currentColor"
                                   viewBox="0 0 24 24"
