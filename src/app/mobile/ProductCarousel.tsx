@@ -18,14 +18,14 @@ const poppins = Poppins({
 
 const carouselSlides = [
   {
-    image: "/airtelcarousel1.jpeg",
+    image: "/airtel5grouter.png",
     title: "What is it?",
     description:
       "Learn about the Airtel SmartConnect 5G router and its capabilities.",
     link: "/product/overview",
   },
   {
-    image: "/airtelcarousel2.jpeg",
+    image: "/airtel5grouter1.jpg",
     title: "Troubleshooting",
     description: "Common issues and solutions to get your device working perfectly.",
     link: "/product/troubleshooting",
@@ -37,7 +37,7 @@ const carouselSlides = [
     description: "Built to perform reliably in all conditions.",
   },
   {
-    image: "/aitelcarousel4.jpeg",
+    image: "/airtel5grouter4.jpg.png",
     title: "Flexible Mounting Options",
     description: "Easily install on walls, poles, or rooftops.",
   },
@@ -207,7 +207,7 @@ export default function ProductCarousel() {
               <div className="absolute inset-0 overflow-hidden">
                 <Image
                   src={carouselSlides[0].image}
-                  alt={carouselSlides[0].title}
+                  alt="Airtel SmartConnect 5G Router"
                   fill
                   className="object-cover sm:object-stretch"
                   style={{ objectPosition: "center" }}
@@ -219,16 +219,16 @@ export default function ProductCarousel() {
                 <div
                   className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: "rgba(0, 0, 0, 0.1)",
+                    background: "rgba(0, 0, 0, 0.04)",
                     zIndex: 1,
                   }}
                 />
                 <div
                   className="absolute bottom-0 left-0 right-0 pointer-events-none"
                   style={{
-                    height: "120px",
+                    height: "70px",
                     background:
-                      "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9))",
+                      "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85))",
                     zIndex: 2,
                   }}
                 />
@@ -242,7 +242,6 @@ export default function ProductCarousel() {
                     className="absolute inset-0 pointer-events-none"
                     style={{
                       background: "linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%)",
-                      backdropFilter: "blur(1px)",
                       zIndex: -1,
                       borderRadius: "0 0 12px 12px",
                     }}
@@ -370,21 +369,21 @@ export default function ProductCarousel() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
                       quality={75}
                     />
-                    {/* Black Overlay */}
+                    {/* Subtle overlay - minimal to keep image clear */}
                     <div
                       className="absolute inset-0 pointer-events-none"
                       style={{
-                        background: "rgba(0, 0, 0, 0.1)",
+                        background: "rgba(0, 0, 0, 0.04)",
                         zIndex: 1,
                       }}
                     />
-                    {/* Gradient Fade at Bottom - Enhanced for better text visibility */}
+                    {/* Gradient Fade at Bottom - narrow band for text readability */}
                     <div
                       className="absolute bottom-0 left-0 right-0 pointer-events-none"
                       style={{
-                        height: "120px",
+                        height: "70px",
                         background:
-                          "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9))",
+                          "linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85))",
                         zIndex: 2,
                       }}
                     />
@@ -401,7 +400,6 @@ export default function ProductCarousel() {
                         className="absolute inset-0 pointer-events-none"
                         style={{
                           background: "linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%)",
-                          backdropFilter: "blur(1px)",
                           zIndex: -1,
                           borderRadius: "0 0 12px 12px",
                         }}
