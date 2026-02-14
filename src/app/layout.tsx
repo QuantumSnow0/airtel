@@ -7,6 +7,9 @@ import "./globals.css";
 
 // Trigger redeploy
 
+/** Set to false to revert status bar and Valentine theme. */
+const VALENTINE_MODE = true;
+
 /** Stable date for schema.org priceValidUntil (1 year from module load) */
 const PRICE_VALID_UNTIL = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
   .toISOString()
@@ -380,9 +383,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Status Bar Theme - Dark Neutral to match theme */}
-        <meta name="theme-color" content="#0a0a0a" />
-        <meta name="msapplication-navbutton-color" content="#0a0a0a" />
+        {/* Status Bar Theme - Dark Neutral, or rose when Valentine */}
+        <meta name="theme-color" content={VALENTINE_MODE ? "#831843" : "#0a0a0a"} />
+        <meta name="msapplication-navbutton-color" content={VALENTINE_MODE ? "#831843" : "#0a0a0a"} />
         <meta
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"
