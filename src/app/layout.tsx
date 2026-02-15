@@ -7,8 +7,7 @@ import "./globals.css";
 
 // Trigger redeploy
 
-/** Set to false to revert status bar and Valentine theme. */
-const VALENTINE_MODE = true;
+import { VALENTINE_MODE } from "./valentine-config";
 
 /** Stable date for schema.org priceValidUntil (1 year from module load) */
 const PRICE_VALID_UNTIL = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)

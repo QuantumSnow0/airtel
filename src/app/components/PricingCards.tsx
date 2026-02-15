@@ -3,8 +3,7 @@
 import { usePackage } from "../contexts/PackageContext";
 import { Poppins } from "next/font/google";
 
-/** Set to false to remove Valentine decorations instantly. */
-const VALENTINE_MODE = true;
+import { VALENTINE_MODE } from "../valentine-config";
 
 const poppins = Poppins({
   subsets: ["latin"],

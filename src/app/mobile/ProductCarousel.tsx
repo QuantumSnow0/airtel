@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 
-/** Set to false to remove Valentine mood from carousel instantly. */
-const VALENTINE_MODE = true;
+import { VALENTINE_MODE } from "../valentine-config";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";

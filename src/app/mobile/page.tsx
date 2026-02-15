@@ -1,8 +1,6 @@
 "use client";
 
-/** Set to false to remove Valentine mood from whole page instantly. */
-const VALENTINE_MODE = true;
-
+import { VALENTINE_MODE } from "../valentine-config";
 import {
   useState,
   useRef,
