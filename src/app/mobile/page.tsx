@@ -1376,7 +1376,7 @@ export default function TestMobilePage() {
     } else if (customerPhone.trim().length > 0 && !phoneBlurred) {
       if (!isPhoneValid) {
         const phoneTypingMessages = [
-          "Enter your Airtel number (10-12 digits) 📱",
+          "Enter your primary number (10-12 digits) 📱",
           "Keep typing your phone number! 🔢",
           "Almost there! Make sure it's 10-12 digits! 📞",
         ];
@@ -1677,7 +1677,7 @@ export default function TestMobilePage() {
     } else if (phoneBlurred && !isPhoneValid) {
       // Phone error
       const phoneErrors = [
-        "Oops! Please enter a valid Airtel phone number (10-12 digits) 📱",
+        "Oops! Please enter a valid primary phone number (10-12 digits) 📱",
         "The phone number needs to be 10-12 digits. Try again! 🔢",
         "Hmm, that phone number doesn't look right. Check and try again! 📞",
       ];
@@ -2535,11 +2535,11 @@ export default function TestMobilePage() {
                           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
                             2
                           </span>
-                          Airtel Number{" "}
+                          Primary number{" "}
                           <span className="text-yellow-400">*</span>
                         </>
                       ) : (
-                        "Enter your Airtel Number"
+                        "Enter your primary number"
                       )}
                     </span>
                   </div>
@@ -2562,7 +2562,7 @@ export default function TestMobilePage() {
                       setPhoneBlurred(true);
                     }}
                     autoComplete="tel"
-                    aria-label="Airtel Phone Number"
+                    aria-label="Primary phone number"
                     aria-required="true"
                     className={`w-full px-3 py-3.5 ${
                       phoneFocused || customerPhone ? "pt-5" : "pt-3.5"
@@ -2596,6 +2596,11 @@ export default function TestMobilePage() {
                     </div>
                   )}
                 </div>
+                {phoneFocused && (
+                  <p className="mt-1.5 text-xs text-neutral-400">
+                    Airtel will contact you on this number for your installation.
+                  </p>
+                )}
               </div>
 
               {/* Customer Alternative Number */}

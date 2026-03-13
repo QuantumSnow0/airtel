@@ -75,6 +75,7 @@ export default function TestDesktopPage() {
   const [preferredTime, setPreferredTime] = useState("");
   const [nameBlurred, setNameBlurred] = useState(false);
   const [phoneBlurred, setPhoneBlurred] = useState(false);
+  const [phoneFocused, setPhoneFocused] = useState(false);
   const [alternativeBlurred, setAlternativeBlurred] = useState(false);
   const [emailBlurred, setEmailBlurred] = useState(false);
   const [townBlurred, setTownBlurred] = useState(false);
@@ -1401,7 +1402,7 @@ export default function TestDesktopPage() {
                     </div>
                   </div>
 
-                  {/* Airtel Number */}
+                  {/* Primary number */}
                   <div className="mb-4 relative">
                     <div
                       className="absolute left-3 pointer-events-none"
@@ -1431,7 +1432,7 @@ export default function TestDesktopPage() {
                           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold mr-2">
                             2
                           </span>
-                          Airtel Number{" "}
+                          Primary number{" "}
                           <span className="text-yellow-400">*</span>
                         </span>
                       </div>
@@ -1453,7 +1454,11 @@ export default function TestDesktopPage() {
                         style={{
                           fontFamily: "var(--font-poppins), sans-serif",
                         }}
-                        onBlur={() => setPhoneBlurred(true)}
+                        onFocus={() => setPhoneFocused(true)}
+                        onBlur={() => {
+                          setPhoneFocused(false);
+                          setPhoneBlurred(true);
+                        }}
                       />
                       {showPhoneCheck && (
                         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -1473,6 +1478,11 @@ export default function TestDesktopPage() {
                         </div>
                       )}
                     </div>
+                    {phoneFocused && (
+                      <p className="mt-1.5 text-xs text-neutral-400">
+                        Airtel will contact you on this number for your installation.
+                      </p>
+                    )}
                   </div>
 
                   {/* Alternative Number */}

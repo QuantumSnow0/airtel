@@ -33,6 +33,7 @@ export default function CustomerResubmitModal({
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [dateError, setDateError] = useState("");
+  const [primaryNumberFocused, setPrimaryNumberFocused] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState<LeadData>({
@@ -402,10 +403,10 @@ export default function CustomerResubmitModal({
                     />
                   </div>
 
-                  {/* Airtel Number */}
+                  {/* Primary number */}
                   <div>
                     <label className="block text-sm font-medium text-neutral-300 mb-2">
-                      Airtel Number *
+                      Primary number *
                     </label>
                     <input
                       type="tel"
@@ -414,9 +415,16 @@ export default function CustomerResubmitModal({
                       onChange={(e) =>
                         setFormData({ ...formData, airtel_number: e.target.value })
                       }
+                      onFocus={() => setPrimaryNumberFocused(true)}
+                      onBlur={() => setPrimaryNumberFocused(false)}
                       className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                       placeholder="0712 345 678"
                     />
+                    {primaryNumberFocused && (
+                      <p className="mt-1.5 text-xs text-neutral-400">
+                        Airtel will contact you on this number for your installation.
+                      </p>
+                    )}
                   </div>
 
                   {/* Alternate Number */}

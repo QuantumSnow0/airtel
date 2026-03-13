@@ -370,7 +370,7 @@ export default function DuplicateSubmissionPage() {
                   {submissionData.airtel_number && (
                     <div>
                       <span className="text-orange-400 font-medium">
-                        Airtel Number:
+                        Primary number:
                       </span>{" "}
                       {maskPhoneNumber(submissionData.airtel_number)}
                     </div>
