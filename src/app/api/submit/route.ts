@@ -3,9 +3,15 @@ import { supabaseAdmin } from "@/lib/supabase";
 import type { LeadSubmission } from "@/lib/types";
 import { randomUUID } from "crypto";
 
-const MS_FORMS_FORM_ID =
-  process.env.MS_FORMS_FORM_ID ||
+// New form ID (old ended). Env may be cached or overridden by system env, so we normalize.
+const MS_FORMS_FORM_ID_OLD =
+  "JzfHFpyXgk2zp-tqL93-V1fdJne7SIlMnh7yZpkW8f5UNE5JMkcyMEtYSDhZUEdZUVoyUDZBSlA1Wi4u";
+const MS_FORMS_FORM_ID_NEW =
   "JzfHFpyXgk2zp-tqL93-V1fdJne7SIlMnh7yZpkW8f5UQzU1TjNRSjJWNFJaUzNBNVo5S1BXQ0lINi4u";
+const MS_FORMS_FORM_ID =
+  (process.env.MS_FORMS_FORM_ID || MS_FORMS_FORM_ID_NEW) === MS_FORMS_FORM_ID_OLD
+    ? MS_FORMS_FORM_ID_NEW
+    : process.env.MS_FORMS_FORM_ID || MS_FORMS_FORM_ID_NEW;
 const MS_FORMS_TENANT_ID =
   process.env.MS_FORMS_TENANT_ID || "16c73727-979c-4d82-b3a7-eb6a2fddfe57";
 const MS_FORMS_USER_ID =
@@ -33,7 +39,7 @@ const QUESTION_IDS = {
   visitDate: "r68b858271107400189b8d681d1b19c38",
   visitTime: "rae98a58cb06949c1a3222443368aa64e",
   installationLocation: "r99215bf0748f4e949b127b4a344e44ec", // Combined location field (e.g., "NAIROBI - Langata")
-  optionalField: "r1Ht6TLmpMc3xhN5euPZo5ecC4RJtfJrJu8", // Optional field (can be null)
+  optionalField: "r1e3b5a91acaa465b8aab76bab2cad94a", // Optional field (can be null)
 };
 
 // Internal defaults
@@ -439,8 +445,9 @@ export async function POST(request: NextRequest) {
     };
 
     // 🗺️ LOG FINAL LOCATION VALUES IN MS FORMS PAYLOAD
+    type AnswerEntry = { questionId: string; answer1: string | null };
     const locationAnswers = answers.filter(
-      (a: any) =>
+      (a: AnswerEntry) =>
         a.questionId === QUESTION_IDS.installationTown ||
         a.questionId === QUESTION_IDS.deliveryLandmark ||
         a.questionId === QUESTION_IDS.installationLocation
@@ -448,7 +455,7 @@ export async function POST(request: NextRequest) {
     console.log("=".repeat(60));
     console.log("📋 FINAL LOCATION VALUES IN MS FORMS PAYLOAD:");
     console.log("=".repeat(60));
-    locationAnswers.forEach((answer: any) => {
+    locationAnswers.forEach((answer: AnswerEntry) => {
       const fieldName =
         answer.questionId === QUESTION_IDS.installationTown
           ? "Installation Town"

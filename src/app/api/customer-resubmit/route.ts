@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { randomUUID } from "crypto";
 
-const MS_FORMS_FORM_ID =
-  process.env.MS_FORMS_FORM_ID ||
+const MS_FORMS_FORM_ID_OLD =
+  "JzfHFpyXgk2zp-tqL93-V1fdJne7SIlMnh7yZpkW8f5UNE5JMkcyMEtYSDhZUEdZUVoyUDZBSlA1Wi4u";
+const MS_FORMS_FORM_ID_NEW =
   "JzfHFpyXgk2zp-tqL93-V1fdJne7SIlMnh7yZpkW8f5UQzU1TjNRSjJWNFJaUzNBNVo5S1BXQ0lINi4u";
+const MS_FORMS_FORM_ID =
+  (process.env.MS_FORMS_FORM_ID || MS_FORMS_FORM_ID_NEW) === MS_FORMS_FORM_ID_OLD
+    ? MS_FORMS_FORM_ID_NEW
+    : process.env.MS_FORMS_FORM_ID || MS_FORMS_FORM_ID_NEW;
 const MS_FORMS_TENANT_ID =
   process.env.MS_FORMS_TENANT_ID || "16c73727-979c-4d82-b3a7-eb6a2fddfe57";
 const MS_FORMS_USER_ID =
