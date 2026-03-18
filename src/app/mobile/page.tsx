@@ -173,7 +173,7 @@ export default function TestMobilePage() {
       customerEmail.trim()
     );
     const isTownValid = installationTown.trim().length > 0;
-    const isDeliveryLocationValid = deliveryLocation.trim().length >= 5;
+    const isDeliveryLocationValid = deliveryLocation.trim().length >= 3;
     const isInstallationLocationValid =
       (installationLocation.trim().length > 0 &&
         installationLocation !== "Other") ||
@@ -1627,7 +1627,7 @@ export default function TestMobilePage() {
       setRobotMessage(randomMessage);
     } else if (deliveryLocationBlurred && !isDeliveryLocationValid) {
       const locationErrors = [
-        "Please provide a more detailed landmark (at least 5 characters)! 🗺️",
+        "Please provide a more detailed landmark (at least 3 characters)! 🗺️",
         "We need a clearer landmark description. Add more details! 📍",
         "The landmark seems too short. Please add more information! 🏠",
       ];
@@ -3923,17 +3923,27 @@ export default function TestMobilePage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.5 }}
                   onClick={async () => {
-                    if (
-                      !(nameBlurred && isNameValid) ||
-                      !(phoneBlurred && isPhoneValid) ||
-                      !(alternativeBlurred && isAlternativeValid) ||
-                      !(emailBlurred && isEmailValid) ||
-                      !(townBlurred && isTownValid) ||
-                      !(deliveryLocationBlurred && isDeliveryLocationValid) ||
-                      !(preferredDateBlurred && isPreferredDateValid) ||
-                      !(preferredTimeBlurred && isPreferredTimeValid) ||
-                      !selectedPackage
-                    ) {
+                    const missing: string[] = [];
+                    if (!(nameBlurred && isNameValid)) missing.push("name");
+                    if (!(phoneBlurred && isPhoneValid)) missing.push("phone");
+                    if (!(alternativeBlurred && isAlternativeValid)) missing.push("alternative number");
+                    if (!(emailBlurred && isEmailValid)) missing.push("email");
+                    if (!(townBlurred && isTownValid)) missing.push("installation town");
+                    if (!(deliveryLocationBlurred && isDeliveryLocationValid)) missing.push("delivery location");
+                    if (!(installationLocationBlurred && isInstallationLocationValid)) missing.push("installation location (estate/area)");
+                    if (!(preferredDateBlurred && isPreferredDateValid)) missing.push("preferred date");
+                    if (!(preferredTimeBlurred && isPreferredTimeValid)) missing.push("preferred time");
+                    if (!selectedPackage) missing.push("package");
+
+                    if (missing.length > 0) {
+                      console.warn("[Submit] Missing or invalid fields:", missing);
+                      setSubmitStatus({
+                        state: "error",
+                        message: `Please complete: ${missing.join(", ")}`,
+                      });
+                      setRobotMessage(
+                        `Please fill in or fix: ${missing.join(", ")}. Then try submitting again.`
+                      );
                       return;
                     }
 
@@ -3998,10 +4008,14 @@ export default function TestMobilePage() {
                           setIsSubmitting(false);
                           return;
                         }
-                        // Otherwise, throw the error
-                        throw new Error(
-                          data.error || data.details || "Failed to submit form"
-                        );
+                        // Show missing fields from API if present
+                        const msg = data.missing
+                          ? `${data.error || "Missing fields"}: ${data.details || data.missing.join(", ")}`
+                          : data.error || data.details || "Failed to submit form";
+                        setSubmitStatus({ state: "error", message: msg });
+                        setRobotMessage(msg);
+                        setIsSubmitting(false);
+                        return;
                       }
 
                       setSubmitStatus({

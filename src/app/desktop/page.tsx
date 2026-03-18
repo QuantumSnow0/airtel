@@ -125,7 +125,7 @@ export default function TestDesktopPage() {
   );
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim());
   const isTownValid = installationTown.trim().length > 0;
-  const isDeliveryLocationValid = deliveryLocation.trim().length >= 5;
+  const isDeliveryLocationValid = deliveryLocation.trim().length >= 3;
   const isInstallationLocationValid =
     installationLocation.trim().length > 0 && installationLocation !== "Other";
   const isPreferredDateValid = preferredDate.trim().length > 0;

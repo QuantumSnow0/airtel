@@ -40,6 +40,23 @@ const QUESTION_IDS = {
   optionalField: "r1Ht6TLmpMc3xhN5euPZo5ecC4RJtfJrJu8",
 };
 
+const TOWN_TO_LOCATION_QUESTION_ID: Record<string, string> = {
+  BUNGOMA: "rbf5746ac7f5e4d2cab54a1b8df24b5e1",
+  ELDORET: "r24b818b049314910ad025b6b727e64a3",
+  GARISSA: "r2fc4cb930c154b5e8f1a354d4ac354a5",
+  KAKAMEGA: "r28f2b48873504822b4010ba668be5267",
+  KILIFI: "rafb9a2cdb406426fa865a66baa42b3a0",
+  KISII: "r77cbe5ec85a8411ca451f323c9336c7e",
+  KISUMU: "r39626af0978948d780a63643b5a14ef7",
+  KITALE: "rcae794cab7ff49bbacecf526f6c7f4ff",
+  MACHAKOS: "re7e1cac4a9424be9a965efd0e7065812",
+  MERU: "rd95772902dc54356bce0f3d11204586a",
+  MIGORI: "r3a023823fcfe46798b4b8af5051dc632",
+  MOMBASA: "r6c5bd7f72fde4c51b2ac8661f3d3afac",
+  NAIROBI: "r99215bf0748f4e949b127b4a344e44ec",
+  NAKURU: "r37c5c841668f44269a3410c03e9eb055",
+};
+
 // Internal defaults
 const INTERNAL_DEFAULTS = {
   agentType: "Enterprise",
@@ -331,7 +348,7 @@ export async function POST(request: NextRequest) {
         answer1: normalizedTown,
       },
       {
-        questionId: QUESTION_IDS.installationLocation,
+        questionId: TOWN_TO_LOCATION_QUESTION_ID[normalizedTown] ?? QUESTION_IDS.installationLocation,
         answer1: installationLocation,
       },
       {

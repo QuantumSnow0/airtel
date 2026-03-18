@@ -38,8 +38,26 @@ const QUESTION_IDS = {
   deliveryLandmark: "r7a69684d43ec4bf1b6971b21a8b4dd18",
   visitDate: "r68b858271107400189b8d681d1b19c38",
   visitTime: "rae98a58cb06949c1a3222443368aa64e",
-  installationLocation: "r99215bf0748f4e949b127b4a344e44ec", // Combined location field (e.g., "NAIROBI - Langata")
-  optionalField: "r1e3b5a91acaa465b8aab76bab2cad94a", // Optional field (can be null)
+  installationLocation: "r99215bf0748f4e949b127b4a344e44ec", // Nairobi column (fallback)
+  optionalField: "r1Ht6TLmpMc3xhN5euPZo5ecC4RJtfJrJu8", // Optional field (can be null)
+};
+
+// Form has one column per town. Send "Town - Landmark" to this town's column (not always Nairobi).
+const TOWN_TO_LOCATION_QUESTION_ID: Record<string, string> = {
+  BUNGOMA: "rbf5746ac7f5e4d2cab54a1b8df24b5e1",
+  ELDORET: "r24b818b049314910ad025b6b727e64a3",
+  GARISSA: "r2fc4cb930c154b5e8f1a354d4ac354a5",
+  KAKAMEGA: "r28f2b48873504822b4010ba668be5267",
+  KILIFI: "rafb9a2cdb406426fa865a66baa42b3a0",
+  KISII: "r77cbe5ec85a8411ca451f323c9336c7e",
+  KISUMU: "r39626af0978948d780a63643b5a14ef7",
+  KITALE: "rcae794cab7ff49bbacecf526f6c7f4ff",
+  MACHAKOS: "re7e1cac4a9424be9a965efd0e7065812",
+  MERU: "rd95772902dc54356bce0f3d11204586a",
+  MIGORI: "r3a023823fcfe46798b4b8af5051dc632",
+  MOMBASA: "r6c5bd7f72fde4c51b2ac8661f3d3afac",
+  NAIROBI: "r99215bf0748f4e949b127b4a344e44ec",
+  NAKURU: "r37c5c841668f44269a3410c03e9eb055",
 };
 
 // Internal defaults
@@ -62,6 +80,31 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+
+    const requiredFields = [
+      "customerName",
+      "airtelNumber",
+      "alternateNumber",
+      "email",
+      "preferredPackage",
+      "installationTown",
+      "deliveryLandmark",
+      "installationLocation",
+      "visitDate",
+      "visitTime",
+    ] as const;
+    const missing = requiredFields.filter((f) => {
+      const v = body[f];
+      return v === undefined || v === null || (typeof v === "string" && !v.trim());
+    });
+    if (missing.length > 0) {
+      console.warn("[Submit API] Missing or empty fields:", missing, "body keys:", Object.keys(body));
+      return NextResponse.json(
+        { error: "Missing or empty fields", missing, details: `Required: ${missing.join(", ")}` },
+        { status: 400 }
+      );
+    }
+
     const {
       customerName,
       airtelNumber,
@@ -429,7 +472,7 @@ export async function POST(request: NextRequest) {
         answer1: normalizedTown, // Use normalized town (e.g., "HOMABAY" instead of "Homa Bay")
       },
       {
-        questionId: QUESTION_IDS.installationLocation,
+        questionId: TOWN_TO_LOCATION_QUESTION_ID[normalizedTown] ?? QUESTION_IDS.installationLocation,
         answer1: installationLocation,
       },
       {
@@ -446,11 +489,12 @@ export async function POST(request: NextRequest) {
 
     // 🗺️ LOG FINAL LOCATION VALUES IN MS FORMS PAYLOAD
     type AnswerEntry = { questionId: string; answer1: string | null };
+    const locationQuestionIds = new Set(Object.values(TOWN_TO_LOCATION_QUESTION_ID));
     const locationAnswers = answers.filter(
       (a: AnswerEntry) =>
         a.questionId === QUESTION_IDS.installationTown ||
         a.questionId === QUESTION_IDS.deliveryLandmark ||
-        a.questionId === QUESTION_IDS.installationLocation
+        locationQuestionIds.has(a.questionId)
     );
     console.log("=".repeat(60));
     console.log("📋 FINAL LOCATION VALUES IN MS FORMS PAYLOAD:");
@@ -461,8 +505,8 @@ export async function POST(request: NextRequest) {
           ? "Installation Town"
           : answer.questionId === QUESTION_IDS.deliveryLandmark
           ? "Delivery Landmark"
-          : answer.questionId === QUESTION_IDS.installationLocation
-          ? "Installation Location"
+          : locationQuestionIds.has(answer.questionId)
+          ? "Installation Location (town column)"
           : "Unknown";
       console.log(`   ${fieldName}: "${answer.answer1}"`);
     });

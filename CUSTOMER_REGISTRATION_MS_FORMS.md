@@ -97,7 +97,7 @@ Before submitting, validate the following:
 - **Phone Numbers (Airtel & Alternate):** Must be 10-12 digits (spaces are ignored during validation)
 - **Email:** Must match standard email format (`user@domain.com`)
 - **Installation Town:** Must not be empty
-- **Delivery Landmark:** Minimum 5 characters (after trimming whitespace)
+- **Delivery Landmark:** Minimum 3 characters (after trimming whitespace)
 - **Installation Location:** Must not be empty (unless "Other" is selected, then custom input must be provided)
 - **Visit Date:** Must not be empty, format must be `M/d/yyyy` (e.g., "1/15/2024" or "12/25/2024")
 - **Visit Time:** Must not be empty, format must be `h:mm AM/PM` (e.g., "9:00 AM" or "2:30 PM")
@@ -945,7 +945,7 @@ const correlationId = uuidv4();
 4. `email` - String, valid email format
 5. `preferredPackage` - String, "standard" or "premium"
 6. `installationTown` - String, one of 52 towns
-7. `deliveryLandmark` - String, min 5 chars
+7. `deliveryLandmark` - String, min 3 chars
 8. `installationLocation` - String, location within town
 9. `visitDate` - String, format `M/d/yyyy`
 10. `visitTime` - String, format `h:mm AM/PM`

@@ -16,7 +16,7 @@ This document lists **every detail required to register for Airtel SmartConnect*
 | 4 | **email** | String | Yes | Valid email | `"customer@example.com"` |
 | 5 | **preferredPackage** | String | Yes | `"standard"` or `"premium"` (case-insensitive) | `"standard"` |
 | 6 | **installationTown** | String | Yes | Non-empty; must be a valid town | `"Nairobi"`, `"Homa Bay"` |
-| 7 | **deliveryLandmark** | String | Yes | Min 5 characters (after trim) | `"Near Total station"` |
+| 7 | **deliveryLandmark** | String | Yes | Min 3 characters (after trim) | `"Near Total station"` |
 | 8 | **installationLocation** | String | Yes | Location within town (or "Other" + custom text) | `"Kangemi"`, `"Langata"` |
 | 9 | **visitDate** | String | Yes | Valid date; stored/sent as `YYYY-MM-DD` | `"2024-12-25"` or `"12/25/2024"` |
 | 10 | **visitTime** | String | Yes | 12-hour format `h:mm AM/PM` | `"10:00 AM"`, `"2:30 PM"` |
