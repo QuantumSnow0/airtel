@@ -113,6 +113,7 @@ export async function POST(request: NextRequest) {
       preferred_package,
       installation_town,
       delivery_landmark,
+      installation_location,
       visit_date,
       visit_time,
     } = resubmitLead;
@@ -143,10 +144,12 @@ export async function POST(request: NextRequest) {
 
     // Build installation location (if we have delivery_landmark, use it)
     // For resubmit, we'll use delivery_landmark as installation location if available
+    const installationLocationLandmark =
+      installation_location || delivery_landmark || "";
     const installationLocation =
-      delivery_landmark && normalizedTown
-        ? `${normalizedTown} - ${delivery_landmark}`
-        : delivery_landmark || normalizedTown || "";
+      installationLocationLandmark && normalizedTown
+        ? `${normalizedTown} - ${installationLocationLandmark}`
+        : installationLocationLandmark || normalizedTown || "";
 
     // Format phone numbers (convert from 7XXXXXXXX to 2547XXXXXXXX)
     const formatPhone = (phone: string): string => {
@@ -461,6 +464,7 @@ export async function POST(request: NextRequest) {
       preferred_package: preferred_package,
       installation_town: installation_town,
       delivery_landmark: delivery_landmark || "",
+      installation_location: installationLocationLandmark,
       // Installation schedule
       visit_date: visit_date,
       visit_time: visit_time,

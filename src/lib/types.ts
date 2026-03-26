@@ -12,6 +12,7 @@ export type LeadSubmission = {
   preferred_package: string;
   installation_town: string;
   delivery_landmark: string;
+  installation_location: string;
   // Installation schedule
   visit_date: string;
   visit_time: string;

@@ -212,6 +212,7 @@ export async function POST(request: NextRequest) {
       preferred_package: preferredPackage,
       installation_town: installationTown,
       delivery_landmark: deliveryLandmark,
+      installation_location: installationLocationLandmark,
       visit_date: visitDate,
       visit_time: visitTime,
       // Internal defaults

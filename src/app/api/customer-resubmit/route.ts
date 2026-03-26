@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { randomUUID } from "crypto";
+import type { LeadSubmission } from "@/lib/types";
 
 const MS_FORMS_FORM_ID_OLD =
   "JzfHFpyXgk2zp-tqL93-V1fdJne7SIlMnh7yZpkW8f5UNE5JMkcyMEtYSDhZUEdZUVoyUDZBSlA1Wi4u";
@@ -84,6 +85,7 @@ export async function POST(request: NextRequest) {
       preferredPackage,
       installationTown,
       deliveryLandmark,
+      installationLocation: rawInstallationLocation,
       visitDate,
       visitTime,
     } = body;
@@ -101,7 +103,7 @@ export async function POST(request: NextRequest) {
     const threeDaysAgo = new Date();
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
 
-    let recentResubmissions: any[] = [];
+    let recentResubmissions: Array<{ created_at: string }> = [];
     try {
       // Try to check with resubmitted flag first
       const { data, error: rateLimitError } = await supabaseAdmin
@@ -152,10 +154,12 @@ export async function POST(request: NextRequest) {
     const normalizedTown = normalizeTownForMSForms(installationTown);
 
     // Build installation location (use deliveryLandmark as installationLocation)
+    const installationLocationLandmark =
+      rawInstallationLocation || deliveryLandmark || "";
     const installationLocation =
-      deliveryLandmark && normalizedTown
-        ? `${normalizedTown} - ${deliveryLandmark}`
-        : deliveryLandmark || "";
+      installationLocationLandmark && normalizedTown
+        ? `${normalizedTown} - ${installationLocationLandmark}`
+        : installationLocationLandmark;
 
     // Format phone numbers
     const formatPhone = (phone: string | undefined | null): string => {
@@ -463,7 +467,10 @@ export async function POST(request: NextRequest) {
 
     // Insert into leads table
     // Note: resubmitted column may not exist yet - if insert fails, check database schema
-    const leadData: any = {
+    const leadData: LeadSubmission & {
+      bypass_duplicate_check: boolean;
+      resubmitted: boolean;
+    } = {
       id: randomUUID(),
       created_at: new Date().toISOString(),
       customer_name: customerName,
@@ -473,6 +480,7 @@ export async function POST(request: NextRequest) {
       preferred_package: preferredPackage,
       installation_town: installationTown,
       delivery_landmark: deliveryLandmark || "",
+      installation_location: installationLocationLandmark,
       visit_date: visitDate,
       visit_time: visitTime,
       agent_type: INTERNAL_DEFAULTS.agentType,
