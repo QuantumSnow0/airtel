@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
       preferredPackage,
       installationTown,
       deliveryLandmark,
+      installationLocation,
       visitDate,
       visitTime,
     } = body;
@@ -48,6 +49,7 @@ export async function POST(request: NextRequest) {
       preferred_package: preferredPackage,
       installation_town: installationTown,
       delivery_landmark: deliveryLandmark,
+      installation_location: installationLocation || deliveryLandmark || "",
       visit_date: visitDate,
       visit_time: visitTime,
       // Internal defaults
